@@ -1,19 +1,12 @@
 package ukma.springboot.nextskill.model;
 
-import java.util.Random;
-
 public class AnswerOption {
-    private final int id;           //Random number from 100000 to 999998
+    private final int id;
     private String text;
     private boolean isCorrect;
 
-    public AnswerOption() {
-        this.id = generateRandomId();
-    }
-
-    private int generateRandomId() {
-        Random random = new Random();
-        return random.nextInt(100000, 999999);
+    public AnswerOption(int id) {
+        this.id = id;
     }
 
     public int getId() {

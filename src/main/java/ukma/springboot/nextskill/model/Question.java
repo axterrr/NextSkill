@@ -8,12 +8,14 @@ public class Question {
     private String text;
     private List<String> attachedImages;
     private List<AnswerOption> answerOptions;
+    private boolean isMultipleChoice;
 
-    public Question(String text, List<String> attachedImages, List<AnswerOption> answerOptions) {
+    public Question(String text, List<String> attachedImages, List<AnswerOption> answerOptions, boolean isMultipleChoice) {
         this.id = UUID.randomUUID();
         this.text = text;
         this.attachedImages = attachedImages;
         this.answerOptions = answerOptions;
+        this.isMultipleChoice = isMultipleChoice;
     }
 
     public UUID getId() {
@@ -42,5 +44,13 @@ public class Question {
 
     public void setAnswerOptions(List<AnswerOption> answerOptions) {
         this.answerOptions = answerOptions;
+    }
+
+    public boolean isMultipleChoice() {
+        return isMultipleChoice;
+    }
+
+    public void setMultipleChoice(boolean multipleChoice) {
+        isMultipleChoice = multipleChoice;
     }
 }

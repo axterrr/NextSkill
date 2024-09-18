@@ -1,3 +1,5 @@
+//TODO: UserTestAttempt class
+
 package ukma.springboot.nextskill.model;
 
 import java.time.LocalDateTime;
