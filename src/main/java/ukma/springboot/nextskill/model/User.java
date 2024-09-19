@@ -103,4 +103,21 @@ public class User {
     public void setUserRole(UserRole userRole) {
         this.userRole = userRole;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "uuid=" + uuid +
+                ", username='" + username + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", avatarLink='" + avatarLink + '\'' +
+                ", description='" + description + '\'' +
+                ", createdAt=" + createdAt +
+                ", userRole=" + userRole +
+                ", isDisabled=" + isDisabled +
+                '}';
+    }
 }
