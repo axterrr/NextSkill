@@ -3,7 +3,7 @@ package ukma.springboot.nextskill.model;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-class CourseObject {
+public class CourseObject {
     private String title;
     private final UUID uuid;
     private final LocalDateTime createdAt;
