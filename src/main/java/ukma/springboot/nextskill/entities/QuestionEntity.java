@@ -16,11 +16,12 @@ public class QuestionEntity {
     private String text;
     @Column(nullable = false)
     private boolean isMultipleChoice;
-    @OneToMany
+    @ManyToMany
     @JoinTable(name = "question_attached_files",
             joinColumns = @JoinColumn(name = "question_fk"),
             inverseJoinColumns = @JoinColumn(name = "file_upload_fk")
     )
+
     private List<FileUploadEntity> attachedFiles;
     @Column
     @OneToMany
