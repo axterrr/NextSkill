@@ -16,14 +16,17 @@ public class QuestionEntity {
     private String text;
     @Column(nullable = false)
     private boolean isMultipleChoice;
-    /*    @Column
-        @OneToMany(mappedBy = "question")
-        private List<FileEntity> attachedImages;*/
+    @OneToMany
+    @JoinTable(name = "question_attached_files",
+            joinColumns = @JoinColumn(name = "question_fk"),
+            inverseJoinColumns = @JoinColumn(name = "file_upload_fk")
+    )
+    private List<FileUploadEntity> attachedFiles;
     @Column
     @OneToMany
-    @JoinTable(name = "joined_question_answers",
+    @JoinTable(name = "question_answer_options",
             joinColumns = @JoinColumn(name = "question_fk"),
-            inverseJoinColumns = @JoinColumn(name = "answer_fk"))
+            inverseJoinColumns = @JoinColumn(name = "answer_option_fk"))
     private List<AnswerOptionEntity> answerOptions;
 
     public QuestionEntity() {
@@ -58,4 +61,11 @@ public class QuestionEntity {
         this.answerOptions = answerOptions;
     }
 
+    public List<FileUploadEntity> getAttachedFiles() {
+        return attachedFiles;
+    }
+
+    public void setAttachedFiles(List<FileUploadEntity> attachedFiles) {
+        this.attachedFiles = attachedFiles;
+    }
 }
