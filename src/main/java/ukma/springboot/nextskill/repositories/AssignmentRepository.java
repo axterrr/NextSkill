@@ -8,4 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface AssignmentRepository extends JpaRepository<AssignmentEntity, UUID> {
+    List<AssignmentEntity> findByTitleContaining(String title);
+    List<AssignmentEntity> findByDueToBefore(LocalDateTime dueDate);
 }

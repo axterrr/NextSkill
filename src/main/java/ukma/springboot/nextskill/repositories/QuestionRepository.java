@@ -7,4 +7,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface QuestionRepository extends JpaRepository<QuestionEntity, UUID> {
+    List<QuestionEntity> findByTextContaining(String text);
+
 }
