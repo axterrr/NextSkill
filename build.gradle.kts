@@ -20,7 +20,9 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.slf4j:slf4j-api")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
+    testImplementation("com.h2database:h2")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.slf4j:slf4j-simple")
 
