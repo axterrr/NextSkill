@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import ukma.springboot.nextskill.security.UserRole;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -36,11 +37,28 @@ public class UserEntity {
     @Column
     private boolean isDisabled;
 
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_courses",
+            joinColumns = @JoinColumn(name = "user_fk"),
+            inverseJoinColumns = @JoinColumn(name = "course_fk"))
+    private List<CourseEntity> courses;
+
+
     public UserEntity() {
         this.uuid = UUID.randomUUID();
         this.createdAt = LocalDateTime.now();
         this.userRole = UserRole.STUDENT;
         this.isDisabled = false;
+    }
+
+    public List<CourseEntity> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<CourseEntity> courses) {
+        this.courses = courses;
     }
 
     public UUID getUuid() {

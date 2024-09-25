@@ -3,6 +3,7 @@ package ukma.springboot.nextskill.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -25,6 +26,17 @@ public class CourseEntity {
     public CourseEntity() {
         this.uuid = UUID.randomUUID();
         creationDate = LocalDate.now();
+    }
+
+    @ManyToMany(mappedBy = "courses")
+    private List<UserEntity> users;
+
+    public List<UserEntity> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<UserEntity> users) {
+        this.users = users;
     }
 
     public UUID getUuid() {

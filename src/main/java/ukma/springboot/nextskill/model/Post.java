@@ -27,4 +27,6 @@ public class Post extends CourseObject{
     public void setAttachedFiles(List<String> attachedFiles) {
         this.attachedFiles = attachedFiles;
     }
+
+
 }

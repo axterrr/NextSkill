@@ -12,7 +12,7 @@ public class AssignmentEntity extends PostEntity{
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "due_to", nullable = false)
     private LocalDateTime dueTo;
-
+    private Integer grade;
     public AssignmentEntity() {
         super();
         this.dueTo = LocalDateTime.now().plusDays(1);
@@ -21,6 +21,14 @@ public class AssignmentEntity extends PostEntity{
     public AssignmentEntity(String title, String content, List<FileUploadEntity> attachedFiles) {
         super(title, content, attachedFiles);
         this.dueTo = LocalDateTime.now().plusDays(1);
+    }
+
+    public Integer getGrade() {
+        return grade;
+    }
+
+    public void setGrade(Integer grade) {
+        this.grade = grade;
     }
 
     public LocalDateTime getDueTo() {
