@@ -19,8 +19,20 @@ repositories {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.slf4j:slf4j-api")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.slf4j:slf4j-simple")
+
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+configurations {
+    all {
+        exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
+        exclude(group = "ch.qos.logback", module = "logback-classic")
+        exclude(group = "org.apache.logging.log4j", module = "log4j-to-slf4j")
+    }
 }
 
 tasks.withType<Test> {
