@@ -7,13 +7,21 @@ public class CourseObject {
     private String title;
     private final UUID uuid;
     private final LocalDateTime createdAt;
-    private boolean isHidden;
+    private boolean isHidden = false;
+    private int order = -1;
 
     CourseObject(String title) {
         this.title = title;
         this.uuid = UUID.randomUUID();
         this.createdAt = LocalDateTime.now();
-        this.isHidden = false;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
     }
 
     public String getTitle() {
