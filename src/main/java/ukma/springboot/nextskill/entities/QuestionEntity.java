@@ -20,7 +20,10 @@ public class QuestionEntity {
         @OneToMany(mappedBy = "question")
         private List<FileEntity> attachedImages;*/
     @Column
-    @OneToMany(mappedBy = "question")
+    @OneToMany
+    @JoinTable(name = "joined_question_answers",
+            joinColumns = @JoinColumn(name = "question_fk"),
+            inverseJoinColumns = @JoinColumn(name = "answer_fk"))
     private List<AnswerOptionEntity> answerOptions;
 
     public QuestionEntity() {
