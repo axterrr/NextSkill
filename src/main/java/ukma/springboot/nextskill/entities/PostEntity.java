@@ -12,16 +12,18 @@ public class PostEntity extends CourseObjectEntity{
     @Column(name = "content", columnDefinition = "TEXT")
     private String content;
 
-    @ElementCollection
-    @CollectionTable(name = "post_attached_files", joinColumns = @JoinColumn(name = "post_id"))
-    @Column(name = "attached_file_url")
-    private List<String> attachedFiles;
+    @ManyToMany
+    @JoinTable(name = "post_attached_files",
+            joinColumns = @JoinColumn(name = "post_fk"),
+            inverseJoinColumns = @JoinColumn(name = "file_upload_fk")
+    )
+    private List<FileUploadEntity> attachedFiles;
 
     protected PostEntity() {
         super();
     }
 
-    public PostEntity(String title, String content, List<String> attachedFiles) {
+    public PostEntity(String title, String content, List<FileUploadEntity> attachedFiles) {
         super(title);
         this.content = content;
         this.attachedFiles = attachedFiles;
@@ -35,11 +37,11 @@ public class PostEntity extends CourseObjectEntity{
         this.content = content;
     }
 
-    public List<String> getAttachedFiles() {
+    public List<FileUploadEntity> getAttachedFiles() {
         return attachedFiles;
     }
 
-    public void setAttachedFiles(List<String> attachedFiles) {
+    public void setAttachedFiles(List<FileUploadEntity> attachedFiles) {
         this.attachedFiles = attachedFiles;
     }
 }

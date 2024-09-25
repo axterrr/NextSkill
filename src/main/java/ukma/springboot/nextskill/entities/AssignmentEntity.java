@@ -18,7 +18,7 @@ public class AssignmentEntity extends PostEntity{
         this.dueTo = LocalDateTime.now().plusDays(1);
     }
 
-    public AssignmentEntity(String title, String content, List<String> attachedFiles) {
+    public AssignmentEntity(String title, String content, List<FileUploadEntity> attachedFiles) {
         super(title, content, attachedFiles);
         this.dueTo = LocalDateTime.now().plusDays(1);
     }
