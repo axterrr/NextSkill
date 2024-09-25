@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@Table(name = "post")
+@Table(name = "posts")
 public class PostEntity extends CourseObjectEntity{
 
     @Column(name = "content", columnDefinition = "TEXT")

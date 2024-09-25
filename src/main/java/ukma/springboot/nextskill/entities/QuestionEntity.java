@@ -24,9 +24,9 @@ public class QuestionEntity {
     private List<FileUploadEntity> attachedFiles;
     @Column
     @OneToMany
-    @JoinTable(name = "joined_question_answers",
+    @JoinTable(name = "question_answer_options",
             joinColumns = @JoinColumn(name = "question_fk"),
-            inverseJoinColumns = @JoinColumn(name = "answer_fk"))
+            inverseJoinColumns = @JoinColumn(name = "answer_option_fk"))
     private List<AnswerOptionEntity> answerOptions;
 
     public QuestionEntity() {
