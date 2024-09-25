@@ -9,45 +9,42 @@ import java.util.UUID;
 @Entity
 @Table(name = "users")
 public class UserEntity {
-    @Id @GeneratedValue
-    private UUID id;
+    @Id
+    @GeneratedValue
+    @Column(nullable = false, updatable = false, unique = true)
+    private final UUID uuid;
     @Column(nullable = false, unique = true)
     private String username;
     @Column(nullable = false)
-    private String password;
+    private String name;
+    @Column(nullable = false)
+    private String surname;
     @Column(nullable = false, unique = true)
     private String email;
+    @Column(nullable = false, unique = true)
+    private String phone;
     @Column(nullable = false)
-    private String fullName;
+    private String avatarLink;
     @Column
-    private String profile;
-    @Column(nullable = false)
-    private LocalDateTime registrationDate;
+    private String description;
+    @Column(nullable = false, updatable = false)
+    private final LocalDateTime createdAt;
+
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole userRole;
     @Column
-    private UserRole role;
+    private boolean isDisabled;
 
     public UserEntity() {
-        this.id = UUID.randomUUID();
-        this.registrationDate = LocalDateTime.now();
+        this.uuid = UUID.randomUUID();
+        this.createdAt = LocalDateTime.now();
+        this.userRole = UserRole.STUDENT;
+        this.isDisabled = false;
     }
 
-    public UserEntity(String username, String password, String email, String fullName, String profile, UserRole role) {
-        this();
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.fullName = fullName;
-        this.profile = profile;
-        this.role = role;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
+    public UUID getUuid() {
+        return uuid;
     }
 
     public String getUsername() {
@@ -58,12 +55,20 @@ public class UserEntity {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getName() {
+        return name;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     public String getEmail() {
@@ -74,36 +79,47 @@ public class UserEntity {
         this.email = email;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public String getProfile() {
-        return profile;
+    public String getAvatarLink() {
+        return avatarLink;
     }
 
-    public void setProfile(String profile) {
-        this.profile = profile;
+    public void setAvatarLink(String avatarLink) {
+        this.avatarLink = avatarLink;
     }
 
-    public LocalDateTime getRegistrationDate() {
-        return registrationDate;
+    public String getDescription() {
+        return description;
     }
 
-    public void setRegistrationDate(LocalDateTime registrationDate) {
-        this.registrationDate = registrationDate;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public UserRole getRole() {
-        return role;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setRole(UserRole role) {
-        this.role = role;
+    public UserRole getUserRole() {
+        return userRole;
     }
 
+    public void setUserRole(UserRole userRole) {
+        this.userRole = userRole;
+    }
+
+    public boolean isDisabled() {
+        return isDisabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        isDisabled = disabled;
+    }
 }
