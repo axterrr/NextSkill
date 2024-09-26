@@ -32,6 +32,11 @@ public class User {
         this.userRole = UserRole.STUDENT;
     }
 
+    public User(UUID uuid, LocalDateTime createdAt) {
+        this.uuid = uuid;
+        this.createdAt = createdAt;
+    }
+
     public UUID getUuid() {
         return uuid;
     }

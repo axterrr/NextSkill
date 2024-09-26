@@ -2,7 +2,9 @@ package ukma.springboot.nextskill.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -27,6 +29,10 @@ public class PostEntity extends CourseObjectEntity{
         super(title);
         this.content = content;
         this.attachedFiles = attachedFiles;
+    }
+
+    public PostEntity(UUID uuid, String title, int order, boolean isHidden, LocalDateTime createdAt) {
+        super(uuid, title, order, isHidden, createdAt);
     }
 
     public String getContent() {

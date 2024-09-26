@@ -36,6 +36,14 @@ public class CourseObjectEntity {
         this.createdAt = LocalDateTime.now();
     }
 
+    public CourseObjectEntity(UUID uuid, String title, int order, boolean isHidden, LocalDateTime createdAt) {
+        this.uuid = uuid;
+        this.title = title;
+        this.order = order;
+        this.isHidden = isHidden;
+        this.createdAt = createdAt;
+    }
+
     public UUID getUuid() {
         return uuid;
     }

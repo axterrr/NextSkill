@@ -53,6 +53,12 @@ public class UserEntity {
         this.isDisabled = false;
     }
 
+    public UserEntity(UUID id, LocalDateTime createdAt) {
+        this.uuid = id;
+        this.createdAt = createdAt;
+    }
+
+
     public List<CourseEntity> getCourses() {
         return courses;
     }

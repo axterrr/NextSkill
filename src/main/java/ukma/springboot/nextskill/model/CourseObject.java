@@ -16,6 +16,14 @@ public class CourseObject {
         this.createdAt = LocalDateTime.now();
     }
 
+    CourseObject(String title, UUID id, LocalDateTime createdAt, boolean isHidden, int order) {
+        this.title = title;
+        this.uuid = id;
+        this.createdAt = createdAt;
+        this.isHidden = isHidden;
+        this.order = order;
+    }
+
     public int getOrder() {
         return order;
     }
