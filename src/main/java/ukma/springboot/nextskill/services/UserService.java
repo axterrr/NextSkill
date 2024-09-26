@@ -6,7 +6,6 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import ukma.springboot.nextskill.interfaces.IUserService;
 import ukma.springboot.nextskill.model.User;
-import ukma.springboot.nextskill.utilities.SimpleLogger;
 import ukma.springboot.nextskill.validators.PhoneValidator;
 
 import java.util.List;
@@ -21,14 +20,6 @@ public class UserService implements IUserService {
     private MockDatabaseUserService mockDatabaseUserService;
 
     private PhoneValidator phoneValidator;
-
-    private SimpleLogger simpleLogger;
-
-    // Constructor wiring
-    @Autowired
-    public UserService(SimpleLogger simpleLogger) {
-        this.simpleLogger = simpleLogger;
-    }
 
     @Override
     public User getUser(UUID id) {
@@ -49,14 +40,12 @@ public class UserService implements IUserService {
         if (validationErrors.hasErrors()) return false;
 
         mockDatabaseUserService.set(id, updatedUser);
-        simpleLogger.info("Updated a user with id " + id + " with " + updatedUser);
         return true;
     }
 
     @Override
     public boolean deleteUser(UUID id) {
         mockDatabaseUserService.delete(id);
-        simpleLogger.info("Deleted a user with id " + id);
         return true;
     }
 
