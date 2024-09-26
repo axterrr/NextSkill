@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
+import ukma.springboot.nextskill.entities.CourseEntity;
 import ukma.springboot.nextskill.entities.UserEntity;
 import ukma.springboot.nextskill.interfaces.IUserService;
+import ukma.springboot.nextskill.model.Course;
 import ukma.springboot.nextskill.model.User;
+import ukma.springboot.nextskill.model.mappers.CourseMapper;
 import ukma.springboot.nextskill.model.mappers.UserMapper;
 import ukma.springboot.nextskill.repositories.UserRepository;
 import ukma.springboot.nextskill.validators.PhoneValidator;
@@ -33,6 +36,13 @@ public class UserService implements IUserService {
     public List<User> getAllUsers() {
         return userRepository.findAll()
                 .stream().map(UserMapper::toUser).toList();
+    }
+
+    @Override
+    public User createUser(User user) {
+        UserEntity userEntity = UserMapper.toUserEntity(user);
+        UserEntity savedEntity = userRepository.save(userEntity);
+        return UserMapper.toUser(savedEntity);
     }
 
     @Override

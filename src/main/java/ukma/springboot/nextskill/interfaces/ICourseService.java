@@ -10,7 +10,7 @@ public interface ICourseService {
 
     Course getCourse(UUID id);
     List<Course> getAllCourses();
-    Course createCourse(Course updatedCourse);
+    Course createCourse(Course course);
     Course updateCourse(UUID id, Course updatedCourse);
     void deleteCourse(UUID id);
 
