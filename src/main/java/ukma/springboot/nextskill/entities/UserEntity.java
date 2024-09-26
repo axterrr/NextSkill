@@ -22,9 +22,9 @@ public class UserEntity {
     private String surname;
     @Column(nullable = false, unique = true)
     private String email;
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String phone;
-    @Column(nullable = false)
+    @Column
     private String avatarLink;
     @Column
     private String description;
