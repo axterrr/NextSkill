@@ -1,42 +1,29 @@
-package ukma.springboot.nextskill.entities;
+package ukma.springboot.nextskill.model;
 
-import jakarta.persistence.*;
-
+import ukma.springboot.nextskill.entities.UserEntity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
+import java.util.List;
 
-@Entity
-@Table(name = "courses")
-public class CourseEntity {
-    @Id
-    @GeneratedValue
-    @Column(nullable = false, updatable = false, unique = true)
+public class Course {
     private final UUID uuid;
-    @Column(nullable = false)
     private String name;
-    @Column
     private String description;
-    @Column(nullable = false, updatable = false)
     private LocalDate creationDate;
-    @ManyToOne
-    @JoinColumn(name = "teacher_id", nullable = false)
-    private UserEntity teacher;
+    private User teacher;
 
-    @ManyToMany(mappedBy = "courses")
-    private List<UserEntity> users;
-
-
-    public CourseEntity() {
+    public Course() {
         this.uuid = UUID.randomUUID();
         creationDate = LocalDate.now();
     }
 
-    public CourseEntity(UUID id, LocalDate createdAt) {
-        this.uuid = id;
+    public Course(UUID uuid, LocalDate createdAt) {
+        this.uuid = uuid;
         this.creationDate = createdAt;
     }
+
+    private List<UserEntity> users;
 
     public List<UserEntity> getUsers() {
         return users;
@@ -67,14 +54,15 @@ public class CourseEntity {
     }
 
     public LocalDate getCreationDate() {
-        return creationDate;
+        return this.creationDate;
     }
 
-    public UserEntity getTeacher() {
+    public User getTeacher() {
         return teacher;
     }
 
-    public void setTeacher(UserEntity teacher) {
+    public void setTeacher(User teacher) {
         this.teacher = teacher;
     }
 }
+
