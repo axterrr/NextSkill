@@ -5,8 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ukma.springboot.nextskill.dto.UserDto;
+import ukma.springboot.nextskill.interfaces.IUserService;
 import ukma.springboot.nextskill.model.mappers.UserMapper;
-import ukma.springboot.nextskill.services.UserService;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
     @GetMapping(value = "/all")
     public ResponseEntity<List<UserDto>> getAllUsers() {

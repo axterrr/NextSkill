@@ -2,17 +2,12 @@ package ukma.springboot.nextskill.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.Errors;
-import ukma.springboot.nextskill.entities.CourseEntity;
 import ukma.springboot.nextskill.entities.UserEntity;
+import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
 import ukma.springboot.nextskill.interfaces.IUserService;
-import ukma.springboot.nextskill.model.Course;
 import ukma.springboot.nextskill.model.User;
-import ukma.springboot.nextskill.model.mappers.CourseMapper;
 import ukma.springboot.nextskill.model.mappers.UserMapper;
 import ukma.springboot.nextskill.repositories.UserRepository;
-import ukma.springboot.nextskill.validators.PhoneValidator;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,14 +16,13 @@ import java.util.UUID;
 @Service
 public class UserService implements IUserService {
 
+    @Autowired
     private UserRepository userRepository;
-    private PhoneValidator phoneValidator;
 
     @Override
     public User getUser(String id) {
         Optional<UserEntity> result = userRepository.findById(UUID.fromString(id));
-        if (result.isEmpty()) throw new IllegalArgumentException("User not found with id: " + id);
-
+        if (result.isEmpty()) throw new ResourceNotFoundException("User", id);
         return UserMapper.toUser(result.get());
     }
 
@@ -47,13 +41,8 @@ public class UserService implements IUserService {
 
     @Override
     public User updateUser(String id, User updatedUser) {
-        Errors validationErrors = new BeanPropertyBindingResult(updatedUser.getPhone(), "phone");
-        phoneValidator.validate(updatedUser.getPhone(), validationErrors);
-
-        if (validationErrors.hasErrors()) throw new IllegalArgumentException("User's phone is bot valid, id = " + id);
-
         Optional<UserEntity> existingUser = userRepository.findById(UUID.fromString(id));
-        if (existingUser.isEmpty()) throw new IllegalArgumentException("User not found with id: " + id);
+        if (existingUser.isEmpty()) throw new ResourceNotFoundException("User", id);
 
         UserEntity existingUserEntity = existingUser.get();
 
@@ -73,19 +62,8 @@ public class UserService implements IUserService {
     @Override
     public void deleteUser(String id) {
         Optional<UserEntity> result = userRepository.findById(UUID.fromString(id));
-        if (result.isEmpty()) throw new IllegalArgumentException("User not found with id: " + id);
+        if (result.isEmpty()) throw new ResourceNotFoundException("User", id);
 
         userRepository.deleteById(UUID.fromString(id));
-    }
-
-    //Setter wiring
-    @Autowired
-    private void setPhoneValidator(PhoneValidator phoneValidator) {
-        this.phoneValidator = phoneValidator;
-    }
-
-    @Autowired
-    private void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
     }
 }
