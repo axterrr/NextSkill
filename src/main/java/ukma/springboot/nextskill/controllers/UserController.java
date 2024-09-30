@@ -1,5 +1,6 @@
 package ukma.springboot.nextskill.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,13 +31,13 @@ public class UserController {
     }
 
     @PostMapping(value = "")
-    public ResponseEntity<HttpStatus> addUser(@RequestBody UserDto user) {
+    public ResponseEntity<HttpStatus> addUser(@Valid @RequestBody UserDto user) {
         userService.createUser(UserMapper.toUser(user));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<HttpStatus> updateUser(@PathVariable String id, @RequestBody UserDto user) {
+    public ResponseEntity<HttpStatus> updateUser(@PathVariable String id, @Valid @RequestBody UserDto user) {
         userService.updateUser(id, UserMapper.toUser(user));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
