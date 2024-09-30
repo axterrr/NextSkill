@@ -25,8 +25,8 @@ public class UserService implements IUserService {
     private PhoneValidator phoneValidator;
 
     @Override
-    public User getUser(UUID id) {
-        Optional<UserEntity> result = userRepository.findById(id);
+    public User getUser(String id) {
+        Optional<UserEntity> result = userRepository.findById(UUID.fromString(id));
         if (result.isEmpty()) throw new IllegalArgumentException("User not found with id: " + id);
 
         return UserMapper.toUser(result.get());
@@ -46,13 +46,13 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User updateUser(UUID id, User updatedUser) {
+    public User updateUser(String id, User updatedUser) {
         Errors validationErrors = new BeanPropertyBindingResult(updatedUser.getPhone(), "phone");
         phoneValidator.validate(updatedUser.getPhone(), validationErrors);
 
         if (validationErrors.hasErrors()) throw new IllegalArgumentException("User's phone is bot valid, id = " + id);
 
-        Optional<UserEntity> existingUser = userRepository.findById(id);
+        Optional<UserEntity> existingUser = userRepository.findById(UUID.fromString(id));
         if (existingUser.isEmpty()) throw new IllegalArgumentException("User not found with id: " + id);
 
         UserEntity existingUserEntity = existingUser.get();
@@ -71,11 +71,11 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void deleteUser(UUID id) {
-        Optional<UserEntity> result = userRepository.findById(id);
+    public void deleteUser(String id) {
+        Optional<UserEntity> result = userRepository.findById(UUID.fromString(id));
         if (result.isEmpty()) throw new IllegalArgumentException("User not found with id: " + id);
 
-        userRepository.deleteById(id);
+        userRepository.deleteById(UUID.fromString(id));
     }
 
     //Setter wiring

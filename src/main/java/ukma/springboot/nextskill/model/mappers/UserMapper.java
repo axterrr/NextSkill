@@ -1,5 +1,6 @@
 package ukma.springboot.nextskill.model.mappers;
 
+import ukma.springboot.nextskill.dto.UserDto;
 import ukma.springboot.nextskill.entities.UserEntity;
 import ukma.springboot.nextskill.model.User;
 
@@ -43,6 +44,46 @@ public class UserMapper {
         userEntity.setDisabled(user.isDisabled());
 
         return userEntity;
+    }
+
+    public static UserDto toUserDto(User user) {
+        if (user == null) {
+            return null;
+        }
+
+        UserDto userDto = new UserDto();
+        userDto.setUuid(user.getUuid());
+        userDto.setCreatedAt(user.getCreatedAt());
+        userDto.setUsername(user.getUsername());
+        userDto.setName(user.getName());
+        userDto.setSurname(user.getSurname());
+        userDto.setEmail(user.getEmail());
+        userDto.setPhone(user.getPhone());
+        userDto.setAvatarLink(user.getAvatarLink());
+        userDto.setDescription(user.getDescription());
+        userDto.setUserRole(user.getUserRole());
+        userDto.setDisabled(user.isDisabled());
+
+        return userDto;
+    }
+
+    public static User toUser(UserDto userDto) {
+        if (userDto == null) {
+            return null;
+        }
+
+        User user = new User(userDto.getUuid(), userDto.getCreatedAt());
+        user.setUsername(userDto.getUsername());
+        user.setName(userDto.getName());
+        user.setSurname(userDto.getSurname());
+        user.setEmail(userDto.getEmail());
+        user.setPhone(userDto.getPhone());
+        user.setAvatarLink(userDto.getAvatarLink());
+        user.setDescription(userDto.getDescription());
+        user.setUserRole(userDto.getUserRole());
+        user.setDisabled(userDto.isDisabled());
+
+        return user;
     }
 }
 
