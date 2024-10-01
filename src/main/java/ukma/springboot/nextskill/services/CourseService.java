@@ -4,17 +4,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ukma.springboot.nextskill.entities.CourseEntity;
 import ukma.springboot.nextskill.entities.UserEntity;
+import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
 import ukma.springboot.nextskill.interfaces.ICourseService;
 import ukma.springboot.nextskill.model.Course;
 import ukma.springboot.nextskill.model.CourseObject;
 import ukma.springboot.nextskill.model.mappers.CourseMapper;
-import ukma.springboot.nextskill.model.mappers.UserMapper;
 import ukma.springboot.nextskill.repositories.CourseRepository;
 import ukma.springboot.nextskill.repositories.UserRepository;
+import ukma.springboot.nextskill.security.UserRole;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 @Service
 public class CourseService implements ICourseService {
 
@@ -30,19 +32,18 @@ public class CourseService implements ICourseService {
     @Override
     public Course getCourse(UUID id) {
         Optional<CourseEntity> result = courseRepository.findById(id);
-        if (result.isEmpty()) throw new IllegalArgumentException("Course not found with id: " + id);
-
+        if (result.isEmpty()) throw new ResourceNotFoundException("Course", id.toString());
         return CourseMapper.toCourse(result.get());
     }
 
     @Override
     public List<Course> getAllCourses() {
-        return courseRepository.findAll()
-                .stream().map(CourseMapper::toCourse).toList();
+        return courseRepository.findAll().stream().map(CourseMapper::toCourse).toList();
     }
 
     @Override
     public Course createCourse(Course course) {
+        checkTeacherExisting(course);
         CourseEntity courseEntity = CourseMapper.toCourseEntity(course);
         CourseEntity savedEntity = courseRepository.save(courseEntity);
         return CourseMapper.toCourse(savedEntity);
@@ -50,23 +51,18 @@ public class CourseService implements ICourseService {
 
     @Override
     public Course updateCourse(UUID id, Course updatedCourse) {
-
         Optional<CourseEntity> existingCourse = courseRepository.findById(id);
-        if (existingCourse.isEmpty()) throw new IllegalArgumentException("Course not found with id: " + id);
-
-        CourseEntity existingCourseEntity = existingCourse.get();
-
-        existingCourseEntity.setName(updatedCourse.getName());
-        existingCourseEntity.setDescription(updatedCourse.getDescription());
-        existingCourseEntity.setTeacher(UserMapper.toUserEntity(updatedCourse.getTeacher()));
-
-        return CourseMapper.toCourse(courseRepository.save(existingCourseEntity));
+        if (existingCourse.isEmpty()) throw new ResourceNotFoundException("Course", id.toString());
+        checkTeacherExisting(updatedCourse);
+        updatedCourse.setUuid(existingCourse.get().getUuid());
+        CourseEntity result = courseRepository.save(CourseMapper.toCourseEntity(updatedCourse));
+        return CourseMapper.toCourse(result);
     }
 
     @Override
     public void deleteCourse(UUID id) {
         Optional<CourseEntity> result = courseRepository.findById(id);
-        if (result.isEmpty()) throw new IllegalArgumentException("Course not found with id: " + id);
+        if (result.isEmpty()) throw new ResourceNotFoundException("Course", id.toString());
         courseRepository.deleteById(id);
     }
 
@@ -92,12 +88,20 @@ public class CourseService implements ICourseService {
     // Метод запису користувача на курс
     public void enrollUserToCourse(UUID courseId, UUID userId) {
         CourseEntity course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new IllegalArgumentException("Course not found with id: " + courseId));
+                .orElseThrow(() -> new ResourceNotFoundException("Course", courseId.toString()));
 
         UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User", userId.toString()));
 
         course.getUsers().add(user);
         courseRepository.save(course);
     }
+
+    private void checkTeacherExisting(Course course) {
+        Optional<UserEntity> teacher = userRepository.findById(course.getTeacher().getUuid());
+        if (teacher.isEmpty() || teacher.get().getUserRole() != UserRole.TEACHER) {
+            throw new ResourceNotFoundException("Teacher", course.getTeacher().getUuid().toString());
+        }
+    }
+
 }
