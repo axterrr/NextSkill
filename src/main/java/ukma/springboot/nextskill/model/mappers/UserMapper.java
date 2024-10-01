@@ -9,11 +9,11 @@ public class UserMapper {
     private UserMapper() {}
 
     public static User toUser(UserEntity userEntity) {
-        if (userEntity == null) {
-            return null;
-        }
+        if (userEntity == null) return null;
 
-        User user = new User(userEntity.getUuid(), userEntity.getCreatedAt());
+        User user = new User();
+        user.setUuid(userEntity.getUuid());
+        user.setCreatedAt(userEntity.getCreatedAt());
         user.setUsername(userEntity.getUsername());
         user.setName(userEntity.getName());
         user.setSurname(userEntity.getSurname());
@@ -28,9 +28,7 @@ public class UserMapper {
     }
 
     public static UserEntity toUserEntity(User user) {
-        if (user == null) {
-            return null;
-        }
+        if (user == null) return null;
 
         UserEntity userEntity = new UserEntity(user.getUuid(), user.getCreatedAt());
         userEntity.setUsername(user.getUsername());
@@ -47,9 +45,7 @@ public class UserMapper {
     }
 
     public static UserDto toUserDto(User user) {
-        if (user == null) {
-            return null;
-        }
+        if (user == null) return null;
 
         UserDto userDto = new UserDto();
         userDto.setUuid(user.getUuid());
@@ -68,11 +64,11 @@ public class UserMapper {
     }
 
     public static User toUser(UserDto userDto) {
-        if (userDto == null) {
-            return null;
-        }
+        if (userDto == null) return null;
 
-        User user = new User(userDto.getUuid(), userDto.getCreatedAt());
+        User user = new User();
+        user.setUuid(userDto.getUuid());
+        user.setCreatedAt(userDto.getCreatedAt());
         user.setUsername(userDto.getUsername());
         user.setName(userDto.getName());
         user.setSurname(userDto.getSurname());

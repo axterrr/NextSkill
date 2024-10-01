@@ -17,8 +17,12 @@ import java.util.UUID;
 @Service
 public class UserService implements IUserService {
 
+    private final UserRepository userRepository;
+
     @Autowired
-    private UserRepository userRepository;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public User getUser(String id) {
@@ -29,8 +33,7 @@ public class UserService implements IUserService {
 
     @Override
     public List<User> getAllUsers() {
-        return userRepository.findAll()
-                .stream().map(UserMapper::toUser).toList();
+        return userRepository.findAll().stream().map(UserMapper::toUser).toList();
     }
 
     @Override
@@ -45,28 +48,16 @@ public class UserService implements IUserService {
     public User updateUser(String id, User updatedUser) {
         Optional<UserEntity> existingUser = userRepository.findById(UUID.fromString(id));
         if (existingUser.isEmpty()) throw new ResourceNotFoundException("User", id);
-
-        UserEntity existingUserEntity = existingUser.get();
         checkUniqueFields(updatedUser, existingUser.get());
-
-        existingUserEntity.setUsername(updatedUser.getUsername());
-        existingUserEntity.setName(updatedUser.getName());
-        existingUserEntity.setSurname(updatedUser.getSurname());
-        existingUserEntity.setEmail(updatedUser.getEmail());
-        existingUserEntity.setPhone(updatedUser.getPhone());
-        existingUserEntity.setAvatarLink(updatedUser.getAvatarLink());
-        existingUserEntity.setDescription(updatedUser.getDescription());
-        existingUserEntity.setUserRole(updatedUser.getUserRole());
-        existingUserEntity.setDisabled(updatedUser.isDisabled());
-
-        return UserMapper.toUser(userRepository.save(existingUserEntity));
+        updatedUser.setUuid(existingUser.get().getUuid());
+        UserEntity result = userRepository.save(UserMapper.toUserEntity(updatedUser));
+        return UserMapper.toUser(result);
     }
 
     @Override
     public void deleteUser(String id) {
         Optional<UserEntity> result = userRepository.findById(UUID.fromString(id));
         if (result.isEmpty()) throw new ResourceNotFoundException("User", id);
-
         userRepository.deleteById(UUID.fromString(id));
     }
 
