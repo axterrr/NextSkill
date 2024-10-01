@@ -3,6 +3,7 @@ package ukma.springboot.nextskill.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ukma.springboot.nextskill.entities.UserEntity;
+import ukma.springboot.nextskill.exceptions.DuplicateUniqueFieldException;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
 import ukma.springboot.nextskill.interfaces.IUserService;
 import ukma.springboot.nextskill.model.User;
@@ -34,6 +35,7 @@ public class UserService implements IUserService {
 
     @Override
     public User createUser(User user) {
+        checkUniqueFields(user, null);
         UserEntity userEntity = UserMapper.toUserEntity(user);
         UserEntity savedEntity = userRepository.save(userEntity);
         return UserMapper.toUser(savedEntity);
@@ -45,6 +47,7 @@ public class UserService implements IUserService {
         if (existingUser.isEmpty()) throw new ResourceNotFoundException("User", id);
 
         UserEntity existingUserEntity = existingUser.get();
+        checkUniqueFields(updatedUser, existingUser.get());
 
         existingUserEntity.setUsername(updatedUser.getUsername());
         existingUserEntity.setName(updatedUser.getName());
@@ -66,4 +69,25 @@ public class UserService implements IUserService {
 
         userRepository.deleteById(UUID.fromString(id));
     }
+
+    private void checkUniqueFields(User user, UserEntity existingUser) {
+        if (existingUser == null || !existingUser.getUsername().equals(user.getUsername())) {
+            if (userRepository.existsByUsername(user.getUsername())) {
+                throw new DuplicateUniqueFieldException("User", "username", user.getUsername());
+            }
+        }
+
+        if (existingUser == null || !existingUser.getEmail().equals(user.getEmail())) {
+            if (userRepository.existsByEmail(user.getEmail())) {
+                throw new DuplicateUniqueFieldException("User", "email", user.getEmail());
+            }
+        }
+
+        if (existingUser == null || !existingUser.getPhone().equals(user.getPhone())) {
+            if (userRepository.existsByPhone(user.getPhone())) {
+                throw new DuplicateUniqueFieldException("User", "phone", user.getPhone());
+            }
+        }
+    }
+
 }
