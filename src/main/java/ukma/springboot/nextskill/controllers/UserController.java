@@ -10,6 +10,7 @@ import ukma.springboot.nextskill.interfaces.IUserService;
 import ukma.springboot.nextskill.model.mappers.UserMapper;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
@@ -29,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<UserDto> getUser(@PathVariable String id) {
+    public ResponseEntity<UserDto> getUser(@PathVariable UUID id) {
         UserDto user = UserMapper.toUserDto(userService.getUser(id));
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -41,13 +42,13 @@ public class UserController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<HttpStatus> updateUser(@PathVariable String id, @Valid @RequestBody UserDto user) {
+    public ResponseEntity<HttpStatus> updateUser(@PathVariable UUID id, @Valid @RequestBody UserDto user) {
         userService.updateUser(id, UserMapper.toUser(user));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable String id) {
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable UUID id) {
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

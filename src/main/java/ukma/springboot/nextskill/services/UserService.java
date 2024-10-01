@@ -25,9 +25,9 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User getUser(String id) {
-        Optional<UserEntity> result = userRepository.findById(UUID.fromString(id));
-        if (result.isEmpty()) throw new ResourceNotFoundException("User", id);
+    public User getUser(UUID id) {
+        Optional<UserEntity> result = userRepository.findById(id);
+        if (result.isEmpty()) throw new ResourceNotFoundException("User", id.toString());
         return UserMapper.toUser(result.get());
     }
 
@@ -45,9 +45,9 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User updateUser(String id, User updatedUser) {
-        Optional<UserEntity> existingUser = userRepository.findById(UUID.fromString(id));
-        if (existingUser.isEmpty()) throw new ResourceNotFoundException("User", id);
+    public User updateUser(UUID id, User updatedUser) {
+        Optional<UserEntity> existingUser = userRepository.findById(id);
+        if (existingUser.isEmpty()) throw new ResourceNotFoundException("User", id.toString());
         checkUniqueFields(updatedUser, existingUser.get());
         updatedUser.setUuid(existingUser.get().getUuid());
         UserEntity result = userRepository.save(UserMapper.toUserEntity(updatedUser));
@@ -55,10 +55,10 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void deleteUser(String id) {
-        Optional<UserEntity> result = userRepository.findById(UUID.fromString(id));
-        if (result.isEmpty()) throw new ResourceNotFoundException("User", id);
-        userRepository.deleteById(UUID.fromString(id));
+    public void deleteUser(UUID id) {
+        Optional<UserEntity> result = userRepository.findById(id);
+        if (result.isEmpty()) throw new ResourceNotFoundException("User", id.toString());
+        userRepository.deleteById(id);
     }
 
     private void checkUniqueFields(User user, UserEntity existingUser) {
