@@ -1,15 +1,19 @@
 package ukma.springboot.nextskill.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.util.UUID;
 
 @Entity
 @Table(name = "questions")
+@Data
+
 public class CourseSectionEntity {
     @Id
     @GeneratedValue
     @Column(nullable = false, updatable = false, unique = true)
-    private final UUID uuid;
+    private UUID uuid;
     @Column(nullable = false)
     private String name;
     @Column
@@ -22,31 +26,4 @@ public class CourseSectionEntity {
         this.uuid = UUID.randomUUID();
     }
 
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public CourseEntity getCourse() {
-        return course;
-    }
-
-    public void setCourse(CourseEntity course) {
-        this.course = course;
-    }
 }
