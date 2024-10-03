@@ -36,19 +36,19 @@ public class CourseSectionController {
     }
 
     @PostMapping(value = "")
-    public ResponseEntity<HttpStatus> addCourse(@Valid @RequestBody CourseSectionDto courseSection) {
+    public ResponseEntity<HttpStatus> addCourseSection(@Valid @RequestBody CourseSectionDto courseSection) {
         courseSectionService.createCourseSection(CourseSectionMapper.toCourseSection(courseSection));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<HttpStatus> updateCourse(@PathVariable UUID id, @Valid @RequestBody CourseSectionDto courseSection) {
+    public ResponseEntity<HttpStatus> updateCourseSection(@PathVariable UUID id, @Valid @RequestBody CourseSectionDto courseSection) {
         courseSectionService.updateCourseSection(id, CourseSectionMapper.toCourseSection(courseSection));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<HttpStatus> deleteCourse(@PathVariable UUID id) {
+    public ResponseEntity<HttpStatus> deleteCourseSection(@PathVariable UUID id) {
         courseSectionService.deleteCourseSection(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
