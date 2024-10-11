@@ -2,12 +2,13 @@ package ukma.springboot.nextskill.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.Errors;
+import ukma.springboot.nextskill.entities.UserEntity;
+import ukma.springboot.nextskill.exceptions.DuplicateUniqueFieldException;
+import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
 import ukma.springboot.nextskill.interfaces.IUserService;
 import ukma.springboot.nextskill.model.User;
-import ukma.springboot.nextskill.utilities.SimpleLogger;
-import ukma.springboot.nextskill.validators.PhoneValidator;
+import ukma.springboot.nextskill.model.mappers.UserMapper;
+import ukma.springboot.nextskill.repositories.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,53 +17,68 @@ import java.util.UUID;
 @Service
 public class UserService implements IUserService {
 
-    // Field wiring
+    private final UserRepository userRepository;
+
     @Autowired
-    private MockDatabaseUserService mockDatabaseUserService;
-
-    private PhoneValidator phoneValidator;
-
-    private SimpleLogger simpleLogger;
-
-    // Constructor wiring
-    @Autowired
-    public UserService(SimpleLogger simpleLogger) {
-        this.simpleLogger = simpleLogger;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public User getUser(UUID id) {
-        Optional<User> result = mockDatabaseUserService.find(id);
-        return result.orElse(null);
+        Optional<UserEntity> result = userRepository.findById(id);
+        if (result.isEmpty()) throw new ResourceNotFoundException("User", id.toString());
+        return UserMapper.toUser(result.get());
     }
 
     @Override
     public List<User> getAllUsers() {
-        return mockDatabaseUserService.getAll();
+        return userRepository.findAll().stream().map(UserMapper::toUser).toList();
     }
 
     @Override
-    public boolean updateUser(UUID id, User updatedUser) {
-        Errors validationErrors = new BeanPropertyBindingResult(updatedUser.getPhone(), "phone");
-        phoneValidator.validate(updatedUser.getPhone(), validationErrors);
-
-        if (validationErrors.hasErrors()) return false;
-
-        mockDatabaseUserService.set(id, updatedUser);
-        simpleLogger.info("Updated a user with id " + id + " with " + updatedUser);
-        return true;
+    public User createUser(User user) {
+        checkUniqueFields(user, null);
+        UserEntity userEntity = UserMapper.toUserEntity(user);
+        UserEntity savedEntity = userRepository.save(userEntity);
+        return UserMapper.toUser(savedEntity);
     }
 
     @Override
-    public boolean deleteUser(UUID id) {
-        mockDatabaseUserService.delete(id);
-        simpleLogger.info("Deleted a user with id " + id);
-        return true;
+    public User updateUser(UUID id, User updatedUser) {
+        Optional<UserEntity> existingUser = userRepository.findById(id);
+        if (existingUser.isEmpty()) throw new ResourceNotFoundException("User", id.toString());
+        checkUniqueFields(updatedUser, existingUser.get());
+        updatedUser.setUuid(existingUser.get().getUuid());
+        UserEntity result = userRepository.save(UserMapper.toUserEntity(updatedUser));
+        return UserMapper.toUser(result);
     }
 
-    //Setter wiring
-    @Autowired
-    private void setPhoneValidator(PhoneValidator phoneValidator) {
-        this.phoneValidator = phoneValidator;
+    @Override
+    public void deleteUser(UUID id) {
+        Optional<UserEntity> result = userRepository.findById(id);
+        if (result.isEmpty()) throw new ResourceNotFoundException("User", id.toString());
+        userRepository.deleteById(id);
     }
+
+    private void checkUniqueFields(User user, UserEntity existingUser) {
+        if (existingUser == null || !existingUser.getUsername().equals(user.getUsername())) {
+            if (userRepository.existsByUsername(user.getUsername())) {
+                throw new DuplicateUniqueFieldException("User", "username", user.getUsername());
+            }
+        }
+
+        if (existingUser == null || !existingUser.getEmail().equals(user.getEmail())) {
+            if (userRepository.existsByEmail(user.getEmail())) {
+                throw new DuplicateUniqueFieldException("User", "email", user.getEmail());
+            }
+        }
+
+        if (existingUser == null || !existingUser.getPhone().equals(user.getPhone())) {
+            if (userRepository.existsByPhone(user.getPhone())) {
+                throw new DuplicateUniqueFieldException("User", "phone", user.getPhone());
+            }
+        }
+    }
+
 }

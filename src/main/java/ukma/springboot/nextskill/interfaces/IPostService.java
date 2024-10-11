@@ -1,5 +1,6 @@
 package ukma.springboot.nextskill.interfaces;
 
+import ukma.springboot.nextskill.entities.PostEntity;
 import ukma.springboot.nextskill.model.Post;
 
 import java.util.List;

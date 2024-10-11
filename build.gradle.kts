@@ -19,20 +19,20 @@ repositories {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
-    implementation("org.slf4j:slf4j-api")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-devtools")
+    implementation("io.github.cdimascio:java-dotenv:5.2.2")
+
+    compileOnly("org.projectlombok:lombok:1.18.34")
+    annotationProcessor("org.projectlombok:lombok:1.18.34")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.slf4j:slf4j-simple")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-}
 
-configurations {
-    all {
-        exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
-        exclude(group = "ch.qos.logback", module = "logback-classic")
-        exclude(group = "org.apache.logging.log4j", module = "log4j-to-slf4j")
-    }
+    runtimeOnly("com.h2database:h2")
 }
 
 tasks.withType<Test> {
