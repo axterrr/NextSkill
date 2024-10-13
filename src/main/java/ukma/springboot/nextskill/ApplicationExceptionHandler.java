@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import ukma.springboot.nextskill.exceptions.CourseLimitExceededException;
 import ukma.springboot.nextskill.exceptions.DuplicateUniqueFieldException;
 import ukma.springboot.nextskill.exceptions.ErrorResponse;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
@@ -29,6 +30,11 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
     protected ResponseEntity<Object> handleDuplicateUniqueFieldException(DuplicateUniqueFieldException e) {
         ErrorResponse errorResponse = new ErrorResponse(List.of(e.getMessage()));
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(CourseLimitExceededException.class)
+    public ResponseEntity<Object> handleCourseLimitException(CourseLimitExceededException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @Override

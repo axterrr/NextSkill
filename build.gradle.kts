@@ -3,6 +3,7 @@ plugins {
     id("org.springframework.boot") version "3.3.3"
     id("io.spring.dependency-management") version "1.1.6"
     id("org.springdoc.openapi-gradle-plugin") version "1.9.0"
+    id("maven-publish")
 }
 
 group = "ukma.springboot"
@@ -26,7 +27,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-devtools")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
-    implementation("com.github.r-rin.nextskill:spring-boot-nextskill-aws-s3-starter:1.0.0")
 
     compileOnly("org.projectlombok:lombok:1.18.34")
     annotationProcessor("org.projectlombok:lombok:1.18.34")
