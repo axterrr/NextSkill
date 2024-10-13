@@ -40,6 +40,14 @@ public class CourseObjectService {
         return entities.stream().map(this::mapEntityToDto).collect(Collectors.toList());
     }
 
+    public CourseObjectDto getCourseObject(UUID uuid) {
+        Optional<CourseObjectEntity> optionalEntity = courseObjectRepository.findById(uuid);
+        if (optionalEntity.isEmpty()) {
+            throw new ResourceNotFoundException("CourseObject with UUID ", uuid.toString() );
+        }
+        return mapEntityToDto(optionalEntity.get());
+    }
+
     public CourseObjectDto updateCourseObject(UUID uuid, CourseObjectDto courseObjectDto) {
         validateCourseObject(courseObjectDto);
 

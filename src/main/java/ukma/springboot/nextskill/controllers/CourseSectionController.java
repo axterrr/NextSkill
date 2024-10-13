@@ -53,7 +53,7 @@ public class CourseSectionController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Course section is found", content = { @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = CourseDto.class))}),
+                    schema = @Schema(implementation = CourseSectionDto.class))}),
             @ApiResponse(responseCode = "404", description = "Course section is not found", content = @Content(
                     mediaType = "application/json",
                     schema = @Schema(implementation = ErrorResponse.class)))}
