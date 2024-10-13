@@ -10,4 +10,4 @@ public interface CourseRepository extends JpaRepository<CourseEntity, UUID> {
     List<CourseEntity> findByNameContaining(String name);
     List<CourseEntity> findByTeacher_Uuid(UUID teacherId);
 
-}
+    }
