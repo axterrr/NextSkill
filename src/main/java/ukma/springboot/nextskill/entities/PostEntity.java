@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Table(name = "posts")
 public class PostEntity extends CourseObjectEntity{
 

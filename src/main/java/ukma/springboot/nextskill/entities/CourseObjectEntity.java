@@ -5,7 +5,8 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class CourseObjectEntity {
 
     @Id
@@ -26,10 +27,6 @@ public class CourseObjectEntity {
     @Column(name = "order_index", nullable = false)
     private int order = -1;
 
-    CourseObjectEntity() {
-        this.createdAt = LocalDateTime.now();
-    }
-
     protected CourseObjectEntity(String title) {
         this.title = title;
         this.uuid = UUID.randomUUID();
@@ -42,6 +39,12 @@ public class CourseObjectEntity {
         this.order = order;
         this.isHidden = isHidden;
         this.createdAt = createdAt;
+    }
+
+    public CourseObjectEntity() {
+        this.title = "New Object";
+        this.uuid = UUID.randomUUID();
+        this.createdAt = LocalDateTime.now();
     }
 
     public UUID getUuid() {

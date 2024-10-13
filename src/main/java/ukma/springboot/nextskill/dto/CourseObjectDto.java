@@ -1,5 +1,7 @@
 package ukma.springboot.nextskill.dto;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -9,6 +11,14 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        property = "type"
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = PostDto.class, name = "Post"),
+        @JsonSubTypes.Type(value = AssignmentDto.class, name = "Assignment")
+})
 public class CourseObjectDto {
 
     private UUID uuid;
@@ -22,7 +32,4 @@ public class CourseObjectDto {
     private int order;
 
     private boolean isHidden = false;
-
-    @Size(min = 10, max = 500, message = "Description should be between 10 and 500 characters")
-    private String description;
 }
