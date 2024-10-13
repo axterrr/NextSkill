@@ -39,7 +39,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operation successful", content = {@Content(
                     mediaType = "application/json",
-                    array = @ArraySchema(schema = @Schema(implementation = CourseDto.class)))})}
+                    array = @ArraySchema(schema = @Schema(implementation = UserDto.class)))})}
     )
     public ResponseEntity<List<UserDto>> getAllUsers() {
         List<UserDto> users = userService.getAllUsers().stream().map(UserMapper::toUserDto).toList();
