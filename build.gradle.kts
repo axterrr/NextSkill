@@ -17,7 +17,13 @@ java {
 
 repositories {
     mavenCentral()
-    maven(url = "https://jitpack.io")
+    maven {
+        url = uri("https://maven.pkg.github.com/r-rin/spring-boot-nextskill-aws-s3-starter")
+        credentials {
+            username = System.getenv("STARTER_TOKEN")
+            password = ""
+        }
+    }
 }
 
 dependencies {
