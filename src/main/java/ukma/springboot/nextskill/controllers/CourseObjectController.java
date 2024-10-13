@@ -1,4 +1,4 @@
-// TODO: create DTO for children of CourseObjectDTO class and use oneOf
+// TODO: create DTO for children of CourseObjectDTO class and use oneOf, return correct subclasses
 package ukma.springboot.nextskill.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
