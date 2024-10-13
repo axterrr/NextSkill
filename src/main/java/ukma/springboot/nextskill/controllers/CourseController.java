@@ -109,4 +109,22 @@ public class CourseController {
         courseService.deleteCourse(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+
+    @PostMapping(value = "/{courseId}/enroll/{userId}")
+    @Operation(summary = "Enroll a user to a course", description = "Enrolls a user to the specified course", tags = {"Courses"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User successfully enrolled", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Course or User not found", content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ErrorResponse.class)))}
+    )
+    public ResponseEntity<HttpStatus> enrollUserToCourse(
+            @Parameter(description = "Id of the course")
+            @PathVariable UUID courseId,
+            @Parameter(description = "Id of the user")
+            @PathVariable UUID userId) {
+        courseService.enrollUserToCourse(courseId, userId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

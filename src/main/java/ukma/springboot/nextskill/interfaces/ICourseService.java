@@ -18,4 +18,6 @@ public interface ICourseService {
     List<CourseObject> getAllCourseItems();
     CourseObject getCourseItemById(UUID courseObjectId);
     void removeCourseItem(UUID courseObjectId);
+
+    void enrollUserToCourse(UUID courseId, UUID userId);
 }

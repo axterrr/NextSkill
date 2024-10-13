@@ -86,26 +86,22 @@ public class CourseService implements ICourseService {
     public void removeCourseItem(UUID courseObjectId) {
     }
 
-    // Метод запису користувача на курс
+    @Override
     public void enrollUserToCourse(UUID courseId, UUID userId) {
-        // Знаходимо курс
         CourseEntity course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new ResourceNotFoundException("Course", courseId.toString()));
 
-        // Знаходимо користувача
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", userId.toString()));
 
-        // Отримуємо кількість курсів, на які вже записаний користувач
         int currentCoursesCount = user.getCourses().size();
 
-        // Перевіряємо ліміт курсів
         courseLimitService.checkCourseLimit(currentCoursesCount);
 
-        // Якщо ліміт не перевищено, додаємо користувача до курсу
         course.getUsers().add(user);
         courseRepository.save(course);
     }
+
     private void checkTeacherExisting(Course course) {
         Optional<UserEntity> teacher = userRepository.findById(course.getTeacher().getUuid());
         if (teacher.isEmpty() || teacher.get().getUserRole() != UserRole.TEACHER) {
