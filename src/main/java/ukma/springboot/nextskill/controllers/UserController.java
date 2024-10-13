@@ -17,6 +17,7 @@ import ukma.springboot.nextskill.dto.CourseDto;
 import ukma.springboot.nextskill.dto.UserDto;
 import ukma.springboot.nextskill.exceptions.ErrorResponse;
 import ukma.springboot.nextskill.interfaces.IUserService;
+import ukma.springboot.nextskill.model.User;
 import ukma.springboot.nextskill.model.mappers.UserMapper;
 
 import java.util.List;
@@ -71,11 +72,12 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Something in provided data is wrong", content = @Content(
                     mediaType = "application/json"))}
     )
-    public ResponseEntity<HttpStatus> addUser(
+    public ResponseEntity<UserDto> addUser(
             @Parameter(description = "Data of a user to be created")
             @Valid @RequestBody UserDto user) {
-        userService.createUser(UserMapper.toUser(user));
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        User createdUser = userService.createUser(UserMapper.toUser(user));
+        UserDto toReturn = UserMapper.toUserDto(createdUser);
+        return new ResponseEntity<>(toReturn, HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{id}")
