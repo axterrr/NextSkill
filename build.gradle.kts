@@ -40,6 +40,7 @@ dependencies {
 
     compileOnly("org.projectlombok:lombok:1.18.34")
     annotationProcessor("org.projectlombok:lombok:1.18.34")
+    annotationProcessor("org.apache.logging.log4j:log4j-core:2.20.0")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 

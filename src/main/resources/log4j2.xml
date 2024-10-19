@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration packages="ukma.springboot.nextskill" status="INFO">
+<Configuration status="INFO">
     <Appenders>
         <ConditionalLayoutAppender name="ConditionalAppender">
             <SimpleLayout charset="UTF-8"/>
