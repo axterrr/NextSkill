@@ -34,6 +34,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-devtools")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
     implementation("com.github.r-rin.nextskill.s3starter:spring-boot-nextskill-aws-s3-starter:1.0.1")
+    implementation("org.springframework.boot:spring-boot-starter-security")
 
     compileOnly("org.projectlombok:lombok:1.18.34")
     annotationProcessor("org.projectlombok:lombok:1.18.34")
