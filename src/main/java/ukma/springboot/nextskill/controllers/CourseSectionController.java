@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/courseSection")
+@RequestMapping("/api/courseSection")
 @Tag(name = "Course Sections", description = "Course Sections related API")
 public class CourseSectionController {
 
