@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ukma.springboot.nextskill.dto.CourseDto;
 import ukma.springboot.nextskill.exceptions.ErrorResponse;
@@ -69,6 +70,7 @@ public class CourseController {
             @ApiResponse(responseCode = "400", description = "Something in provided data is wrong", content = @Content(
                     mediaType = "application/json"))}
     )
+    @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<HttpStatus> addCourse(
             @Parameter(description = "Data of a course to be created")
             @Valid @RequestBody CourseDto course) {
@@ -103,6 +105,7 @@ public class CourseController {
                     mediaType = "application/json",
                     schema = @Schema(implementation = ErrorResponse.class)))}
     )
+    @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<HttpStatus> deleteCourse(
             @Parameter(description = "Id if a course")
             @PathVariable UUID id) {
