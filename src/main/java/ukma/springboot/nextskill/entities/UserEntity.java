@@ -2,16 +2,19 @@ package ukma.springboot.nextskill.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import ukma.springboot.nextskill.security.UserRole;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Table(name = "users")
 @Data
-public class UserEntity {
+public class UserEntity implements UserDetails {
 
     @Id
     @GeneratedValue
@@ -42,12 +45,11 @@ public class UserEntity {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private UserRole userRole;
-
     @Column
     private boolean isDisabled;
+
+    @Column(nullable = false)
+    private String passwordHash;
 
     @ManyToMany
     @JoinTable(
@@ -56,9 +58,23 @@ public class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "course_fk"))
     private List<CourseEntity> courses;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<RoleEntity> roles;
+
     public UserEntity() {
         this.uuid = UUID.randomUUID();
         this.createdAt = LocalDateTime.now();
         this.isDisabled = false;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public String getPassword() {
+        return passwordHash;
     }
 }
