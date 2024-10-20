@@ -42,7 +42,6 @@ public class CourseService implements ICourseService {
         logger.info(LogMarkers.COURSE_MARKER, "Trying to fetch course with id: {}", id);
         Optional<CourseEntity> result = courseRepository.findById(id);
         if (result.isEmpty()) {
-            logger.warn(LogMarkers.COURSE_MARKER, "Course with id {} not found", id);
             throw new ResourceNotFoundException("Course", id.toString());
         }
         logger.info(LogMarkers.COURSE_MARKER, "Course with id: {} fetched successfully", id);
@@ -76,7 +75,6 @@ public class CourseService implements ICourseService {
         logger.info(LogMarkers.COURSE_MARKER, "Trying to update course with id: {}", id);
         Optional<CourseEntity> existingCourse = courseRepository.findById(id);
         if (existingCourse.isEmpty()) {
-            logger.warn(LogMarkers.COURSE_MARKER, "Course with id {} not found", id);
             throw new ResourceNotFoundException("Course", id.toString());
         }
 
@@ -92,7 +90,6 @@ public class CourseService implements ICourseService {
         logger.info(LogMarkers.COURSE_MARKER, "Trying to delete course with id: {}", id);
         Optional<CourseEntity> result = courseRepository.findById(id);
         if (result.isEmpty()) {
-            logger.warn(LogMarkers.COURSE_MARKER, "Course with id {} not found", id);
             throw new ResourceNotFoundException("Course", id.toString());
         }
         courseRepository.deleteById(id);
@@ -149,7 +146,6 @@ public class CourseService implements ICourseService {
         logger.debug("Checking if teacher exists for course: {}", course.getName());
         Optional<UserEntity> teacher = userRepository.findById(course.getTeacher().getUuid());
         if (teacher.isEmpty() || teacher.get().getUserRole() != UserRole.TEACHER) {
-            logger.warn(LogMarkers.COURSE_MARKER, "Teacher with id {} not found or invalid role", course.getTeacher().getUuid());
             throw new ResourceNotFoundException("Teacher", course.getTeacher().getUuid().toString());
         }
         logger.debug("Teacher check passed for course: {}", course.getName());

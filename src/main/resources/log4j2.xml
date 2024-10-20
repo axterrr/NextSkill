@@ -9,7 +9,7 @@
                      filePattern="logs/app-%d{yyyy-MM-dd}-%i.log.gz">
             <DetailedLayout charset="UTF-8"/>
             <Policies>
-                <SizeBasedTriggeringPolicy size="10MB"/>
+                <SizeBasedTriggeringPolicy size="10KB"/>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
             </Policies>
         </RollingFile>

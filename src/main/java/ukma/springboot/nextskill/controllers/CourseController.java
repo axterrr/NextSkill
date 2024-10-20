@@ -81,7 +81,8 @@ public class CourseController {
     public ResponseEntity<HttpStatus> addCourse(
             @Parameter(description = "Data of a course to be created")
             @Valid @RequestBody CourseDto course) {
-        ThreadContext.put("sessionInfo", "session information");
+        String sessionInfo = "session information available from controller";
+        ThreadContext.put("sessionInfo", sessionInfo);
         logger.info(CompositeLogMarkers.COURSE_CREATE_MARKER, "Creating course with name: {}", course.getName());
         courseService.createCourse(CourseMapper.toCourse(course));
         ThreadContext.clearAll();
@@ -120,9 +121,8 @@ public class CourseController {
     public ResponseEntity<HttpStatus> deleteCourse(
             @Parameter(description = "Id if a course")
             @PathVariable UUID id) {
-        logger.info(LogMarkers.COURSE_MARKER, "Trying to delete course with id: {}", id);
+        logger.info(LogMarkers.COURSE_MARKER, "Deleting course with id: {}", id);
         courseService.deleteCourse(id);
-        logger.info(LogMarkers.COURSE_MARKER, "Course with id: {} deleted successfully", id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -146,20 +146,3 @@ public class CourseController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
-
-/*
-no, no filters
-just use thread context like here
-public class Log4J2Runnable implements Runnable {
-    private final Transaction tx;
-    private Log4J2BusinessService log4j2BusinessService = new Log4J2BusinessService();
-    public void run() {
-        ThreadContext.put("transaction.id", tx.getTransactionId());
-        ThreadContext.put("transaction.owner", tx.getOwner());
-        log4j2BusinessService.transfer(tx.getAmount());
-        ThreadContext.clearAll();
-    }
-}
-
-to help log in swrvicesd and exceptionhandling
- */
