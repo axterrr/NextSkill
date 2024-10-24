@@ -42,6 +42,7 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-core")
     implementation("org.apache.logging.log4j:log4j-api")
     implementation("org.springframework.boot:spring-boot-starter-log4j2:3.3.4")
+    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
 
     compileOnly("org.projectlombok:lombok:1.18.34")
     annotationProcessor("org.projectlombok:lombok:1.18.34")
