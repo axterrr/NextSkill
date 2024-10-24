@@ -3,6 +3,7 @@ package ukma.springboot.nextskill.model;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -24,6 +25,8 @@ public class User {
     public User() {
         this.uuid = UUID.randomUUID();
         this.createdAt = LocalDateTime.now();
+        this.isDisabled = false;
+        this.roles = new HashSet<>();
     }
 
     @Override
@@ -38,7 +41,7 @@ public class User {
                 ", phone='" + phone + '\'' +
                 ", description='" + description + '\'' +
                 ", createdAt=" + createdAt +
-                ", userRole=" + userRole +
+                ", userRole=" + roles +
                 ", isDisabled=" + isDisabled +
                 '}';
     }
