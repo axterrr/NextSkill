@@ -1,18 +1,13 @@
 package ukma.springboot.nextskill.dto;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import ukma.springboot.nextskill.validation.annotations.VerifiedEmail;
 
-import java.time.LocalDateTime;
-import java.util.Set;
-import java.util.UUID;
-
 @Data
-public class UserDto {
-
-    private UUID uuid;
-
+public class RegisterUserDto {
     @NotBlank(message = "Username cannot be blank")
     @Pattern(regexp = "^[a-z0-9_]*$", message = "Username can contain only lower latin letters, digits and underscore")
     @Size(min = 5, message = "Username length should me more than 5")
@@ -26,25 +21,10 @@ public class UserDto {
     private String surname;
 
     @NotBlank(message = "Email cannot be blank")
-    //@VerifiedEmail(message = "Invalid email")
+    @VerifiedEmail(message = "Invalid email")
     private String email;
 
-    @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10}$", message = "Invalid phone")
-    private String phone;
-
-    private String avatarLink;
-
-    private String description;
-
-    private LocalDateTime createdAt;
-
-    private boolean isDisabled;
-
-    private Set<RoleDto> roles;
-
-    public UserDto() {
-        this.uuid = UUID.randomUUID();
-        this.createdAt = LocalDateTime.now();
-        this.isDisabled = false;
-    }
+    @NotBlank(message = "Password cannot be blank")
+    @Size(min = 8, message = "Password length should be more than 8")
+    private String password;
 }

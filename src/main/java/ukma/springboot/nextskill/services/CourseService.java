@@ -16,7 +16,6 @@ import ukma.springboot.nextskill.model.CourseObject;
 import ukma.springboot.nextskill.model.mappers.CourseMapper;
 import ukma.springboot.nextskill.repositories.CourseRepository;
 import ukma.springboot.nextskill.repositories.UserRepository;
-import ukma.springboot.nextskill.security.UserRole;
 
 import java.util.List;
 import java.util.Optional;
@@ -145,7 +144,7 @@ public class CourseService implements ICourseService {
     private void checkTeacherExisting(Course course) {
         logger.debug("Checking if teacher exists for course: {}", course.getName());
         Optional<UserEntity> teacher = userRepository.findById(course.getTeacher().getUuid());
-        if (teacher.isEmpty() || teacher.get().getUserRole() != UserRole.TEACHER) {
+        if (teacher.isEmpty() || teacher.get().getRoles().stream().noneMatch(role -> role.getTitle().equals("TEACHER"))) {
             throw new ResourceNotFoundException("Teacher", course.getTeacher().getUuid().toString());
         }
         logger.debug("Teacher check passed for course: {}", course.getName());

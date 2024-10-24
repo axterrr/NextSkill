@@ -1,9 +1,9 @@
 package ukma.springboot.nextskill.model;
 
 import lombok.Data;
-import ukma.springboot.nextskill.security.UserRole;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -17,8 +17,9 @@ public class User {
     private String avatarLink;
     private String description;
     private LocalDateTime createdAt;
-    private UserRole userRole;
     private boolean isDisabled;
+    private String passwordHash;
+    private Set<Role> roles;
 
     public User() {
         this.uuid = UUID.randomUUID();

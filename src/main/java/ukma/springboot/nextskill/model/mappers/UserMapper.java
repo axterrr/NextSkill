@@ -4,6 +4,8 @@ import ukma.springboot.nextskill.dto.UserDto;
 import ukma.springboot.nextskill.entities.UserEntity;
 import ukma.springboot.nextskill.model.User;
 
+import java.util.stream.Collectors;
+
 public class UserMapper {
 
     private UserMapper() {}
@@ -21,8 +23,9 @@ public class UserMapper {
         user.setPhone(userEntity.getPhone());
         user.setAvatarLink(userEntity.getAvatarLink());
         user.setDescription(userEntity.getDescription());
-        user.setUserRole(userEntity.getUserRole());
+        user.setRoles(userEntity.getRoles().stream().map(RoleMapper::toRole).collect(Collectors.toSet()));
         user.setDisabled(userEntity.isDisabled());
+        user.setPasswordHash(user.getPasswordHash());
 
         return user;
     }
@@ -40,8 +43,9 @@ public class UserMapper {
         userEntity.setPhone(user.getPhone());
         userEntity.setAvatarLink(user.getAvatarLink());
         userEntity.setDescription(user.getDescription());
-        userEntity.setUserRole(user.getUserRole());
+        userEntity.setRoles(user.getRoles().stream().map(RoleMapper::toRoleEntity).collect(Collectors.toSet()));
         userEntity.setDisabled(user.isDisabled());
+        userEntity.setPasswordHash(user.getPasswordHash());
 
         return userEntity;
     }
@@ -59,7 +63,7 @@ public class UserMapper {
         userDto.setPhone(user.getPhone());
         userDto.setAvatarLink(user.getAvatarLink());
         userDto.setDescription(user.getDescription());
-        userDto.setUserRole(user.getUserRole());
+        userDto.setRoles(user.getRoles().stream().map(RoleMapper::toRoleDto).collect(Collectors.toSet()));
         userDto.setDisabled(user.isDisabled());
 
         return userDto;
@@ -78,7 +82,7 @@ public class UserMapper {
         user.setPhone(userDto.getPhone());
         user.setAvatarLink(userDto.getAvatarLink());
         user.setDescription(userDto.getDescription());
-        user.setUserRole(userDto.getUserRole());
+        user.setRoles(userDto.getRoles().stream().map(RoleMapper::toRole).collect(Collectors.toSet()));
         user.setDisabled(userDto.isDisabled());
 
         return user;
