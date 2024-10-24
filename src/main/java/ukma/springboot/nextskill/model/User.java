@@ -24,4 +24,21 @@ public class User {
         this.uuid = UUID.randomUUID();
         this.createdAt = LocalDateTime.now();
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "avatarLink='" + avatarLink + '\'' +
+                ", uuid=" + uuid +
+                ", username='" + username + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", description='" + description + '\'' +
+                ", createdAt=" + createdAt +
+                ", userRole=" + userRole +
+                ", isDisabled=" + isDisabled +
+                '}';
+    }
 }

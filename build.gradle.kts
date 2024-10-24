@@ -34,15 +34,25 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-devtools")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
     implementation("com.github.r-rin.nextskill.s3starter:spring-boot-nextskill-aws-s3-starter:1.0.1")
+    implementation("org.apache.logging.log4j:log4j-core")
+    implementation("org.apache.logging.log4j:log4j-api")
+    implementation("org.springframework.boot:spring-boot-starter-log4j2:3.3.4")
 
     compileOnly("org.projectlombok:lombok:1.18.34")
     annotationProcessor("org.projectlombok:lombok:1.18.34")
+    annotationProcessor("org.apache.logging.log4j:log4j-core:2.20.0")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     runtimeOnly("com.h2database:h2")
+
+    modules {
+        module("org.springframework.boot:spring-boot-starter-logging") {
+            replacedBy("org.springframework.boot:spring-boot-starter-log4j2", "Use Log4j2 instead of Logback")
+        }
+    }
 }
 
 tasks.withType<Test> {

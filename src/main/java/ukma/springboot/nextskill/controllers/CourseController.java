@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,11 @@ import org.springframework.web.bind.annotation.*;
 import ukma.springboot.nextskill.dto.CourseDto;
 import ukma.springboot.nextskill.exceptions.ErrorResponse;
 import ukma.springboot.nextskill.interfaces.ICourseService;
+import ukma.springboot.nextskill.logging.markers.CompositeLogMarkers;
+import ukma.springboot.nextskill.logging.markers.LogMarkers;
 import ukma.springboot.nextskill.model.mappers.CourseMapper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,6 +30,8 @@ import java.util.UUID;
 @RequestMapping("/course")
 @Tag(name = "Courses", description = "Courses related API")
 public class CourseController {
+
+    private static final Logger logger = LogManager.getLogger(CourseController.class);
 
     private final ICourseService courseService;
 
@@ -41,6 +48,7 @@ public class CourseController {
                     array = @ArraySchema(schema = @Schema(implementation = CourseDto.class)))})}
     )
     public ResponseEntity<List<CourseDto>> getAllCourses() {
+        logger.info(LogMarkers.COURSE_MARKER, "Fetching all courses for current user");
         List<CourseDto> courses = courseService.getAllCourses().stream().map(CourseMapper::toCourseDto).toList();
         return new ResponseEntity<>(courses, HttpStatus.OK);
     }
@@ -58,6 +66,7 @@ public class CourseController {
     public ResponseEntity<CourseDto> getCourse(
             @Parameter(description = "Id if a course")
             @PathVariable UUID id) {
+        logger.info(LogMarkers.COURSE_MARKER, "Fetching course with id: {}", id);
         CourseDto course = CourseMapper.toCourseDto(courseService.getCourse(id));
         return new ResponseEntity<>(course, HttpStatus.OK);
     }
@@ -72,7 +81,11 @@ public class CourseController {
     public ResponseEntity<HttpStatus> addCourse(
             @Parameter(description = "Data of a course to be created")
             @Valid @RequestBody CourseDto course) {
+        String sessionInfo = "session information available from controller";
+        ThreadContext.put("sessionInfo", sessionInfo);
+        logger.info(CompositeLogMarkers.COURSE_CREATE_MARKER, "Creating course with name: {}", course.getName());
         courseService.createCourse(CourseMapper.toCourse(course));
+        ThreadContext.clearAll();
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -91,6 +104,8 @@ public class CourseController {
             @PathVariable UUID id,
             @Parameter(description = "Updated data of a course")
             @Valid @RequestBody CourseDto course) {
+        logger.info(LogMarkers.COURSE_MARKER, "Updating course with id: {}", id);
+
         courseService.updateCourse(id, CourseMapper.toCourse(course));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -106,6 +121,7 @@ public class CourseController {
     public ResponseEntity<HttpStatus> deleteCourse(
             @Parameter(description = "Id if a course")
             @PathVariable UUID id) {
+        logger.info(LogMarkers.COURSE_MARKER, "Deleting course with id: {}", id);
         courseService.deleteCourse(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -124,6 +140,8 @@ public class CourseController {
             @PathVariable UUID courseId,
             @Parameter(description = "Id of the user")
             @PathVariable UUID userId) {
+        logger.info(LogMarkers.COURSE_MARKER, "Enrolling user {} to course with id: {}", userId, courseId);
+
         courseService.enrollUserToCourse(courseId, userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

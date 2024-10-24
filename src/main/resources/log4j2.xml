@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Appenders>
+        <ConditionalLayoutAppender name="ConditionalAppender">
+            <SimpleLayout charset="UTF-8"/>
+            <DetailedLayout charset="UTF-8"/>
+        </ConditionalLayoutAppender>
+        <RollingFile name="RollingFileAppender" fileName="logs/app.log"
+                     filePattern="logs/app-%d{yyyy-MM-dd}-%i.log.gz">
+            <DetailedLayout charset="UTF-8"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10KB"/>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="ConditionalAppender"/>
+            <AppenderRef ref="RollingFileAppender"/>
+        </Root>
+    </Loggers>
+</Configuration>

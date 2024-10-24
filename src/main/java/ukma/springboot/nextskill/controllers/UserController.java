@@ -9,14 +9,18 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ukma.springboot.nextskill.dto.CourseDto;
 import ukma.springboot.nextskill.dto.UserDto;
 import ukma.springboot.nextskill.exceptions.ErrorResponse;
 import ukma.springboot.nextskill.interfaces.IUserService;
+import ukma.springboot.nextskill.logging.markers.CompositeLogMarkers;
+import ukma.springboot.nextskill.logging.markers.LogMarkers;
 import ukma.springboot.nextskill.model.User;
 import ukma.springboot.nextskill.model.mappers.UserMapper;
 
@@ -27,6 +31,8 @@ import java.util.UUID;
 @RequestMapping("/user")
 @Tag(name = "Users", description = "Users related API")
 public class UserController {
+
+    private static final Logger logger = LogManager.getLogger(CourseController.class);
 
     private final IUserService userService;
 
@@ -43,6 +49,7 @@ public class UserController {
                     array = @ArraySchema(schema = @Schema(implementation = UserDto.class)))})}
     )
     public ResponseEntity<List<UserDto>> getAllUsers() {
+        logger.info(LogMarkers.USER_MARKER, "Fetching all users");
         List<UserDto> users = userService.getAllUsers().stream().map(UserMapper::toUserDto).toList();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
@@ -61,6 +68,7 @@ public class UserController {
     public ResponseEntity<UserDto> getUser(
             @Parameter(description = "Id if a user")
             @PathVariable UUID id) {
+        logger.info(LogMarkers.USER_MARKER, "Fetching user with id: {}", id);
         UserDto user = UserMapper.toUserDto(userService.getUser(id));
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -75,8 +83,12 @@ public class UserController {
     public ResponseEntity<UserDto> addUser(
             @Parameter(description = "Data of a user to be created")
             @Valid @RequestBody UserDto user) {
+        String sessionInfo = "session information available from controller";
+        ThreadContext.put("sessionInfo", sessionInfo);
+        logger.info(CompositeLogMarkers.USER_CREATE_MARKER, "Creating user: {}", user);
         User createdUser = userService.createUser(UserMapper.toUser(user));
         UserDto toReturn = UserMapper.toUserDto(createdUser);
+        ThreadContext.clearAll();
         return new ResponseEntity<>(toReturn, HttpStatus.CREATED);
     }
 
@@ -93,6 +105,7 @@ public class UserController {
     public ResponseEntity<HttpStatus> updateUser(
             @Parameter(description = "Data of a user to be updated")
             @PathVariable UUID id, @Valid @RequestBody UserDto user) {
+        logger.info(LogMarkers.USER_MARKER, "Updating user with id: {}", id);
         userService.updateUser(id, UserMapper.toUser(user));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -108,6 +121,7 @@ public class UserController {
     public ResponseEntity<HttpStatus> deleteUser(
             @Parameter(description = "Id if a user")
             @PathVariable UUID id) {
+        logger.info(LogMarkers.USER_MARKER, "Deleting course with id: {}", id);
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
