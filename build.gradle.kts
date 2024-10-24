@@ -38,15 +38,25 @@ dependencies {
     implementation("org.springframework.security:spring-security-config:6.3.3")
     implementation("io.jsonwebtoken:jjwt-api:0.12.6")
     implementation("io.jsonwebtoken:jjwt-impl:0.12.6")
+    implementation("org.apache.logging.log4j:log4j-core")
+    implementation("org.apache.logging.log4j:log4j-api")
+    implementation("org.springframework.boot:spring-boot-starter-log4j2:3.3.4")
 
     compileOnly("org.projectlombok:lombok:1.18.34")
     annotationProcessor("org.projectlombok:lombok:1.18.34")
+    annotationProcessor("org.apache.logging.log4j:log4j-core:2.20.0")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     runtimeOnly("com.h2database:h2")
+
+    modules {
+        module("org.springframework.boot:spring-boot-starter-logging") {
+            replacedBy("org.springframework.boot:spring-boot-starter-log4j2", "Use Log4j2 instead of Logback")
+        }
+    }
 }
 
 tasks.withType<Test> {

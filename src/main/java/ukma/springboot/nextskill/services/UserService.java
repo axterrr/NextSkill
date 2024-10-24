@@ -1,5 +1,7 @@
 package ukma.springboot.nextskill.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ukma.springboot.nextskill.entities.UserEntity;
@@ -24,6 +26,8 @@ public class UserService implements IUserService {
         this.userRepository = userRepository;
     }
 
+    private static final Logger userLogger = LoggerFactory.getLogger(UserService.class);
+
     @Override
     public User getUser(UUID id) {
         Optional<UserEntity> result = userRepository.findById(id);
@@ -41,6 +45,7 @@ public class UserService implements IUserService {
         checkUniqueFields(user, null);
         UserEntity userEntity = UserMapper.toUserEntity(user);
         UserEntity savedEntity = userRepository.save(userEntity);
+        userLogger.info("Created user {} with id {}", savedEntity.getUsername(), savedEntity.getUuid());
         return UserMapper.toUser(savedEntity);
     }
 
@@ -48,9 +53,12 @@ public class UserService implements IUserService {
     public User updateUser(UUID id, User updatedUser) {
         Optional<UserEntity> existingUser = userRepository.findById(id);
         if (existingUser.isEmpty()) throw new ResourceNotFoundException("User", id.toString());
+        userLogger.info("Received new user data for id {}, data: {}", updatedUser.getUuid(), updatedUser);
+        userLogger.info("Current user data for id {}, data: {}", existingUser.get().getUuid(), existingUser.get());
         checkUniqueFields(updatedUser, existingUser.get());
         updatedUser.setUuid(existingUser.get().getUuid());
         UserEntity result = userRepository.save(UserMapper.toUserEntity(updatedUser));
+        userLogger.info("Updated user {} with id {}", result.getUsername(), result.getUuid());
         return UserMapper.toUser(result);
     }
 
@@ -58,6 +66,7 @@ public class UserService implements IUserService {
     public void deleteUser(UUID id) {
         Optional<UserEntity> result = userRepository.findById(id);
         if (result.isEmpty()) throw new ResourceNotFoundException("User", id.toString());
+        userLogger.info("User {} with id {} was deleted", result.get().getUsername(), result.get().getUuid());
         userRepository.deleteById(id);
     }
 

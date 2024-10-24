@@ -26,7 +26,7 @@ public class UserDto {
     private String surname;
 
     @NotBlank(message = "Email cannot be blank")
-    @VerifiedEmail(message = "Invalid email")
+    //@VerifiedEmail(message = "Invalid email")
     private String email;
 
     @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10}$", message = "Invalid phone")
