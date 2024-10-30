@@ -27,4 +27,5 @@ public class CourseDto {
         this.uuid = UUID.randomUUID();
         creationDate = LocalDate.now();
     }
+
 }
