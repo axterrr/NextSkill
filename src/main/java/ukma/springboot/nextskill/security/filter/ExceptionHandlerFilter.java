@@ -21,7 +21,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
             response.getWriter().flush();
         } catch (ResourceNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            response.getWriter().write("Incorrect email");
+            response.getWriter().write("Incorrect username");
             response.getWriter().flush();
         } catch (RuntimeException e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

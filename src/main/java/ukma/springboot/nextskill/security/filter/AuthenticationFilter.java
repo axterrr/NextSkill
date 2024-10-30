@@ -30,7 +30,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
             Credentials credentials = new ObjectMapper().readValue(request.getInputStream(), Credentials.class);
-            Authentication authentication = new UsernamePasswordAuthenticationToken(credentials.getEmail(), credentials.getPassword());
+            Authentication authentication = new UsernamePasswordAuthenticationToken(credentials.getUsername(), credentials.getPassword());
             return authenticationManager.authenticate(authentication);
         } catch (IOException e) {
             throw new RuntimeException();

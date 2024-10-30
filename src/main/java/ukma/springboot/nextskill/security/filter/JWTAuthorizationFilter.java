@@ -37,12 +37,12 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
             .build()
             .verify(token);
 
-        String email = jwt.getSubject();
+        String username = jwt.getSubject();
         List<GrantedAuthority> authorities = jwt.getClaim("roles").asList(String.class).stream()
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, authorities);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         filterChain.doFilter(request, response);
     }

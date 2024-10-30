@@ -23,7 +23,7 @@ public class AuthenticationManagerImpl implements AuthenticationManager {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        User user = userService.getUserByEmail(authentication.getPrincipal().toString());
+        User user = userService.getUserByUsername(authentication.getPrincipal().toString());
         if (!passwordEncoder.matches(authentication.getCredentials().toString(), user.getPasswordHash())) {
             throw new BadCredentialsException("Incorrect Password");
         }

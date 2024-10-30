@@ -83,8 +83,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User getUserByEmail(String email) {
-        Optional<UserEntity> result = userRepository.findByEmail(email);
+    public User getUserByUsername(String username) {
+        Optional<UserEntity> result = userRepository.findByUsername(username);
         if (result.isEmpty()) throw new ResourceNotFoundException("User", "-");
         return UserMapper.toUser(result.get());
     }
