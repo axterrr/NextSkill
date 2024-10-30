@@ -70,6 +70,16 @@ public class UserService implements IUserService {
         userRepository.deleteById(id);
     }
 
+    @Override
+    public void processUser(User user) {
+        Optional<UserEntity> result = userRepository.findById(user.getUuid());
+        if (result.isEmpty()) {
+            createUser(user);
+        } else {
+            updateUser(user.getUuid(), user);
+        }
+    }
+
     private void checkUniqueFields(User user, UserEntity existingUser) {
         if (existingUser == null || !existingUser.getUsername().equals(user.getUsername())) {
             if (userRepository.existsByUsername(user.getUsername())) {

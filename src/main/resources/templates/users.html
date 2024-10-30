@@ -1,0 +1,37 @@
+<!DOCTYPE>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" lang="en">
+<head>
+    <title>NextSkill</title>
+    <link th:href="@{/list-stylesheet.css}" rel="stylesheet">
+</head>
+<body>
+
+<div class="topnav">
+    <a th:href="@{/page/user/form}">User Form</a>
+    <a th:href="@{/page/user/all}" style="background:green">Users</a>
+    <a th:href="@{/page/course/all}">Courses</a>
+</div>
+
+<div class="container">
+    <h2>Users</h2>
+    <table id="table">
+        <tr>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Surname</th>
+            <th>Email</th>
+            <th>Phone</th>
+        </tr>
+        <tr th:each="user: ${users}" th:object="${user}">
+            <td th:text="*{username}"></td>
+            <td th:text="*{name}"></td>
+            <td th:text="*{surname}"></td>
+            <td th:text="*{email}"></td>
+            <td th:text="*{phone}"></td>
+            <td sec:authorize="hasRole('ROLE_ADMIN')"> <a role="button" class="update" th:href="@{form(id = *{uuid})}">Update</a> </td>
+        </tr>
+    </table>
+</div>
+
+</body>
+</html>
