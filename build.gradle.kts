@@ -49,6 +49,10 @@ dependencies {
     annotationProcessor("org.apache.logging.log4j:log4j-core:2.20.0")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework:spring-test")
+    testImplementation ("com.jayway.jsonpath:json-path")
+    testImplementation ("org.mockito:mockito-core")
+    testImplementation ("org.mockito:mockito-junit-jupiter")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
