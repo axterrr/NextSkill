@@ -35,6 +35,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-devtools")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
     //implementation("com.github.r-rin.nextskill.s3starter:spring-boot-nextskill-aws-s3-starter:1.0.1")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("com.auth0:java-jwt:4.4.0")
     implementation("org.apache.logging.log4j:log4j-core")
     implementation("org.apache.logging.log4j:log4j-api")
     implementation("org.springframework.boot:spring-boot-starter-log4j2:3.3.4")

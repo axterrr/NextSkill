@@ -80,6 +80,13 @@ public class UserService implements IUserService {
         }
     }
 
+    @Override
+    public User getUserByEmail(String email) {
+        Optional<UserEntity> result = userRepository.findByEmail(email);
+        if (result.isEmpty()) throw new ResourceNotFoundException("User", "-");
+        return UserMapper.toUser(result.get());
+    }
+
     private void checkUniqueFields(User user, UserEntity existingUser) {
         if (existingUser == null || !existingUser.getUsername().equals(user.getUsername())) {
             if (userRepository.existsByUsername(user.getUsername())) {

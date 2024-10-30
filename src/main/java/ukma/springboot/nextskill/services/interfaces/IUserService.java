@@ -12,4 +12,5 @@ public interface IUserService {
     User updateUser(UUID id, User updatedUser);
     void deleteUser(UUID id);
     void processUser(User user);
+    User getUserByEmail(String email);
 }
