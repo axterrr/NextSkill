@@ -34,9 +34,10 @@ public class SecurityConfig {
         return http
             .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
             .csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(autorize -> autorize
+            .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/user/create").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/user/all").hasRole("ADMIN")
                 .anyRequest().authenticated())
             .addFilterBefore(new ExceptionHandlerFilter(), AuthenticationFilter.class)
             .addFilter(new AuthenticationFilter(authenticationManager, secretKey, jwtExpiration))
