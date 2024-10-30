@@ -52,7 +52,7 @@ public class CourseMapper {
         course.setCreationDate(courseDto.getCreationDate());
         course.setName(courseDto.getName());
         course.setDescription(courseDto.getDescription());
-        course.setTeacher(UserMapper.toUser(courseDto.getTeacher()));
+        course.setTeacher(UserMapper.toUser(courseDto.getTeacher(), null));
 
         return course;
     }

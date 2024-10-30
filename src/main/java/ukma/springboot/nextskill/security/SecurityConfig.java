@@ -3,6 +3,7 @@ package ukma.springboot.nextskill.security;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -22,7 +23,7 @@ public class SecurityConfig {
     @Value("${jwt.token.expiration.time}")
     private long jwtExpiration;
 
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
     public SecurityConfig(AuthenticationManager manager) {
         this.authenticationManager = manager;
@@ -35,6 +36,7 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(autorize -> autorize
                 .requestMatchers("/h2-console/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/user/create").permitAll()
                 .anyRequest().authenticated())
             .addFilterBefore(new ExceptionHandlerFilter(), AuthenticationFilter.class)
             .addFilter(new AuthenticationFilter(authenticationManager, secretKey, jwtExpiration))

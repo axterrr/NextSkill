@@ -1,5 +1,6 @@
 package ukma.springboot.nextskill.model.mappers;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import ukma.springboot.nextskill.model.dto.UserDto;
 import ukma.springboot.nextskill.model.entities.UserEntity;
 import ukma.springboot.nextskill.model.pojo.User;
@@ -23,7 +24,7 @@ public class UserMapper {
         user.setDescription(userEntity.getDescription());
         user.setRole(userEntity.getRole());
         user.setDisabled(userEntity.isDisabled());
-        user.setPasswordHash(user.getPasswordHash());
+        user.setPasswordHash(userEntity.getPasswordHash());
 
         return user;
     }
@@ -67,7 +68,7 @@ public class UserMapper {
         return userDto;
     }
 
-    public static User toUser(UserDto userDto) {
+    public static User toUser(UserDto userDto, PasswordEncoder passwordEncoder) {
         if (userDto == null) return null;
 
         User user = new User();
@@ -82,6 +83,9 @@ public class UserMapper {
         user.setDescription(userDto.getDescription());
         user.setRole(userDto.getRole());
         user.setDisabled(userDto.isDisabled());
+        if (passwordEncoder != null) {
+            user.setPasswordHash(passwordEncoder.encode(userDto.getPassword()));
+        }
 
         return user;
     }

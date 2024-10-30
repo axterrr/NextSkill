@@ -3,11 +3,14 @@ package ukma.springboot.nextskill.model.dto;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import ukma.springboot.nextskill.model.enums.UserRole;
+import ukma.springboot.nextskill.validation.annotations.ValidConfirmPassword;
+import ukma.springboot.nextskill.validation.annotations.Password;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
+@ValidConfirmPassword
 public class UserDto {
 
     private UUID uuid;
@@ -39,7 +42,15 @@ public class UserDto {
 
     private boolean isDisabled;
 
+    @NotNull(message = "Role cannot be null")
     private UserRole role;
+
+    @NotBlank(message = "Password is required")
+    @Password
+    private String password;
+
+    @NotBlank(message = "Confirm password is required")
+    private String confirmPassword;
 
     public UserDto() {
         this.uuid = UUID.randomUUID();

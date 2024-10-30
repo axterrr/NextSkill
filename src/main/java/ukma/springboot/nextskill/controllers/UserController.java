@@ -86,7 +86,7 @@ public class UserController {
         String sessionInfo = "session information available from controller";
         ThreadContext.put("sessionInfo", sessionInfo);
         logger.info(CompositeLogMarkers.USER_CREATE_MARKER, "Creating user: {}", user);
-        User createdUser = userService.createUser(UserMapper.toUser(user));
+        User createdUser = userService.createUser(user);
         UserDto toReturn = UserMapper.toUserDto(createdUser);
         ThreadContext.clearAll();
         return new ResponseEntity<>(toReturn, HttpStatus.CREATED);
@@ -106,7 +106,7 @@ public class UserController {
             @Parameter(description = "Data of a user to be updated")
             @PathVariable UUID id, @Valid @RequestBody UserDto user) {
         logger.info(LogMarkers.USER_MARKER, "Updating user with id: {}", id);
-        userService.updateUser(id, UserMapper.toUser(user));
+        userService.updateUser(id, user);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

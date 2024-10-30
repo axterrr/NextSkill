@@ -41,7 +41,7 @@ public class PageController {
     @PostMapping("/user/form/submit")
     public String postUserForm(@Valid @ModelAttribute("user") UserDto user, BindingResult result) {
         if (result.hasErrors()) return "userForm";
-        userService.processUser(UserMapper.toUser(user));
+        userService.processUser(user);
         return "redirect:/page/user/all";
 
     }

@@ -1,9 +1,12 @@
 package ukma.springboot.nextskill.services;
 
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ukma.springboot.nextskill.model.dto.UserDto;
 import ukma.springboot.nextskill.model.entities.UserEntity;
 import ukma.springboot.nextskill.exceptions.DuplicateUniqueFieldException;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
@@ -17,14 +20,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@AllArgsConstructor
 public class UserService implements IUserService {
 
     private final UserRepository userRepository;
-
-    @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final PasswordEncoder passwordEncoder;
 
     private static final Logger userLogger = LoggerFactory.getLogger(UserService.class);
 
@@ -41,7 +41,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User createUser(User user) {
+    public User createUser(UserDto userDto) {
+        User user = UserMapper.toUser(userDto, passwordEncoder);
         checkUniqueFields(user, null);
         UserEntity userEntity = UserMapper.toUserEntity(user);
         UserEntity savedEntity = userRepository.save(userEntity);
@@ -50,7 +51,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User updateUser(UUID id, User updatedUser) {
+    public User updateUser(UUID id, UserDto userDto) {
+        User updatedUser = UserMapper.toUser(userDto, passwordEncoder);
         Optional<UserEntity> existingUser = userRepository.findById(id);
         if (existingUser.isEmpty()) throw new ResourceNotFoundException("User", id.toString());
         userLogger.info("Received new user data for id {}, data: {}", updatedUser.getUuid(), updatedUser);
@@ -71,12 +73,12 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void processUser(User user) {
-        Optional<UserEntity> result = userRepository.findById(user.getUuid());
+    public void processUser(UserDto userDto) {
+        Optional<UserEntity> result = userRepository.findById(userDto.getUuid());
         if (result.isEmpty()) {
-            createUser(user);
+            createUser(userDto);
         } else {
-            updateUser(user.getUuid(), user);
+            updateUser(userDto.getUuid(), userDto);
         }
     }
 
