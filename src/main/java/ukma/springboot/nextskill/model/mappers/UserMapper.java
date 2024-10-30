@@ -1,10 +1,8 @@
 package ukma.springboot.nextskill.model.mappers;
 
-import ukma.springboot.nextskill.dto.UserDto;
-import ukma.springboot.nextskill.entities.UserEntity;
-import ukma.springboot.nextskill.model.User;
-
-import java.util.stream.Collectors;
+import ukma.springboot.nextskill.model.dto.UserDto;
+import ukma.springboot.nextskill.model.entities.UserEntity;
+import ukma.springboot.nextskill.model.pojo.User;
 
 public class UserMapper {
 
@@ -23,7 +21,7 @@ public class UserMapper {
         user.setPhone(userEntity.getPhone());
         user.setAvatarLink(userEntity.getAvatarLink());
         user.setDescription(userEntity.getDescription());
-        user.setRoles(userEntity.getRoles().stream().map(RoleMapper::toRole).collect(Collectors.toSet()));
+        user.setRole(userEntity.getRole());
         user.setDisabled(userEntity.isDisabled());
         user.setPasswordHash(user.getPasswordHash());
 
@@ -43,7 +41,7 @@ public class UserMapper {
         userEntity.setPhone(user.getPhone());
         userEntity.setAvatarLink(user.getAvatarLink());
         userEntity.setDescription(user.getDescription());
-        userEntity.setRoles(user.getRoles().stream().map(RoleMapper::toRoleEntity).collect(Collectors.toSet()));
+        userEntity.setRole(user.getRole());
         userEntity.setDisabled(user.isDisabled());
         userEntity.setPasswordHash(user.getPasswordHash());
 
@@ -63,7 +61,7 @@ public class UserMapper {
         userDto.setPhone(user.getPhone());
         userDto.setAvatarLink(user.getAvatarLink());
         userDto.setDescription(user.getDescription());
-        userDto.setRoles(user.getRoles().stream().map(RoleMapper::toRoleDto).collect(Collectors.toSet()));
+        userDto.setRole(user.getRole());
         userDto.setDisabled(user.isDisabled());
 
         return userDto;
@@ -82,7 +80,7 @@ public class UserMapper {
         user.setPhone(userDto.getPhone());
         user.setAvatarLink(userDto.getAvatarLink());
         user.setDescription(userDto.getDescription());
-        user.setRoles(userDto.getRoles().stream().map(RoleMapper::toRole).collect(Collectors.toSet()));
+        user.setRole(userDto.getRole());
         user.setDisabled(userDto.isDisabled());
 
         return user;

@@ -13,10 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ukma.springboot.nextskill.dto.CourseDto;
-import ukma.springboot.nextskill.dto.CourseSectionDto;
+import ukma.springboot.nextskill.model.dto.CourseSectionDto;
 import ukma.springboot.nextskill.exceptions.ErrorResponse;
-import ukma.springboot.nextskill.interfaces.ICourseSectionService;
+import ukma.springboot.nextskill.services.interfaces.ICourseSectionService;
 import ukma.springboot.nextskill.model.mappers.CourseSectionMapper;
 
 import java.util.List;

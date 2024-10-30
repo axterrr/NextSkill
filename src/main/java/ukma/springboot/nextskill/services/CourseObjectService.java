@@ -2,8 +2,8 @@ package ukma.springboot.nextskill.services;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ukma.springboot.nextskill.dto.CourseObjectDto;
-import ukma.springboot.nextskill.entities.CourseObjectEntity;
+import ukma.springboot.nextskill.model.dto.CourseObjectDto;
+import ukma.springboot.nextskill.model.entities.CourseObjectEntity;
 import ukma.springboot.nextskill.exceptions.InvalidCourseObjectException;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
 import ukma.springboot.nextskill.repositories.CourseObjectRepository;

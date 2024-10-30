@@ -1,7 +1,7 @@
 package ukma.springboot.nextskill.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ukma.springboot.nextskill.entities.AssignmentEntity;
+import ukma.springboot.nextskill.model.entities.AssignmentEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;

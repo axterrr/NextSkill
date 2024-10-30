@@ -2,10 +2,10 @@ package ukma.springboot.nextskill.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ukma.springboot.nextskill.entities.AssignmentEntity;
-import ukma.springboot.nextskill.entities.FileUploadEntity;
-import ukma.springboot.nextskill.interfaces.IAssignmentService;
-import ukma.springboot.nextskill.model.Assignment;
+import ukma.springboot.nextskill.model.entities.AssignmentEntity;
+import ukma.springboot.nextskill.model.entities.FileUploadEntity;
+import ukma.springboot.nextskill.services.interfaces.IAssignmentService;
+import ukma.springboot.nextskill.model.pojo.Assignment;
 import ukma.springboot.nextskill.model.mappers.AssignmentMapper;
 import ukma.springboot.nextskill.model.mappers.FileUploadMapper;
 import ukma.springboot.nextskill.repositories.AssignmentRepository;

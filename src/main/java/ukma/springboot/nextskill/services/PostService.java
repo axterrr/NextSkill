@@ -1,11 +1,11 @@
 package ukma.springboot.nextskill.services;
 
-import ukma.springboot.nextskill.interfaces.IPostService;
-import ukma.springboot.nextskill.model.Post;
+import ukma.springboot.nextskill.services.interfaces.IPostService;
+import ukma.springboot.nextskill.model.pojo.Post;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ukma.springboot.nextskill.entities.PostEntity;
+import ukma.springboot.nextskill.model.entities.PostEntity;
 import ukma.springboot.nextskill.model.mappers.FileUploadMapper;
 import ukma.springboot.nextskill.model.mappers.PostMapper;
 import ukma.springboot.nextskill.repositories.PostRepository;

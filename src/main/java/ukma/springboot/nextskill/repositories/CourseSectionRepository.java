@@ -1,7 +1,7 @@
 package ukma.springboot.nextskill.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ukma.springboot.nextskill.entities.CourseSectionEntity;
+import ukma.springboot.nextskill.model.entities.CourseSectionEntity;
 
 import java.util.List;
 import java.util.UUID;

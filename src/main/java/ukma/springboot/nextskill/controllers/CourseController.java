@@ -13,13 +13,12 @@ import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ukma.springboot.nextskill.dto.CourseDto;
+import ukma.springboot.nextskill.model.dto.CourseDto;
 import ukma.springboot.nextskill.exceptions.ErrorResponse;
-import ukma.springboot.nextskill.interfaces.ICourseService;
-import ukma.springboot.nextskill.logging.markers.CompositeLogMarkers;
-import ukma.springboot.nextskill.logging.markers.LogMarkers;
+import ukma.springboot.nextskill.services.interfaces.ICourseService;
+import ukma.springboot.nextskill.configs.logging.markers.CompositeLogMarkers;
+import ukma.springboot.nextskill.configs.logging.markers.LogMarkers;
 import ukma.springboot.nextskill.model.mappers.CourseMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -79,7 +78,6 @@ public class CourseController {
             @ApiResponse(responseCode = "400", description = "Something in provided data is wrong", content = @Content(
                     mediaType = "application/json"))}
     )
-    @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<HttpStatus> addCourse(
             @Parameter(description = "Data of a course to be created")
             @Valid @RequestBody CourseDto course) {
@@ -120,7 +118,6 @@ public class CourseController {
                     mediaType = "application/json",
                     schema = @Schema(implementation = ErrorResponse.class)))}
     )
-    @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<HttpStatus> deleteCourse(
             @Parameter(description = "Id if a course")
             @PathVariable UUID id) {

@@ -1,9 +1,9 @@
 package ukma.springboot.nextskill.model.mappers;
 
-import ukma.springboot.nextskill.entities.AssignmentEntity;
-import ukma.springboot.nextskill.entities.FileUploadEntity;
-import ukma.springboot.nextskill.model.Assignment;
-import ukma.springboot.nextskill.model.FileUpload;
+import ukma.springboot.nextskill.model.entities.AssignmentEntity;
+import ukma.springboot.nextskill.model.entities.FileUploadEntity;
+import ukma.springboot.nextskill.model.pojo.Assignment;
+import ukma.springboot.nextskill.model.pojo.FileUpload;
 
 import java.util.List;
 

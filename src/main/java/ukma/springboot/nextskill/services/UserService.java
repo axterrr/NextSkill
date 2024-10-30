@@ -4,11 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ukma.springboot.nextskill.entities.UserEntity;
+import ukma.springboot.nextskill.model.entities.UserEntity;
 import ukma.springboot.nextskill.exceptions.DuplicateUniqueFieldException;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
-import ukma.springboot.nextskill.interfaces.IUserService;
-import ukma.springboot.nextskill.model.User;
+import ukma.springboot.nextskill.services.interfaces.IUserService;
+import ukma.springboot.nextskill.model.pojo.User;
 import ukma.springboot.nextskill.model.mappers.UserMapper;
 import ukma.springboot.nextskill.repositories.UserRepository;
 

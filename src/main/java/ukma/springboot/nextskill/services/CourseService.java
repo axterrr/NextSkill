@@ -5,14 +5,15 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ukma.springboot.nextskill.entities.CourseEntity;
-import ukma.springboot.nextskill.entities.UserEntity;
+import ukma.springboot.nextskill.model.entities.CourseEntity;
+import ukma.springboot.nextskill.model.entities.UserEntity;
+import ukma.springboot.nextskill.model.enums.UserRole;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
-import ukma.springboot.nextskill.interfaces.ICourseService;
-import ukma.springboot.nextskill.logging.markers.CompositeLogMarkers;
-import ukma.springboot.nextskill.logging.markers.LogMarkers;
-import ukma.springboot.nextskill.model.Course;
-import ukma.springboot.nextskill.model.CourseObject;
+import ukma.springboot.nextskill.services.interfaces.ICourseService;
+import ukma.springboot.nextskill.configs.logging.markers.CompositeLogMarkers;
+import ukma.springboot.nextskill.configs.logging.markers.LogMarkers;
+import ukma.springboot.nextskill.model.pojo.Course;
+import ukma.springboot.nextskill.model.pojo.CourseObject;
 import ukma.springboot.nextskill.model.mappers.CourseMapper;
 import ukma.springboot.nextskill.repositories.CourseRepository;
 import ukma.springboot.nextskill.repositories.UserRepository;
@@ -144,7 +145,7 @@ public class CourseService implements ICourseService {
     private void checkTeacherExisting(Course course) {
         logger.debug("Checking if teacher exists for course: {}", course.getName());
         Optional<UserEntity> teacher = userRepository.findById(course.getTeacher().getUuid());
-        if (teacher.isEmpty() || teacher.get().getRoles().stream().noneMatch(role -> role.getTitle().equals("TEACHER"))) {
+        if (teacher.isEmpty() || teacher.get().getRole() != UserRole.TEACHER) {
             throw new ResourceNotFoundException("Teacher", course.getTeacher().getUuid().toString());
         }
         logger.debug("Teacher check passed for course: {}", course.getName());

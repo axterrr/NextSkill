@@ -1,7 +1,7 @@
 package ukma.springboot.nextskill.model.mappers;
 
-import ukma.springboot.nextskill.entities.FileUploadEntity;
-import ukma.springboot.nextskill.model.FileUpload;
+import ukma.springboot.nextskill.model.entities.FileUploadEntity;
+import ukma.springboot.nextskill.model.pojo.FileUpload;
 
 public class FileUploadMapper {
 

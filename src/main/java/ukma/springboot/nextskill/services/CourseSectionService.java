@@ -1,11 +1,11 @@
 package ukma.springboot.nextskill.services;
 
 import org.springframework.stereotype.Service;
-import ukma.springboot.nextskill.entities.CourseEntity;
-import ukma.springboot.nextskill.entities.CourseSectionEntity;
+import ukma.springboot.nextskill.model.entities.CourseEntity;
+import ukma.springboot.nextskill.model.entities.CourseSectionEntity;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
-import ukma.springboot.nextskill.interfaces.ICourseSectionService;
-import ukma.springboot.nextskill.model.CourseSection;
+import ukma.springboot.nextskill.services.interfaces.ICourseSectionService;
+import ukma.springboot.nextskill.model.pojo.CourseSection;
 import ukma.springboot.nextskill.model.mappers.CourseSectionMapper;
 import ukma.springboot.nextskill.repositories.CourseRepository;
 import ukma.springboot.nextskill.repositories.CourseSectionRepository;

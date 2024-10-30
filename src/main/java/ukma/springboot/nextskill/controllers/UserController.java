@@ -16,12 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ukma.springboot.nextskill.dto.UserDto;
+import ukma.springboot.nextskill.model.dto.UserDto;
 import ukma.springboot.nextskill.exceptions.ErrorResponse;
-import ukma.springboot.nextskill.interfaces.IUserService;
-import ukma.springboot.nextskill.logging.markers.CompositeLogMarkers;
-import ukma.springboot.nextskill.logging.markers.LogMarkers;
-import ukma.springboot.nextskill.model.User;
+import ukma.springboot.nextskill.services.interfaces.IUserService;
+import ukma.springboot.nextskill.configs.logging.markers.CompositeLogMarkers;
+import ukma.springboot.nextskill.configs.logging.markers.LogMarkers;
+import ukma.springboot.nextskill.model.pojo.User;
 import ukma.springboot.nextskill.model.mappers.UserMapper;
 
 import java.util.List;

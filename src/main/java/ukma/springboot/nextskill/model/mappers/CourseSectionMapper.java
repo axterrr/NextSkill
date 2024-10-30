@@ -1,8 +1,8 @@
 package ukma.springboot.nextskill.model.mappers;
 
-import ukma.springboot.nextskill.dto.CourseSectionDto;
-import ukma.springboot.nextskill.entities.CourseSectionEntity;
-import ukma.springboot.nextskill.model.CourseSection;
+import ukma.springboot.nextskill.model.dto.CourseSectionDto;
+import ukma.springboot.nextskill.model.entities.CourseSectionEntity;
+import ukma.springboot.nextskill.model.pojo.CourseSection;
 
 public class CourseSectionMapper {
 

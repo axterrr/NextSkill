@@ -1,8 +1,8 @@
 package ukma.springboot.nextskill.model.mappers;
 
-import ukma.springboot.nextskill.dto.CourseDto;
-import ukma.springboot.nextskill.entities.CourseEntity;
-import ukma.springboot.nextskill.model.Course;
+import ukma.springboot.nextskill.model.dto.CourseDto;
+import ukma.springboot.nextskill.model.entities.CourseEntity;
+import ukma.springboot.nextskill.model.pojo.Course;
 
 public class CourseMapper {
     private CourseMapper() {}

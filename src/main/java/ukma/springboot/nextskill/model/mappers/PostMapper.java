@@ -1,7 +1,7 @@
 package ukma.springboot.nextskill.model.mappers;
 
-import ukma.springboot.nextskill.entities.PostEntity;
-import ukma.springboot.nextskill.model.Post;
+import ukma.springboot.nextskill.model.entities.PostEntity;
+import ukma.springboot.nextskill.model.pojo.Post;
 
 public class PostMapper {
 
