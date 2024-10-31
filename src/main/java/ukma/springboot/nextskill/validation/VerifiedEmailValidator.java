@@ -7,9 +7,11 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import ukma.springboot.nextskill.validation.annotations.VerifiedEmail;
 
+@Component
 public class VerifiedEmailValidator implements ConstraintValidator<VerifiedEmail, String> {
 
     @Value("${HUNTER_API_KEY}")
@@ -17,7 +19,7 @@ public class VerifiedEmailValidator implements ConstraintValidator<VerifiedEmail
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        if (!value.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$"))
+        if (!value.matches("^\\w[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$"))
             return false;
 
         String resourceUrl = "https://api.hunter.io/v2/email-verifier?email=" + value + "&api_key=" + hunterApiKey;

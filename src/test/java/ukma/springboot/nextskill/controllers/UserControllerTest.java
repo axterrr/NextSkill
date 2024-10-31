@@ -13,8 +13,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ukma.springboot.nextskill.dto.UserDto;
 import ukma.springboot.nextskill.model.mappers.UserMapper;
-import ukma.springboot.nextskill.security.JwtAuthFilter;
-import ukma.springboot.nextskill.security.JwtService;
 import ukma.springboot.nextskill.services.UserService;
 
 import java.util.Collections;
