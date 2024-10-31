@@ -7,11 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -68,6 +64,7 @@ public class UserEntity implements UserDetails {
         this.uuid = UUID.randomUUID();
         this.createdAt = LocalDateTime.now();
         this.isDisabled = false;
+        this.roles = new HashSet<>();
     }
 
     @Override

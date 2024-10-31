@@ -2,9 +2,9 @@ package ukma.springboot.nextskill.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
-import ukma.springboot.nextskill.validation.annotations.VerifiedEmail;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -46,5 +46,6 @@ public class UserDto {
         this.uuid = UUID.randomUUID();
         this.createdAt = LocalDateTime.now();
         this.isDisabled = false;
+        this.roles = new HashSet<>();
     }
 }
