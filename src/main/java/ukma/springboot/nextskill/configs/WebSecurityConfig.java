@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import ukma.springboot.nextskill.security.CustomAccessDeniedHandler;
+import ukma.springboot.nextskill.security.CustomUnauthorizedHandler;
 import ukma.springboot.nextskill.security.JwtAuthFilter;
 
 @Configuration
@@ -19,13 +21,19 @@ public class WebSecurityConfig {
 
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthFilter jwtAuthFilter;
+    private CustomAccessDeniedHandler customAccessDeniedHandler;
+    private CustomUnauthorizedHandler customUnauthorizedHandler;
 
     public WebSecurityConfig(
             JwtAuthFilter jwtAuthenticationFilter,
-            AuthenticationProvider authenticationProvider
+            AuthenticationProvider authenticationProvider,
+            CustomAccessDeniedHandler customAccessDeniedHandler,
+            CustomUnauthorizedHandler customUnauthorizedHandler
     ) {
         this.authenticationProvider = authenticationProvider;
         this.jwtAuthFilter = jwtAuthenticationFilter;
+        this.customAccessDeniedHandler = customAccessDeniedHandler;
+        this.customUnauthorizedHandler = customUnauthorizedHandler;
     }
 
     @Bean
@@ -44,7 +52,11 @@ public class WebSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(handler ->
+                        handler.authenticationEntryPoint(customUnauthorizedHandler)
+                                .accessDeniedHandler(customAccessDeniedHandler)
+                );
 
         return http.build();
     }
