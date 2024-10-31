@@ -53,11 +53,11 @@ public class AuthService {
                 )
         );
 
-        User authenticatedUser = userRepository.findByUsername(loginUserDto.getUsername());
+        User authenticatedUser = UserMapper.toUser(userRepository.findByUsername(loginUserDto.getUsername()));
 
         String jwtToken = jwtService.generateToken(UserMapper.toUserEntity(authenticatedUser));
 
-        LoginResponse loginResponse = new LoginResponse().setToken(jwtToken).setExpiresIn(jwtService.getExpirationTime());
+        LoginResponse loginResponse = new LoginResponse().setToken("Bearer " + jwtToken).setExpiresIn(jwtService.getExpirationTime());
 
         return ResponseEntity.ok(loginResponse);
     }

@@ -41,7 +41,7 @@ public class User {
                 ", phone='" + phone + '\'' +
                 ", description='" + description + '\'' +
                 ", createdAt=" + createdAt +
-                ", userRole=" + roles +
+                ", userRole=" + roles.toString() +
                 ", isDisabled=" + isDisabled +
                 '}';
     }
