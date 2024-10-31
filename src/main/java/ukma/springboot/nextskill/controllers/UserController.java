@@ -82,6 +82,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Something in provided data is wrong", content = @Content(
                     mediaType = "application/json"))}
     )
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDto> addUser(
             @Parameter(description = "Data of a user to be created")
             @Valid @RequestBody UserDto user) {
@@ -120,6 +121,7 @@ public class UserController {
                     mediaType = "application/json",
                     schema = @Schema(implementation = ErrorResponse.class)))}
     )
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<HttpStatus> deleteUser(
             @Parameter(description = "Id if a user")
             @PathVariable UUID id) {

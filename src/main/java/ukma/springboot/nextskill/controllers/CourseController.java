@@ -79,7 +79,7 @@ public class CourseController {
             @ApiResponse(responseCode = "400", description = "Something in provided data is wrong", content = @Content(
                     mediaType = "application/json"))}
     )
-    @PreAuthorize("hasRole('TEACHER')")
+    @PreAuthorize("hasRole('TEACHER') || hasRole('ADMIN')")
     public ResponseEntity<HttpStatus> addCourse(
             @Parameter(description = "Data of a course to be created")
             @Valid @RequestBody CourseDto course) {
@@ -101,6 +101,7 @@ public class CourseController {
             @ApiResponse(responseCode = "404", description = "Course is not found", content = @Content(
                     mediaType = "application/json"))}
     )
+    @PreAuthorize("hasRole('TEACHER') || hasRole('ADMIN')")
     public ResponseEntity<HttpStatus> updateCourse(
             @Parameter(description = "Id if a course")
             @PathVariable UUID id,
@@ -120,7 +121,7 @@ public class CourseController {
                     mediaType = "application/json",
                     schema = @Schema(implementation = ErrorResponse.class)))}
     )
-    @PreAuthorize("hasRole('TEACHER')")
+    @PreAuthorize("hasRole('TEACHER') || hasRole('ADMIN')")
     public ResponseEntity<HttpStatus> deleteCourse(
             @Parameter(description = "Id if a course")
             @PathVariable UUID id) {
@@ -138,6 +139,7 @@ public class CourseController {
                     mediaType = "application/json",
                     schema = @Schema(implementation = ErrorResponse.class)))}
     )
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<HttpStatus> enrollUserToCourse(
             @Parameter(description = "Id of the course")
             @PathVariable UUID courseId,
