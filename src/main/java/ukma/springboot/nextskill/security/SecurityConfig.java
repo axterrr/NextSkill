@@ -17,10 +17,10 @@ import ukma.springboot.nextskill.security.filter.JWTAuthorizationFilter;
 @Configuration
 public class SecurityConfig {
 
-    @Value("${jwt.secret.key}")
+    @Value("${SECRET_KEY}")
     private String secretKey;
 
-    @Value("${jwt.token.expiration.time}")
+    @Value("${TOKEN_EXPIRATION}")
     private long jwtExpiration;
 
     private final AuthenticationManager authenticationManager;
