@@ -2,34 +2,43 @@ package ukma.springboot.nextskill.controllers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ukma.springboot.nextskill.dto.UserDto;
-import ukma.springboot.nextskill.interfaces.IUserService;
 import ukma.springboot.nextskill.model.mappers.UserMapper;
+import ukma.springboot.nextskill.services.UserService;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
+
 
 @SpringBootTest
+@AutoConfigureMockMvc
 class UserControllerTest {
 
     @Autowired
     private UserController userController;
 
     @MockBean
-    private IUserService userService;
+    private UserService userService;
 
     private MockMvc mockMvc;
 
@@ -39,47 +48,48 @@ class UserControllerTest {
     }
 
     @Test
-    void getAllUsers_shouldReturnAllUsers() {
-        // Створюємо тестового користувача
+    @WithMockUser(username = "test_user", roles = "ADMIN")
+    void getAllUsers_shouldReturnAllUsers() throws Exception {
         UserDto testUser = new UserDto();
-        testUser.setName("Test User");
+        testUser.setUuid(UUID.randomUUID());
+        testUser.setUsername("test_user");
+        testUser.setName("Test");
+        testUser.setSurname("User");
+        testUser.setEmail("test@gmail.com");
         testUser.setDescription("Test Description");
 
-        // Мокаємо сервіс
         when(userService.getAllUsers()).thenReturn(Collections.singletonList(UserMapper.toUser(testUser)));
 
-        // Викликаємо метод
-        ResponseEntity<List<UserDto>> response = userController.getAllUsers();
+        mockMvc.perform(get("/api/user/all"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].username").value("test_user"))
+                .andExpect(jsonPath("$[0].name").value("Test"))
+                .andExpect(jsonPath("$[0].surname").value("User"));
 
-        // Перевіряємо результат
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody()).hasSize(1);
-        assertThat(response.getBody().get(0).getName()).isEqualTo("Test User");
-
-        // Перевіряємо, що метод сервісу викликаний один раз
         verify(userService, times(1)).getAllUsers();
     }
 
+
     @Test
     void addUser_shouldCreateUser() {
-        // Створюємо тестового користувача
-        UserDto newUser = new UserDto();
-        newUser.setName("New User");
-        newUser.setDescription("New Description");
+        UserDto testUser = new UserDto();
+        testUser.setUuid(UUID.randomUUID());
+        testUser.setUsername("test_user");
+        testUser.setName("Test");
+        testUser.setSurname("User");
+        testUser.setEmail("test@gmail.com");
+        testUser.setDescription("Test Description");
 
-        // Мокаємо створення користувача
-        when(userService.createUser(any())).thenReturn(UserMapper.toUser(newUser));
+        when(userService.createUser(any())).thenReturn(UserMapper.toUser(testUser));
 
-        // Викликаємо метод
-        ResponseEntity<UserDto> response = userController.addUser(newUser);
+        ResponseEntity<UserDto> response = userController.addUser(testUser);
 
-        // Перевіряємо результат
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getName()).isEqualTo("New User");
+        assertThat(response.getBody().getUsername()).isEqualTo("test_user");
+        assertThat(response.getBody().getName()).isEqualTo("Test");
+        assertThat(response.getBody().getSurname()).isEqualTo("User");
 
-        // Перевіряємо, що метод сервісу викликаний один раз
         verify(userService, times(1)).createUser(any());
     }
 }

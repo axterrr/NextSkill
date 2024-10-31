@@ -53,6 +53,7 @@ dependencies {
     testImplementation ("com.jayway.jsonpath:json-path")
     testImplementation ("org.mockito:mockito-core")
     testImplementation ("org.mockito:mockito-junit-jupiter")
+    testImplementation ("org.springframework.security:spring-security-test")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
