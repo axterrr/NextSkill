@@ -13,6 +13,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ukma.springboot.nextskill.dto.UserDto;
 import ukma.springboot.nextskill.model.mappers.UserMapper;
+import ukma.springboot.nextskill.security.JwtAuthFilter;
+import ukma.springboot.nextskill.security.JwtService;
 import ukma.springboot.nextskill.services.UserService;
 
 import java.util.Collections;
@@ -71,6 +73,7 @@ class UserControllerTest {
 
 
     @Test
+    @WithMockUser(username = "test_user", roles = "ADMIN")
     void addUser_shouldCreateUser() {
         UserDto testUser = new UserDto();
         testUser.setUuid(UUID.randomUUID());
