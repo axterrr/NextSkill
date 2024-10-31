@@ -36,8 +36,21 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/h2-console/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/user/create").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/user/all").hasRole("ADMIN")
+                .requestMatchers("/api/user/**").hasRole("ADMIN")
+
+                .requestMatchers(HttpMethod.POST, "/api/course/create").hasRole("TEACHER")
+                .requestMatchers(HttpMethod.PUT, "/api/course/*").hasAnyRole("TEACHER", "ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/course/*").hasAnyRole("TEACHER", "ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/course/*/enroll/*").hasRole("ADMIN")
+
+                .requestMatchers(HttpMethod.POST, "/api/courseSection/*").hasRole("TEACHER")
+                .requestMatchers(HttpMethod.PUT, "/api/courseSection/*").hasAnyRole("TEACHER", "ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/courseSection/*").hasAnyRole("TEACHER", "ADMIN")
+
+                .requestMatchers(HttpMethod.POST, "/api/courseObjects/*").hasRole("TEACHER")
+                .requestMatchers(HttpMethod.PUT, "/api/courseObjects/*").hasAnyRole("TEACHER", "ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/courseObjects/*").hasAnyRole("TEACHER", "ADMIN")
+
                 .anyRequest().authenticated())
             .addFilterBefore(new ExceptionHandlerFilter(), AuthenticationFilter.class)
             .addFilter(new AuthenticationFilter(authenticationManager, secretKey, jwtExpiration))
