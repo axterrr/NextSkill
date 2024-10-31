@@ -3,15 +3,17 @@ package ukma.springboot.nextskill;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ukma.springboot.nextskill.validation.VerifiedEmailValidator;
+import org.springframework.test.context.ContextConfiguration;
+import ukma.springboot.nextskill.validation.IValidator;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @SpringBootTest
+@ContextConfiguration(classes = TestConfiguration.class)
 public class EmailValidatorTest {
 
     @Autowired
-    VerifiedEmailValidator emailValidator;
+    IValidator<String> emailValidator;
 
     @Test
     void testExternalEmailValidator() {
@@ -26,7 +28,7 @@ public class EmailValidatorTest {
         };
 
         for (String email : invalidEmails) {
-            assertFalse(emailValidator.isValid(email, null), "Expected invalid email: " + email);
+            assertFalse(emailValidator.isValid(email), "Expected invalid email: " + email);
         }
     }
 }
