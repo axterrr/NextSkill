@@ -1,5 +1,6 @@
 package ukma.springboot.nextskill.configs;
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -34,6 +35,11 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
                 )
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers(PathRequest.toH2Console())
+                        .ignoringRequestMatchers("/**")
+                )
+                .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )

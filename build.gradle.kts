@@ -57,6 +57,7 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     runtimeOnly("com.h2database:h2")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
 
     modules {
         module("org.springframework.boot:spring-boot-starter-logging") {
