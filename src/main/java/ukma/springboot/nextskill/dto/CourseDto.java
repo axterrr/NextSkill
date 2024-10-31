@@ -27,5 +27,17 @@ public class CourseDto {
         this.uuid = UUID.randomUUID();
         creationDate = LocalDate.now();
     }
+    public CourseDto(String name) {
+        this.name = name;
+        this.uuid = UUID.randomUUID();
+        creationDate = LocalDate.now();
+    }
+    public CourseDto(UUID uuid, String name, UserDto teacher ) {
+        this.name = name;
+        this.uuid = uuid;
+        this.teacher = teacher;
+        description ="Description of course";
+        creationDate = LocalDate.now();
+    }
 
 }
