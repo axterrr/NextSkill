@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ukma.springboot.nextskill.dto.CourseDto;
 import ukma.springboot.nextskill.dto.CourseSectionDto;
@@ -72,6 +73,7 @@ public class CourseSectionController {
             @ApiResponse(responseCode = "400", description = "Something in provided data is wrong", content = @Content(
                     mediaType = "application/json"))}
     )
+    @PreAuthorize("hasRole('TEACHER') || hasRole('ADMIN')")
     public ResponseEntity<HttpStatus> addCourseSection(
             @Parameter(description = "Data of a course section")
             @Valid @RequestBody CourseSectionDto courseSection) {
@@ -86,6 +88,7 @@ public class CourseSectionController {
             @ApiResponse(responseCode = "400", description = "Something in provided data is wrong", content = @Content(
                     mediaType = "application/json"))}
     )
+    @PreAuthorize("hasRole('TEACHER') || hasRole('ADMIN')")
     public ResponseEntity<HttpStatus> updateCourseSection(
             @Parameter(description = "Id of a course section")
             @PathVariable UUID id,
@@ -103,6 +106,7 @@ public class CourseSectionController {
                     mediaType = "application/json",
                     schema = @Schema(implementation = ErrorResponse.class)))}
     )
+    @PreAuthorize("hasRole('TEACHER') || hasRole('ADMIN')")
     public ResponseEntity<HttpStatus> deleteCourseSection(
             @Parameter(description = "Id of a course section")
             @PathVariable UUID id) {

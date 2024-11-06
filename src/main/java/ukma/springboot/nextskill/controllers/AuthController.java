@@ -8,7 +8,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ukma.springboot.nextskill.dto.LoginUserDto;
 import ukma.springboot.nextskill.dto.RegisterUserDto;
+import ukma.springboot.nextskill.entities.UserEntity;
 import ukma.springboot.nextskill.model.User;
+import ukma.springboot.nextskill.model.mappers.UserMapper;
 import ukma.springboot.nextskill.services.AuthService;
 
 @RestController
@@ -32,7 +34,7 @@ public class AuthController {
     public ResponseEntity<User> authenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = UserMapper.toUser((UserEntity) authentication.getPrincipal());
 
         return ResponseEntity.ok(currentUser);
     }

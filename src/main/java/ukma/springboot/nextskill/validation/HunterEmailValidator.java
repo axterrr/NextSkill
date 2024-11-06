@@ -3,22 +3,17 @@ package ukma.springboot.nextskill.validation;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import ukma.springboot.nextskill.validation.annotations.VerifiedEmail;
 
-@Component
-public class VerifiedEmailValidator implements ConstraintValidator<VerifiedEmail, String> {
+public class HunterEmailValidator implements IValidator<String> {
 
     @Value("${HUNTER_API_KEY}")
     private String hunterApiKey;
 
     @Override
-    public boolean isValid(String value, ConstraintValidatorContext context) {
+    public boolean isValid(String value) {
         if (!value.matches("^\\w[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$"))
             return false;
 

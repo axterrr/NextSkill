@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ukma.springboot.nextskill.dto.*;
 import ukma.springboot.nextskill.exceptions.ErrorResponse;
@@ -37,6 +38,7 @@ public class CourseObjectController {
             @ApiResponse(responseCode = "400", description = "Something in provided data is wrong", content = @Content(
                     mediaType = "application/json"))}
     )
+    @PreAuthorize("hasRole('TEACHER') || hasRole('ADMIN')")
     public ResponseEntity<CourseObjectDto> createCourseObject(
             @Parameter(description = "Data of a course object to be created")
             @Valid @RequestBody CourseObjectDto courseObjectDto) {
@@ -87,6 +89,7 @@ public class CourseObjectController {
             @ApiResponse(responseCode = "404", description = "Course object is not found", content = @Content(
                     mediaType = "application/json"))}
     )
+    @PreAuthorize("hasRole('TEACHER') || hasRole('ADMIN')")
     public ResponseEntity<CourseObjectDto> updateCourseObject(
             @Parameter(description = "Id a course object to be updated")
             @PathVariable UUID uuid,
@@ -104,6 +107,7 @@ public class CourseObjectController {
                     mediaType = "application/json",
                     schema = @Schema(implementation = ErrorResponse.class)))}
     )
+    @PreAuthorize("hasRole('TEACHER') || hasRole('ADMIN')")
     public ResponseEntity<Void> deleteCourseObject(
             @Parameter(description = "Id a course object to be deleted")
             @PathVariable UUID uuid) {

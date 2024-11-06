@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -58,5 +59,12 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
         logger.error("An unexpected error occurred: {}", e.getMessage(), e);
         ErrorResponse errorResponse = new ErrorResponse(List.of("An unexpected error occurred. Please try again later."));
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    protected ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException e) {
+        logger.warn("Access denied: {}", e.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse(List.of("You do not have permission to access this resource."));
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }
 }
