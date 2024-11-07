@@ -1,4 +1,4 @@
-package ukma.springboot.nextskill;
+package ukma.springboot.nextskill.advices;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import ukma.springboot.nextskill.exceptions.CourseLimitExceededException;
-import ukma.springboot.nextskill.exceptions.DuplicateUniqueFieldException;
-import ukma.springboot.nextskill.exceptions.ErrorResponse;
-import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
+import ukma.springboot.nextskill.exceptions.*;
 
 import java.util.List;
 
@@ -66,5 +63,19 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
         logger.warn("Access denied: {}", e.getMessage());
         ErrorResponse errorResponse = new ErrorResponse(List.of("You do not have permission to access this resource."));
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(RateLimitExceededException.class)
+    protected ResponseEntity<Object> handleRateLimitExceededException(RateLimitExceededException e) {
+        logger.warn("Access denied: {}", e.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse(List.of(e.getMessage()));
+        return new ResponseEntity<>(errorResponse, HttpStatus.TOO_MANY_REQUESTS);
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    protected ResponseEntity<Object> handleIllegalStateException(IllegalStateException e) {
+        logger.warn("Illegal state exception: {}", e.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse(List.of(e.getMessage()));
+        return new ResponseEntity<>(errorResponse, HttpStatus.TOO_MANY_REQUESTS);
     }
 }

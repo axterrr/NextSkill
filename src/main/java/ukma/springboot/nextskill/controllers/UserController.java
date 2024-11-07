@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import ukma.springboot.nextskill.advices.annotations.RateLimited;
 import ukma.springboot.nextskill.dto.UserDto;
 import ukma.springboot.nextskill.exceptions.ErrorResponse;
 import ukma.springboot.nextskill.interfaces.IUserService;
@@ -50,6 +51,7 @@ public class UserController {
                     array = @ArraySchema(schema = @Schema(implementation = UserDto.class)))})}
     )
     @PreAuthorize("hasRole('ADMIN')")
+    @RateLimited(limit = 3)
     public ResponseEntity<List<UserDto>> getAllUsers() {
         logger.info(LogMarkers.USER_MARKER, "Fetching all users");
         List<UserDto> users = userService.getAllUsers().stream().map(UserMapper::toUserDto).toList();
