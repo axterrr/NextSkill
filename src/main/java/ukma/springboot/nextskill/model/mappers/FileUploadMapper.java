@@ -11,7 +11,8 @@ public class FileUploadMapper {
         return new FileUpload(
                 fileUploadEntity.getId(),
                 fileUploadEntity.getType(),
-                fileUploadEntity.getServerUrl(),
+                fileUploadEntity.getStorageType(),
+                fileUploadEntity.getPath(),
                 UserMapper.toUser(fileUploadEntity.getOwner()),
                 fileUploadEntity.isPublic()
         );
@@ -21,7 +22,8 @@ public class FileUploadMapper {
         return new FileUploadEntity(
                 fileUpload.getId(),
                 fileUpload.getType(),
-                fileUpload.getServerUrl(),
+                fileUpload.getStorageType(),
+                fileUpload.getPath(),
                 UserMapper.toUserEntity(fileUpload.getOwner()),
                 fileUpload.isPublic()
         );
