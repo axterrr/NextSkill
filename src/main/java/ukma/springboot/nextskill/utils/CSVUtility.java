@@ -1,9 +1,9 @@
 package ukma.springboot.nextskill.utils;
 
-import org.apache.logging.log4j.Marker;
-import org.apache.logging.log4j.MarkerManager;
+import org.slf4j.Marker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MarkerFactory;
 import org.springframework.stereotype.Component;
 import ukma.springboot.nextskill.utils.interfaces.ICSVUtility;
 
@@ -20,7 +20,7 @@ import java.util.List;
 public class CSVUtility implements ICSVUtility {
 
     private static final Logger logger = LoggerFactory.getLogger(CSVUtility.class);
-    private static final Marker marker = MarkerManager.getMarker("CSV_UTILITY");
+    private static final Marker marker = MarkerFactory.getMarker("CSV_UTLITY");
 
     @Override
     public void saveTo(String directory, String fileBasename, List<? extends AbstractCSVConvertable> list) {
@@ -30,7 +30,7 @@ public class CSVUtility implements ICSVUtility {
         try {
             Files.createDirectories(Paths.get(directory));
         } catch (IOException e) {
-            logger.warn((org.slf4j.Marker) marker, "Failed to create directory: {}", e.getMessage());
+            logger.warn(marker, "Failed to create directory: {}", e.getMessage());
             return;
         }
 
@@ -44,9 +44,12 @@ public class CSVUtility implements ICSVUtility {
                     writer.newLine();
                 }
             }
+            writer.close();
         } catch (IOException e) {
-            logger.warn((org.slf4j.Marker) marker, "An error occurred while writing to a CSV file: {}", e.getMessage());
+            logger.warn(marker, "An error occurred while writing to a CSV file: {}", e.getMessage());
         }
+
+        logger.info(marker, "Successfully saved data into a file: {}/{}", directory, fullFilename);
     }
 
     private String getFilename(String basename) {
