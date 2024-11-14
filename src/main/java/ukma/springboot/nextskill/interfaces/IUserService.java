@@ -3,6 +3,7 @@ package ukma.springboot.nextskill.interfaces;
 import ukma.springboot.nextskill.model.Course;
 import ukma.springboot.nextskill.model.User;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,4 +14,5 @@ public interface IUserService {
     User updateUser(UUID id, User updatedUser);
     void deleteUser(UUID id);
     void processUser(User user);
+    List<User> getAllUsersCreatedAfter(LocalDateTime createdAfter);
 }

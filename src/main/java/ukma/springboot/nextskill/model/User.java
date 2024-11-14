@@ -1,14 +1,17 @@
 package ukma.springboot.nextskill.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import ukma.springboot.nextskill.utils.AbstractCSVConvertable;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class User {
+public class User extends AbstractCSVConvertable {
     private UUID uuid;
     private String username;
     private String name;
@@ -44,5 +47,28 @@ public class User {
                 ", userRole=" + roles.toString() +
                 ", isDisabled=" + isDisabled +
                 '}';
+    }
+
+    @Override
+    public String getHeading() {
+        return "UUID,Username,Name,Surname,Email,Phone,AvatarLink,Description,CreatedAt,IsDisabled,Roles";
+    }
+
+    @Override
+    public String toSCV() {
+        String rolesString = String.join(";", roles.stream().map(Role::toString).toArray(String[]::new));
+
+        return String.format("%s,\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%b,\"%s\"",
+                uuid,
+                username,
+                name,
+                surname,
+                email,
+                phone,
+                avatarLink,
+                description,
+                createdAt,
+                isDisabled,
+                rolesString);
     }
 }
