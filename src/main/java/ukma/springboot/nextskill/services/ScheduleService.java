@@ -25,7 +25,7 @@ public class ScheduleService {
     @Value("${statistics.save-stats-dir}")
     private String saveStatsDir;
 
-    @Value("${statistics.save-db-backup-dir}")
+    @Value("${backups.save-db-backup-dir}")
     private String saveBackupDir;
 
     @Value("${spring.application.name}")
