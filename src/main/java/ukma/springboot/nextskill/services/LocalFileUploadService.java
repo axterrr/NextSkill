@@ -6,6 +6,8 @@ import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -75,6 +77,7 @@ public class LocalFileUploadService implements IFileUploadService {
     }
 
     @Override
+    @Cacheable(value = "fileCache", key = "#fileUploadUUID")
     public File get(UUID fileUploadUUID) {
         Optional<FileUploadEntity> entity = fileUploadRepository.findById(fileUploadUUID);
         if (entity.isEmpty()) return null;
@@ -138,6 +141,7 @@ public class LocalFileUploadService implements IFileUploadService {
     }
 
     @Override
+    @CacheEvict(value = "fileCache", key = "#fileUploadUUID")
     public boolean delete(UUID fileUploadUUID) {
         return false;
     }
