@@ -6,8 +6,9 @@ import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ukma.springboot.nextskill.entities.FileUploadEntity;
@@ -31,6 +32,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@CacheConfig(cacheNames = {"files"}, cacheManager = "ttlCacheManager")
 public class LocalFileUploadService implements IFileUploadService {
 
     private static final Logger logger = LoggerFactory.getLogger(LocalFileUploadService.class);
@@ -75,6 +77,7 @@ public class LocalFileUploadService implements IFileUploadService {
     }
 
     @Override
+    @Cacheable
     public File get(UUID fileUploadUUID) {
         Optional<FileUploadEntity> entity = fileUploadRepository.findById(fileUploadUUID);
         if (entity.isEmpty()) return null;
@@ -87,6 +90,7 @@ public class LocalFileUploadService implements IFileUploadService {
             return null;
         }
 
+        logger.debug("File returned from the system");
         return file;
     }
 
@@ -138,6 +142,7 @@ public class LocalFileUploadService implements IFileUploadService {
     }
 
     @Override
+    @CacheEvict
     public boolean delete(UUID fileUploadUUID) {
         return false;
     }

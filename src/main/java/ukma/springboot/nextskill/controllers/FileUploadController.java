@@ -1,6 +1,7 @@
 package ukma.springboot.nextskill.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -62,6 +63,12 @@ public class FileUploadController {
                 .contentType(contentType)
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
                 .body(resource);
+    }
+
+    @GetMapping("clearcache")
+    @CacheEvict(cacheNames = {"files"}, cacheManager = "ttlCacheManager", allEntries = true)
+    public ResponseEntity<String> clearCache() {
+        return ResponseEntity.ok().body("Cleared successfully!");
     }
 
     @Autowired

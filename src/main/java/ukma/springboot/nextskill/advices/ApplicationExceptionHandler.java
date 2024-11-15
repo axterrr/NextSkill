@@ -11,12 +11,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import ukma.springboot.nextskill.exceptions.*;
 
 import java.util.List;
 
 @Component
-@Aspect
+@ControllerAdvice
 public class ApplicationExceptionHandler {
 
     private static final Logger logger = LogManager.getLogger(ApplicationExceptionHandler.class);
@@ -59,5 +61,12 @@ public class ApplicationExceptionHandler {
             ErrorResponse errorResponse = new ErrorResponse(List.of("An unexpected error occurred. Please try again later."));
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @ExceptionHandler(Exception.class)
+    protected ResponseEntity<Object> handleGenericException(Exception e) {
+        logger.error("An unexpected error occurred: {}", e.getMessage(), e);
+        ErrorResponse errorResponse = new ErrorResponse(List.of("An unexpected error occurred. Please try again later."));
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
