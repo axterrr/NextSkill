@@ -12,6 +12,7 @@ import ukma.springboot.nextskill.model.User;
 import ukma.springboot.nextskill.model.mappers.UserMapper;
 import ukma.springboot.nextskill.repositories.UserRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -80,6 +81,12 @@ public class UserService implements IUserService {
         }
     }
 
+    @Override
+    public List<User> getAllUsersCreatedAfter(LocalDateTime createdAfter) {
+        List<UserEntity> users = userRepository.findAllUsersCreatedAfter(createdAfter);
+        return users.stream().map(UserMapper::toUser).toList();
+    }
+
     private void checkUniqueFields(User user, UserEntity existingUser) {
         if (existingUser == null || !existingUser.getUsername().equals(user.getUsername())) {
             if (userRepository.existsByUsername(user.getUsername())) {
@@ -99,5 +106,4 @@ public class UserService implements IUserService {
             }
         }
     }
-
 }

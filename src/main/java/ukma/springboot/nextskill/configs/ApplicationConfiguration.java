@@ -2,6 +2,7 @@ package ukma.springboot.nextskill.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -10,10 +11,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ukma.springboot.nextskill.entities.UserEntity;
-import ukma.springboot.nextskill.model.mappers.UserMapper;
+import ukma.springboot.nextskill.interfaces.IFileUploadService;
 import ukma.springboot.nextskill.repositories.UserRepository;
+import ukma.springboot.nextskill.services.LocalFileUploadService;
+import ukma.springboot.nextskill.utils.CSVUtility;
 
 @Configuration
+@EnableScheduling
 public class ApplicationConfiguration {
 
     private final UserRepository userRepository;
@@ -43,8 +47,16 @@ public class ApplicationConfiguration {
     }
 
     @Bean
+    CSVUtility csvUtility() {return new CSVUtility();}
+
+    @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
+    }
+
+    @Bean
+    IFileUploadService fileUploadService() {
+        return new LocalFileUploadService();
     }
 
     @Bean

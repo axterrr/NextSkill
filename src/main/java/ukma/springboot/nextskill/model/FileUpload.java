@@ -1,5 +1,6 @@
 package ukma.springboot.nextskill.model;
 
+import ukma.springboot.nextskill.security.FileStorageType;
 import ukma.springboot.nextskill.security.FileType;
 
 import java.util.UUID;
@@ -7,18 +8,30 @@ import java.util.UUID;
 public class FileUpload {
     private UUID id;
     private FileType type;
-    private String serverUrl;
+    private String path;
+    private FileStorageType storageType;
     private User owner;
     private boolean isPublic;
+    private String ext;
 
     public FileUpload() {}
 
-    public FileUpload(UUID id, FileType type, String serverUrl, User owner, boolean isPublic) {
+    public FileUpload(UUID id, FileType type, FileStorageType storageType, String path, User owner, boolean isPublic, String ext) {
         this.id = id;
         this.type = type;
-        this.serverUrl = serverUrl;
+        this.storageType = storageType;
+        this.path = path;
         this.owner = owner;
         this.isPublic = isPublic;
+        this.ext = ext;
+    }
+
+    public String getExt() {
+        return ext;
+    }
+
+    public void setExt(String ext) {
+        this.ext = ext;
     }
 
     public UUID getId() {
@@ -29,20 +42,12 @@ public class FileUpload {
         this.id = id;
     }
 
-    public FileType getType() {
-        return type;
+    public boolean isPublic() {
+        return isPublic;
     }
 
-    public void setType(FileType type) {
-        this.type = type;
-    }
-
-    public String getServerUrl() {
-        return serverUrl;
-    }
-
-    public void setServerUrl(String serverUrl) {
-        this.serverUrl = serverUrl;
+    public void setPublic(boolean aPublic) {
+        isPublic = aPublic;
     }
 
     public User getOwner() {
@@ -53,13 +58,27 @@ public class FileUpload {
         this.owner = owner;
     }
 
-    public boolean isPublic() {
-        return isPublic;
+    public String getPath() {
+        return path;
     }
 
-    public void setPublic(boolean isPublic) {
-        this.isPublic = isPublic;
+    public void setPath(String path) {
+        this.path = path;
     }
 
+    public FileStorageType getStorageType() {
+        return storageType;
+    }
 
+    public void setStorageType(FileStorageType storageType) {
+        this.storageType = storageType;
+    }
+
+    public FileType getType() {
+        return type;
+    }
+
+    public void setType(FileType type) {
+        this.type = type;
+    }
 }
