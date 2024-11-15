@@ -11,7 +11,6 @@ import java.util.UUID;
 public class FileUploadEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
@@ -23,7 +22,7 @@ public class FileUploadEntity {
     @Column(name = "file_storage_type", nullable = false)
     private FileStorageType storageType;
 
-    @Column(name = "server_url", nullable = false)
+    @Column(name = "path", nullable = false)
     private String path;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,15 +32,27 @@ public class FileUploadEntity {
     @Column(name = "is_public", nullable = false)
     private boolean isPublic;
 
+    @Column(name = "ext")
+    private String ext;
+
     protected FileUploadEntity() {}
 
-    public FileUploadEntity(UUID id, FileType type, FileStorageType storageType, String path, UserEntity owner, boolean isPublic) {
+    public FileUploadEntity(UUID id, FileType type, FileStorageType storageType, String path, UserEntity owner, boolean isPublic, String ext) {
         this.id = id;
         this.type = type;
         this.storageType = storageType;
         this.path = path;
         this.owner = owner;
         this.isPublic = isPublic;
+        this.ext = ext;
+    }
+
+    public String getExt() {
+        return ext;
+    }
+
+    public void setExt(String ext) {
+        this.ext = ext;
     }
 
     public UUID getId() {

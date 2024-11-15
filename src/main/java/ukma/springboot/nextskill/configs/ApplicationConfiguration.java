@@ -11,7 +11,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ukma.springboot.nextskill.entities.UserEntity;
+import ukma.springboot.nextskill.interfaces.IFileUploadService;
 import ukma.springboot.nextskill.repositories.UserRepository;
+import ukma.springboot.nextskill.services.LocalFileUploadService;
 import ukma.springboot.nextskill.utils.CSVUtility;
 
 @Configuration
@@ -50,6 +52,11 @@ public class ApplicationConfiguration {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
+    }
+
+    @Bean
+    IFileUploadService fileUploadService() {
+        return new LocalFileUploadService();
     }
 
     @Bean

@@ -12,16 +12,26 @@ public class FileUpload {
     private FileStorageType storageType;
     private User owner;
     private boolean isPublic;
+    private String ext;
 
     public FileUpload() {}
 
-    public FileUpload(UUID id, FileType type, FileStorageType storageType, String path, User owner, boolean isPublic) {
+    public FileUpload(UUID id, FileType type, FileStorageType storageType, String path, User owner, boolean isPublic, String ext) {
         this.id = id;
         this.type = type;
         this.storageType = storageType;
         this.path = path;
         this.owner = owner;
         this.isPublic = isPublic;
+        this.ext = ext;
+    }
+
+    public String getExt() {
+        return ext;
+    }
+
+    public void setExt(String ext) {
+        this.ext = ext;
     }
 
     public UUID getId() {
