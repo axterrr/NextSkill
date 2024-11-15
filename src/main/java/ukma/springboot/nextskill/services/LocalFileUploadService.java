@@ -90,7 +90,7 @@ public class LocalFileUploadService implements IFileUploadService {
             return null;
         }
 
-        logger.debug("File returned from the system");
+        logger.warn("File returned from the system");
         return file;
     }
 
