@@ -34,6 +34,9 @@ public class PostEntity {
     @Column(name = "hidden", nullable = false)
     private boolean isHidden;
 
+    @Column(name = "content", columnDefinition = "TEXT")
+    private String content;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "section_uuid")
     private SectionEntity section;

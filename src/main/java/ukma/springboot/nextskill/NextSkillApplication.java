@@ -66,6 +66,7 @@ public class NextSkillApplication implements CommandLineRunner {
 
         PostEntity post = PostEntity.builder()
                 .name("name")
+                .content("content")
                 .section(section)
                 .build();
 
