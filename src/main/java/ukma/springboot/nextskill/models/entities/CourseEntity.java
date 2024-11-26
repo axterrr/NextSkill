@@ -36,7 +36,7 @@ public class CourseEntity {
     private LocalDateTime createdAt;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "teacher_uuid")
+    @JoinColumn(name = "teacher_uuid", updatable = false)
     private UserEntity teacher;
 
     @ManyToMany
