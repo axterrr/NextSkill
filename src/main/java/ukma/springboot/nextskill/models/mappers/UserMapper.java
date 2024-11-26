@@ -1,5 +1,6 @@
 package ukma.springboot.nextskill.models.mappers;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import ukma.springboot.nextskill.models.entities.UserEntity;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.UserView;
@@ -8,7 +9,7 @@ import static ukma.springboot.nextskill.models.mappers.MapIfInitialized.mapIfIni
 
 public class UserMapper {
 
-    public static UserEntity toUserEntity(UserView userView) {
+    public static UserEntity toUserEntity(UserView userView, PasswordEncoder passwordEncoder) {
         return UserEntity.builder()
                 .username(userView.getUsername())
                 .name(userView.getName())
@@ -17,7 +18,7 @@ public class UserMapper {
                 .phone(userView.getPhone())
                 .description(userView.getDescription())
                 .role(userView.getRole())
-                .passwordHash(userView.getPassword())
+                .passwordHash(passwordEncoder.encode(userView.getPassword()))
                 .build();
     }
 

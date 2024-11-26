@@ -1,6 +1,7 @@
 package ukma.springboot.nextskill.services.implementations;
 
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
 import ukma.springboot.nextskill.exceptions.UnknownUserException;
@@ -19,6 +20,7 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public List<UserResponse> getAll() {
@@ -33,7 +35,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse create(UserView userView) {
-        UserEntity userEntity = userRepository.save(UserMapper.toUserEntity(userView));
+        UserEntity userEntity = userRepository.save(UserMapper.toUserEntity(userView, passwordEncoder));
         return UserMapper.toUserResponse(userEntity);
     }
 
