@@ -5,12 +5,30 @@ import ukma.springboot.nextskill.models.entities.UserEntity;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.UserView;
 
-import static ukma.springboot.nextskill.models.mappers.MapIfInitialized.mapIfInitialized;
+import static ukma.springboot.nextskill.models.mappers.MapperUtility.orElse;
+import static ukma.springboot.nextskill.models.mappers.MapperUtility.mapIfInitialized;
 
 public class UserMapper {
 
+    public static UserEntity toUserEntity(UserView userView, UserEntity userEntity, PasswordEncoder passwordEncoder) {
+        return UserEntity.builder()
+                .uuid(userEntity.getUuid())
+                .username(orElse(userView.getUsername(), userEntity.getUsername()))
+                .name(orElse(userView.getName(), userEntity.getName()))
+                .surname(orElse(userView.getSurname(), userEntity.getSurname()))
+                .email(orElse(userView.getEmail(), userEntity.getEmail()))
+                .phone(orElse(userView.getPhone(), userEntity.getPhone()))
+                .description(orElse(userView.getDescription(), userEntity.getDescription()))
+                .isDisabled(orElse(userView.getIsDisabled(), userEntity.isDisabled()))
+                .passwordHash(userView.getPassword() == null ? userEntity.getPasswordHash() : passwordEncoder.encode(userView.getPassword()))
+                .ownCourses(userEntity.getOwnCourses())
+                .courses(userEntity.getCourses())
+                .build();
+    }
+
     public static UserEntity toUserEntity(UserView userView, PasswordEncoder passwordEncoder) {
         return UserEntity.builder()
+                .uuid(userView.getUuid())
                 .username(userView.getUsername())
                 .name(userView.getName())
                 .surname(userView.getSurname())

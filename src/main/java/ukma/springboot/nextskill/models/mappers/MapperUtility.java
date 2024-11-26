@@ -7,7 +7,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 
-public class MapIfInitialized {
+public class MapperUtility {
+
+    public static <T> T orElse(T first, T second) {
+        return first == null ? second : first;
+    }
 
     public static <T, R> List<R> mapIfInitialized(Collection<T> collection, Function<T, R> mapper) {
         if (Hibernate.isInitialized(collection)) {

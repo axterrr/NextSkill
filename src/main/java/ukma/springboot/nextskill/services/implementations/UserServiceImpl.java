@@ -41,7 +41,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse update(UserView userView) {
-        throw new RuntimeException("Not implemented method");
+        UserEntity existingUser = userRepository.findById(userView.getUuid())
+                .orElseThrow(() -> new ResourceNotFoundException("User", userView.getUuid()));
+        UserEntity userEntity = userRepository.save(UserMapper.toUserEntity(userView, existingUser, passwordEncoder));
+        return UserMapper.toUserResponse(userEntity);
     }
 
     @Override

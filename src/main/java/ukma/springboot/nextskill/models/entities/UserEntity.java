@@ -49,7 +49,7 @@ public class UserEntity {
     private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private UserRole role;
 
     @Column(name = "disabled", nullable = false)

@@ -38,7 +38,10 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostResponse update(PostView postView) {
-        throw new RuntimeException("Not implemented method");
+        PostEntity existingPost = postRepository.findById(postView.getUuid())
+                .orElseThrow(() -> new ResourceNotFoundException("Post", postView.getUuid()));
+        PostEntity postEntity = postRepository.save(PostMapper.toPostEntity(postView, existingPost));
+        return PostMapper.toPostResponse(postEntity);
     }
 
     @Override

@@ -6,6 +6,7 @@ import java.util.UUID;
 
 @Data
 public class SectionView {
+    private UUID uuid;
     private String name;
     private String description;
     private UUID courseId;

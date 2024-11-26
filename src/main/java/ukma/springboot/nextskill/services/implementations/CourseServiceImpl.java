@@ -38,7 +38,10 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseResponse update(CourseView courseView) {
-        throw new RuntimeException("Not implemented method");
+        CourseEntity existingCourse = courseRepository.findById(courseView.getUuid())
+                .orElseThrow(() -> new ResourceNotFoundException("Course", courseView.getUuid()));
+        CourseEntity courseEntity = courseRepository.save(CourseMapper.toCourseEntity(courseView, existingCourse));
+        return CourseMapper.toCourseResponse(courseEntity);
     }
 
     @Override

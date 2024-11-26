@@ -38,7 +38,10 @@ public class SectionServiceImpl implements SectionService {
 
     @Override
     public SectionResponse update(SectionView sectionView) {
-        throw new RuntimeException("Not implemented method");
+        SectionEntity existingSection = sectionRepository.findById(sectionView.getUuid())
+                .orElseThrow(() -> new ResourceNotFoundException("Section", sectionView.getUuid()));
+        SectionEntity sectionEntity = sectionRepository.save(SectionMapper.toSectionEntity(sectionView, existingSection));
+        return SectionMapper.toSectionResponse(sectionEntity);
     }
 
     @Override

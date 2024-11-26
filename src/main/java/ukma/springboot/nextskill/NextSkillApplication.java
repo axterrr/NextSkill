@@ -18,10 +18,18 @@ import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.responses.PostResponse;
 import ukma.springboot.nextskill.models.responses.SectionResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
+import ukma.springboot.nextskill.models.views.CourseView;
+import ukma.springboot.nextskill.models.views.PostView;
+import ukma.springboot.nextskill.models.views.SectionView;
+import ukma.springboot.nextskill.models.views.UserView;
 import ukma.springboot.nextskill.repositories.CourseRepository;
 import ukma.springboot.nextskill.repositories.PostRepository;
 import ukma.springboot.nextskill.repositories.SectionRepository;
 import ukma.springboot.nextskill.repositories.UserRepository;
+import ukma.springboot.nextskill.services.CourseService;
+import ukma.springboot.nextskill.services.PostService;
+import ukma.springboot.nextskill.services.SectionService;
+import ukma.springboot.nextskill.services.UserService;
 
 import java.util.List;
 
@@ -39,6 +47,18 @@ public class NextSkillApplication implements CommandLineRunner {
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private CourseService courseService;
+
+    @Autowired
+    private SectionService sectionService;
+
+    @Autowired
+    private PostService postService;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -118,6 +138,28 @@ public class NextSkillApplication implements CommandLineRunner {
 
         PostEntity postEntity = postRepository.findById(post.getUuid()).orElseThrow();
         PostResponse postResponse = PostMapper.toPostResponse(postEntity);
+
+
+
+        UserView userView = new UserView();
+        userView.setUuid(teacher.getUuid());
+        userView.setName("teacher 2.0");
+        userService.update(userView);
+
+        CourseView courseView = new CourseView();
+        courseView.setUuid(course.getUuid());
+        courseView.setName("course 2.0");
+        courseService.update(courseView);
+
+        SectionView sectionView = new SectionView();
+        sectionView.setUuid(section.getUuid());
+        sectionView.setName("section 2.0");
+        sectionService.update(sectionView);
+
+        PostView postView = new PostView();
+        postView.setUuid(post.getUuid());
+        postView.setName("post 2.0");
+        postService.update(postView);
 
         System.out.println();
     }
