@@ -46,4 +46,12 @@ public class CourseServiceImpl implements CourseService {
         courseRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Course", id));
         courseRepository.deleteById(id);
     }
+
+    @Override
+    public List<CourseResponse> getCoursesWhereStudent(UUID studentId) {
+        List<CourseEntity> courses = courseRepository.findByStudentsUuid(studentId);
+        return courses.stream()
+                .map(CourseMapper::toCourseResponse)
+                .toList();
+    }
 }

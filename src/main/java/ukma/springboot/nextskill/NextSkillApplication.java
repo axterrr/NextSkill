@@ -52,8 +52,8 @@ public class NextSkillApplication implements CommandLineRunner {
 
         UserEntity teacher = UserEntity.builder()
                 .username("teacher")
-                .name("name")
-                .surname("surname")
+                .name("Oleksander")
+                .surname("Olesiy")
                 .email("email.teacher")
                 .role(UserRole.TEACHER)
                 .passwordHash(passwordEncoder.encode("teacher"))
@@ -70,7 +70,7 @@ public class NextSkillApplication implements CommandLineRunner {
 
         UserEntity student = UserEntity.builder()
                 .username("student")
-                .name("name")
+                .name("Grygorii")
                 .surname("surname")
                 .email("email.student")
                 .role(UserRole.STUDENT)
@@ -82,7 +82,8 @@ public class NextSkillApplication implements CommandLineRunner {
         userRepository.save(admin);
 
         CourseEntity course = CourseEntity.builder()
-                .name("name")
+                .name("Web Development")
+                .description("Learn how to build single-page applications!")
                 .teacher(teacher)
                 .students(List.of(student))
                 .build();
