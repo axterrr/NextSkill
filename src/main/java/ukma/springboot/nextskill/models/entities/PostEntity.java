@@ -38,6 +38,6 @@ public class PostEntity {
     private String content;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "section_uuid")
+    @JoinColumn(name = "section_uuid", updatable = false)
     private SectionEntity section;
 }

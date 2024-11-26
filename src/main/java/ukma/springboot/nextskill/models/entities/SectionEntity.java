@@ -29,7 +29,7 @@ public class SectionEntity {
     private String description;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "course_uuid")
+    @JoinColumn(name = "course_uuid", updatable = false)
     private CourseEntity course;
 
     @OneToMany(mappedBy = "section")

@@ -58,6 +58,9 @@ public class UserEntity {
     @Column(name = "password", nullable = false)
     private String passwordHash;
 
+    @OneToMany(mappedBy = "teacher")
+    private List<CourseEntity> ownCourses;
+
     @ManyToMany
     @JoinTable(
             name = "students_courses",
