@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import ukma.springboot.nextskill.models.entities.CourseEntity;
 import ukma.springboot.nextskill.models.entities.PostEntity;
 import ukma.springboot.nextskill.models.entities.SectionEntity;
@@ -31,6 +32,9 @@ public class NextSkillApplication implements CommandLineRunner {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     public static void main(String[] args) {
         SpringApplication.run(NextSkillApplication.class, args);
     }
@@ -38,21 +42,41 @@ public class NextSkillApplication implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        UserEntity user = UserEntity.builder()
-                .username("username")
+        UserEntity teacher = UserEntity.builder()
+                .username("teacher")
                 .name("name")
                 .surname("surname")
-                .email("email")
+                .email("email.teacher")
                 .role(UserRole.TEACHER)
-                .passwordHash("password")
+                .passwordHash(passwordEncoder.encode("teacher"))
                 .build();
 
-        userRepository.save(user);
+        UserEntity admin = UserEntity.builder()
+                .username("admin")
+                .name("name")
+                .surname("surname")
+                .email("email.admin")
+                .role(UserRole.ADMIN)
+                .passwordHash(passwordEncoder.encode("admin"))
+                .build();
+
+        UserEntity student = UserEntity.builder()
+                .username("student")
+                .name("name")
+                .surname("surname")
+                .email("email.student")
+                .role(UserRole.STUDENT)
+                .passwordHash(passwordEncoder.encode("student"))
+                .build();
+
+        userRepository.save(teacher);
+        userRepository.save(student);
+        userRepository.save(admin);
 
         CourseEntity course = CourseEntity.builder()
                 .name("name")
-                .teacher(user)
-                .students(List.of(user))
+                .teacher(teacher)
+                .students(List.of(student))
                 .build();
 
         courseRepository.save(course);
