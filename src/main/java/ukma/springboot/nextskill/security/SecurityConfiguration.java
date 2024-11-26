@@ -41,6 +41,9 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(PathRequest.toH2Console()).hasRole("ADMIN")
                         .requestMatchers("error").permitAll()
+                        .requestMatchers("/images/**").permitAll()
+                        .requestMatchers("/js/**").permitAll()
+                        .requestMatchers("/css/**").permitAll()
                         .requestMatchers("login").permitAll()
                         .anyRequest().authenticated()
                 )
