@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,15 +16,11 @@ import ukma.springboot.nextskill.security.JWTUtility;
 
 import java.io.IOException;
 
+@AllArgsConstructor
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    AuthenticationManager authenticationManager;
-    JWTUtility jwtUtility;
-
-    public AuthenticationFilter(AuthenticationManager authenticationManager, JWTUtility jwtUtility) {
-        this.authenticationManager = authenticationManager;
-        this.jwtUtility = jwtUtility;
-    }
+    private AuthenticationManager authenticationManager;
+    private JWTUtility jwtUtility;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -32,10 +29,10 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        if (username == null || username.trim().isEmpty()) {
+        if (username == null || username.isBlank()) {
             throw new BadCredentialsException("Username cannot be empty.");
         }
-        if (password == null || password.trim().isEmpty()) {
+        if (password == null || password.isBlank()) {
             throw new BadCredentialsException("Password cannot be empty.");
         }
 

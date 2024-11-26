@@ -1,5 +1,6 @@
 package ukma.springboot.nextskill.security;
 
+import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,29 +10,20 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import ukma.springboot.nextskill.security.filters.AuthExceptionHandler;
 import ukma.springboot.nextskill.security.filters.AuthenticationFilter;
 import ukma.springboot.nextskill.security.filters.JWTAuthorizationFilter;
 
 @Configuration
-@EnableWebSecurity()
+@EnableWebSecurity
+@AllArgsConstructor
 public class SecurityConfiguration {
 
-    AuthExceptionHandler authExceptionHandler;
-    JWTAuthorizationFilter jwtAuthorizationFilter;
-    PasswordEncoder passwordEncoder;
-    JWTUtility jwtUtility;
-    AuthenticationManager authenticationManager;
-
-    public SecurityConfiguration(AuthenticationManager manager, AuthExceptionHandler authExceptionHandler, JWTAuthorizationFilter jwtAuthorizationFilter, JWTUtility jwtUtility, PasswordEncoder passwordEncoder) {
-        this.authenticationManager = manager;
-        this.authExceptionHandler = authExceptionHandler;
-        this.jwtAuthorizationFilter = jwtAuthorizationFilter;
-        this.jwtUtility = jwtUtility;
-        this.passwordEncoder = passwordEncoder;
-    }
+    private AuthExceptionHandler authExceptionHandler;
+    private JWTAuthorizationFilter jwtAuthorizationFilter;
+    private JWTUtility jwtUtility;
+    private AuthenticationManager authenticationManager;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -54,9 +46,7 @@ public class SecurityConfiguration {
                 .addFilterBefore(authExceptionHandler, AuthenticationFilter.class)
                 .addFilter(new AuthenticationFilter(authenticationManager, jwtUtility))
                 .addFilterAfter(jwtAuthorizationFilter, AuthenticationFilter.class)
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
     }
 }
