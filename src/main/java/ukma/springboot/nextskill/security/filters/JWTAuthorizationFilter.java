@@ -17,6 +17,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import ukma.springboot.nextskill.security.JWTUtility;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +31,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        List<Cookie> cookies = Arrays.asList(request.getCookies());
+        List<Cookie> cookies = request.getCookies() == null ? new ArrayList<>() : Arrays.asList(request.getCookies());
         Optional<Cookie> secretTokenCookie = cookies.stream()
                 .filter(cookie -> "SECRET_TOKEN".equals(cookie.getName()))
                 .findFirst();
