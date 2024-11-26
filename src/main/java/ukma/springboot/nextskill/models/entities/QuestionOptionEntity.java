@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Table(name = "answer_options")
-public class AnswerOptionEntity {
+public class QuestionOptionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

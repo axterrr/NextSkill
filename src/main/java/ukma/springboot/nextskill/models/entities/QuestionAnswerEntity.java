@@ -29,5 +29,5 @@ public class QuestionAnswerEntity {
 
     @ManyToOne
     @JoinColumn(name = "answer_option_id")
-    private AnswerOptionEntity answerOption;
+    private QuestionOptionEntity answerOption;
 }

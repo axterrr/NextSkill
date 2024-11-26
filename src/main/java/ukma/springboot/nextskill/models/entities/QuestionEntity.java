@@ -29,5 +29,5 @@ public class QuestionEntity {
     private TestEntity test;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    private List<AnswerOptionEntity> answerOptions;
+    private List<QuestionOptionEntity> answerOptions;
 }
