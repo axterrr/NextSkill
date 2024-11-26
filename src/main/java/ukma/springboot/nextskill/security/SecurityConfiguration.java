@@ -16,7 +16,7 @@ import ukma.springboot.nextskill.security.filters.AuthenticationFilter;
 import ukma.springboot.nextskill.security.filters.JWTAuthorizationFilter;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity()
 public class SecurityConfiguration {
 
     AuthExceptionHandler authExceptionHandler;

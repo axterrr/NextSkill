@@ -106,7 +106,7 @@ public class NextSkillApplication implements CommandLineRunner {
 
 
 
-        UserEntity userEntity = userRepository.findById(user.getUuid()).orElseThrow();
+        UserEntity userEntity = userRepository.findById(student.getUuid()).orElseThrow();
         UserResponse userResponse = UserMapper.toUserResponse(userEntity);
 
         CourseEntity courseEntity = courseRepository.findById(course.getUuid()).orElseThrow();
