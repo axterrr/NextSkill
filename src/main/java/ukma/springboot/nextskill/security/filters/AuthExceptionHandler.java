@@ -5,10 +5,9 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import ukma.springboot.nextskill.exceptions.UnknownUser;
+import ukma.springboot.nextskill.exceptions.UnknownUserException;
 
 import java.io.IOException;
 
@@ -22,7 +21,7 @@ public class AuthExceptionHandler extends OncePerRequestFilter {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.getWriter().write("There is a problem with your token. Try to login again instead.");
             response.getWriter().flush();
-        } catch (UnknownUser e) {
+        } catch (UnknownUserException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             response.getWriter().write("Wrong credentials provided");
             response.getWriter().flush();
