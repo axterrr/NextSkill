@@ -28,4 +28,7 @@ public class TestEntity {
 
     @OneToMany(mappedBy = "test", cascade = CascadeType.ALL)
     private List<QuestionEntity> questions;
+
+    @OneToMany(mappedBy = "test", cascade = CascadeType.ALL)
+    private List<TestAttemptEntity> attempts;
 }

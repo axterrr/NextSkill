@@ -21,7 +21,7 @@ public class QuestionAnswerEntity {
 
     @ManyToOne
     @JoinColumn(name = "test_attempt_id")
-    private TestAttempt testAttempt;
+    private TestAttemptEntity testAttemptEntity;
 
     @ManyToOne
     @JoinColumn(name = "question_id")
