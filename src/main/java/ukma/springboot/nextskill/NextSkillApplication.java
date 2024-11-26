@@ -9,6 +9,14 @@ import ukma.springboot.nextskill.models.entities.PostEntity;
 import ukma.springboot.nextskill.models.entities.SectionEntity;
 import ukma.springboot.nextskill.models.entities.UserEntity;
 import ukma.springboot.nextskill.models.enums.UserRole;
+import ukma.springboot.nextskill.models.mappers.CourseMapper;
+import ukma.springboot.nextskill.models.mappers.PostMapper;
+import ukma.springboot.nextskill.models.mappers.SectionMapper;
+import ukma.springboot.nextskill.models.mappers.UserMapper;
+import ukma.springboot.nextskill.models.responses.CourseResponse;
+import ukma.springboot.nextskill.models.responses.PostResponse;
+import ukma.springboot.nextskill.models.responses.SectionResponse;
+import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.repositories.CourseRepository;
 import ukma.springboot.nextskill.repositories.PostRepository;
 import ukma.springboot.nextskill.repositories.SectionRepository;
@@ -71,5 +79,21 @@ public class NextSkillApplication implements CommandLineRunner {
                 .build();
 
         postRepository.save(post);
+
+
+
+        UserEntity userEntity = userRepository.findById(user.getUuid()).orElseThrow();
+        UserResponse userResponse = UserMapper.toUserResponse(userEntity);
+
+        CourseEntity courseEntity = courseRepository.findById(course.getUuid()).orElseThrow();
+        CourseResponse courseResponse = CourseMapper.toCourseResponse(courseEntity);
+
+        SectionEntity sectionEntity = sectionRepository.findById(section.getUuid()).orElseThrow();
+        SectionResponse sectionResponse = SectionMapper.toSectionResponse(sectionEntity);
+
+        PostEntity postEntity = postRepository.findById(post.getUuid()).orElseThrow();
+        PostResponse postResponse = PostMapper.toPostResponse(postEntity);
+
+        System.out.println();
     }
 }

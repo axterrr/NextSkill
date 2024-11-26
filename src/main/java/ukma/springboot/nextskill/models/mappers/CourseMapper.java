@@ -5,6 +5,8 @@ import ukma.springboot.nextskill.models.entities.UserEntity;
 import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.views.CourseView;
 
+import static ukma.springboot.nextskill.models.mappers.MapIfInitialized.mapIfInitialized;
+
 public class CourseMapper {
 
     public static CourseEntity toCourseEntity(CourseView courseView) {
@@ -22,8 +24,8 @@ public class CourseMapper {
                 .description(courseEntity.getDescription())
                 .createdAt(courseEntity.getCreatedAt())
                 .teacher(UserMapper.toUserResponse(courseEntity.getTeacher()))
-                .students(courseEntity.getStudents().stream().map(UserMapper::toUserResponse).toList())
-                .sections(courseEntity.getSections().stream().map(SectionMapper::toSectionResponse).toList())
+                .students(mapIfInitialized(courseEntity.getStudents(), UserMapper::toUserResponse))
+                .sections(mapIfInitialized(courseEntity.getSections(), SectionMapper::toSectionResponse))
                 .build();
     }
 }
