@@ -3,9 +3,9 @@ package ukma.springboot.nextskill.security.filters;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ukma.springboot.nextskill.exceptions.UnknownUser;
@@ -20,8 +20,13 @@ public class AuthExceptionHandler extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (JWTVerificationException e) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.getWriter().write("There is a problem with your token. Try to login again instead.");
-            response.getWriter().flush();
+
+            //Resets a cookie (i guess)
+            Cookie newCookie = new Cookie("SECRET_TOKEN", "");
+            newCookie.setMaxAge(0);
+            response.addCookie(newCookie);
+
+            response.sendRedirect("/login?logout");
         } catch (UnknownUser e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             response.getWriter().write("Wrong credentials provided");
