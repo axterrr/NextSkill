@@ -58,7 +58,7 @@ public class TestController {
         return "testInfo";
     }
 
-    @GetMapping("/test/{uuid}/attempt")
+    @GetMapping("/test/{uuid}/start")
     public String doAttempt(@PathVariable(name = "uuid") String testUuid, Model model) {
         UserResponse authenticatedUser = userService.getAuthenticatedUser();
         UUID testId = UUID.fromString(testUuid);
