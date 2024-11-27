@@ -101,9 +101,12 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
-    public CourseResponse getWithSectionsWithPosts(UUID id) {
+    public CourseResponse getWithSectionsWithPostsAndTests(UUID id) {
         CourseEntity courseEntity = courseRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Course", id));
-        courseEntity.getSections().forEach(s -> Hibernate.initialize(s.getPosts()));
+        courseEntity.getSections().forEach(s -> {
+            Hibernate.initialize(s.getPosts());
+            Hibernate.initialize(s.getTests());
+        });
         return CourseMapper.toCourseResponse(courseEntity);
     }
 
