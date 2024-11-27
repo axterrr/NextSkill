@@ -9,6 +9,7 @@ import ukma.springboot.nextskill.models.responses.SectionResponse;
 import ukma.springboot.nextskill.models.views.SectionView;
 import ukma.springboot.nextskill.repositories.SectionRepository;
 import ukma.springboot.nextskill.services.SectionService;
+import ukma.springboot.nextskill.validation.SectionValidator;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +19,7 @@ import java.util.UUID;
 public class SectionServiceImpl implements SectionService {
 
     private SectionRepository sectionRepository;
+    private SectionValidator sectionValidator;
 
     @Override
     public List<SectionResponse> getAll() {
@@ -32,12 +34,14 @@ public class SectionServiceImpl implements SectionService {
 
     @Override
     public SectionResponse create(SectionView sectionView) {
+        sectionValidator.validateForCreation(sectionView);
         SectionEntity sectionEntity = sectionRepository.save(SectionMapper.toSectionEntity(sectionView));
         return SectionMapper.toSectionResponse(sectionEntity);
     }
 
     @Override
     public SectionResponse update(SectionView sectionView) {
+        sectionValidator.validateForUpdate(sectionView);
         SectionEntity existingSection = sectionRepository.findById(sectionView.getUuid())
                 .orElseThrow(() -> new ResourceNotFoundException("Section", sectionView.getUuid()));
         SectionEntity sectionEntity = sectionRepository.save(SectionMapper.toSectionEntity(sectionView, existingSection));

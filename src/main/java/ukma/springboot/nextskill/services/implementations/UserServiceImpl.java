@@ -11,6 +11,7 @@ import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.UserView;
 import ukma.springboot.nextskill.repositories.UserRepository;
 import ukma.springboot.nextskill.services.UserService;
+import ukma.springboot.nextskill.validation.UserValidator;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,6 +22,7 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
+    private UserValidator userValidator;
 
     @Override
     public List<UserResponse> getAll() {
@@ -35,12 +37,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse create(UserView userView) {
+        userValidator.validateForCreation(userView);
         UserEntity userEntity = userRepository.save(UserMapper.toUserEntity(userView, passwordEncoder));
         return UserMapper.toUserResponse(userEntity);
     }
 
     @Override
     public UserResponse update(UserView userView) {
+        userValidator.validateForUpdate(userView);
         UserEntity existingUser = userRepository.findById(userView.getUuid())
                 .orElseThrow(() -> new ResourceNotFoundException("User", userView.getUuid()));
         UserEntity userEntity = userRepository.save(UserMapper.toUserEntity(userView, existingUser, passwordEncoder));

@@ -9,6 +9,7 @@ import ukma.springboot.nextskill.models.responses.PostResponse;
 import ukma.springboot.nextskill.models.views.PostView;
 import ukma.springboot.nextskill.repositories.PostRepository;
 import ukma.springboot.nextskill.services.PostService;
+import ukma.springboot.nextskill.validation.PostValidator;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +19,7 @@ import java.util.UUID;
 public class PostServiceImpl implements PostService {
 
     private PostRepository postRepository;
+    private PostValidator postValidator;
 
     @Override
     public List<PostResponse> getAll() {
@@ -32,12 +34,14 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostResponse create(PostView postView) {
+        postValidator.validateForCreation(postView);
         PostEntity postEntity = postRepository.save(PostMapper.toPostEntity(postView));
         return PostMapper.toPostResponse(postEntity);
     }
 
     @Override
     public PostResponse update(PostView postView) {
+        postValidator.validateForUpdate(postView);
         PostEntity existingPost = postRepository.findById(postView.getUuid())
                 .orElseThrow(() -> new ResourceNotFoundException("Post", postView.getUuid()));
         PostEntity postEntity = postRepository.save(PostMapper.toPostEntity(postView, existingPost));
