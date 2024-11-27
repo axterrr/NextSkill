@@ -41,7 +41,7 @@ public class PagesController {
         UserEntity user = userService.getUserByUsername(username);
         UserMapper.toUserResponse(user);
 
-        CourseResponse course = courseService.getWithSectionsWithPosts(courseUuid);
+        CourseResponse course = courseService.getWithSectionsWithPostsAndTests(courseUuid);
 
         model.addAttribute("course", course);
         model.addAttribute("user", user);
