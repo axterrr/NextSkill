@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import ukma.springboot.nextskill.exceptions.UnknownUserException;
 
 import java.io.IOException;
 
@@ -27,10 +26,6 @@ public class AuthExceptionHandler extends OncePerRequestFilter {
             response.addCookie(newCookie);
 
             response.sendRedirect("/login?logout");
-        } catch (UnknownUserException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            response.getWriter().write("Wrong credentials provided");
-            response.getWriter().flush();
         } catch (RuntimeException e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().write("Bad request");

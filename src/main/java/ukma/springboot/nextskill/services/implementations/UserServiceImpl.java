@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
-import ukma.springboot.nextskill.exceptions.UnknownUserException;
 import ukma.springboot.nextskill.models.entities.UserEntity;
 import ukma.springboot.nextskill.models.mappers.UserMapper;
 import ukma.springboot.nextskill.models.responses.UserResponse;
@@ -59,6 +58,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity getUserByUsername(String username) {
-        return userRepository.findByUsername(username).orElseThrow(() -> new UnknownUserException(username));
+        return userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("User", UUID.randomUUID()));
     }
 }
