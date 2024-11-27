@@ -12,6 +12,8 @@ public class TestMapper {
                 .uuid(testEntity.getUuid())
                 .name(testEntity.getName())
                 .description(testEntity.getDescription())
+                .createdAt(testEntity.getCreatedAt())
+                .isHidden(testEntity.isHidden())
                 .questions(MapperUtility.mapIfInitialized(testEntity.getQuestions(), QuestionMapper::toQuestionResponse))
                 .attempts(MapperUtility.mapIfInitialized(testEntity.getAttempts(), TestAttemptMapper::toTestAttemptResponse))
                 .build();

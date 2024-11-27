@@ -23,9 +23,12 @@ public class TestAttemptEntity {
     @Column
     private UUID uuid;
 
-    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime startTime;
+
     @Column
+    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime endTime;
 
     @Column
