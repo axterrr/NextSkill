@@ -2,10 +2,13 @@ package ukma.springboot.nextskill.services.implementations;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import ukma.springboot.nextskill.exceptions.NoAccessException;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
+import ukma.springboot.nextskill.models.entities.CourseEntity;
 import ukma.springboot.nextskill.models.entities.TestEntity;
 import ukma.springboot.nextskill.models.mappers.TestMapper;
 import ukma.springboot.nextskill.models.responses.TestResponse;
+import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.TestView;
 import ukma.springboot.nextskill.repositories.TestRepository;
 import ukma.springboot.nextskill.services.TestService;
@@ -57,5 +60,16 @@ public class TestServiceImpl implements TestService {
         TestEntity test = testRepository.findById(testId).orElseThrow(() -> new ResourceNotFoundException("Test", testId));
         UUID courseOwner = test.getSection().getCourse().getTeacher().getUuid();
         return courseOwner.equals(userId);
+    }
+
+    @Override
+    public void checkTestAccess(UUID testUuid, UserResponse user) {
+        UUID userId = user.getUuid();
+        TestEntity test = testRepository.findById(testUuid).orElseThrow(() -> new ResourceNotFoundException("Test", testUuid));
+        CourseEntity course = test.getSection().getCourse();
+
+        if (course.getStudents().stream().noneMatch(stud -> stud.getUuid().equals(userId))) {
+            throw new NoAccessException("This user has no access to this test");
+        }
     }
 }

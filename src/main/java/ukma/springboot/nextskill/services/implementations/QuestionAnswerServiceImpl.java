@@ -4,13 +4,17 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
 import ukma.springboot.nextskill.models.entities.QuestionAnswerEntity;
+import ukma.springboot.nextskill.models.entities.QuestionOptionEntity;
 import ukma.springboot.nextskill.models.mappers.QuestionAnswerMapper;
 import ukma.springboot.nextskill.models.responses.QuestionAnswerResponse;
 import ukma.springboot.nextskill.models.views.QuestionAnswerView;
 import ukma.springboot.nextskill.repositories.QuestionAnswerRepository;
+import ukma.springboot.nextskill.repositories.QuestionOptionRepository;
 import ukma.springboot.nextskill.services.QuestionAnswerService;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -18,6 +22,7 @@ import java.util.UUID;
 public class QuestionAnswerServiceImpl implements QuestionAnswerService {
 
     private final QuestionAnswerRepository questionAnswerRepository;
+    private final QuestionOptionRepository questionOptionRepository;
 
     @Override
     public List<QuestionAnswerResponse> getAll() {
@@ -52,10 +57,45 @@ public class QuestionAnswerServiceImpl implements QuestionAnswerService {
         return QuestionAnswerMapper.toQuestionAnswerResponse(updatedEntity);
     }
 
+
+
     @Override
     public void delete(UUID id) {
         questionAnswerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("QuestionAnswer", id));
         questionAnswerRepository.deleteById(id);
+    }
+
+    @Override
+    public void updateSavedAnswers(Map<String, String> map, UUID attemptId) {
+        List<QuestionAnswerEntity> answers = questionAnswerRepository.findByTestAttemptUuid(attemptId);
+
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            String questionId = entry.getKey();
+            String optionId = entry.getValue();
+
+            Optional<QuestionAnswerEntity> existingAnswer = answers.stream()
+                    .filter(answer -> answer.getQuestion().getId().toString().equals(questionId))
+                    .findFirst();
+
+            if (existingAnswer.isPresent()) {
+                Optional<QuestionOptionEntity> option = questionOptionRepository.findById(UUID.fromString(optionId));
+
+                if (option.isPresent()) {
+                    QuestionAnswerEntity answerEntity = existingAnswer.get();
+                    answerEntity.setAnswerOption(option.get());
+
+                    questionAnswerRepository.save(answerEntity);
+                }
+            } else {
+                QuestionAnswerView answer = QuestionAnswerView.builder()
+                        .questionId(UUID.fromString(questionId))
+                        .questionOptionId(UUID.fromString(optionId))
+                        .testAttemptId(attemptId)
+                        .build();
+
+                this.create(answer);
+            }
+        }
     }
 }

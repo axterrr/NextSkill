@@ -10,6 +10,7 @@ import ukma.springboot.nextskill.models.entities.TestEntity;
 import ukma.springboot.nextskill.models.entities.UserEntity;
 import ukma.springboot.nextskill.models.mappers.TestAttemptMapper;
 import ukma.springboot.nextskill.models.responses.TestAttemptResponse;
+import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.TestAttemptView;
 import ukma.springboot.nextskill.repositories.TestAttemptRepository;
 import ukma.springboot.nextskill.repositories.TestRepository;
@@ -39,6 +40,7 @@ public class TestAttemptServiceImpl implements TestAttemptService {
     public TestAttemptResponse get(UUID id) {
         TestAttemptEntity testAttemptEntity = testAttemptRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("TestAttempt", id));
+        testAttemptEntity.getAnswers().size();
         return TestAttemptMapper.toTestAttemptResponse(testAttemptEntity);
     }
 
@@ -89,9 +91,6 @@ public class TestAttemptServiceImpl implements TestAttemptService {
 
         CourseEntity courseEntity = test.getSection().getCourse();
 
-        if (courseEntity.getStudents().stream().noneMatch(stud -> stud.getUuid().equals(userId)))
-            throw new NoAccessException("This user has no access to the course");
-
         if (test.isHidden() && !(courseEntity.getTeacher().getUuid().equals(userId)))
             throw new NoAccessException("This user has no access to the test");
 
@@ -105,5 +104,36 @@ public class TestAttemptServiceImpl implements TestAttemptService {
         TestAttemptEntity savedAttempt = testAttemptRepository.save(newAttempt);
 
         return TestAttemptMapper.toTestAttemptResponse(savedAttempt);
+    }
+
+    @Override
+    public void checkAttemptAccess(UUID attemptId, UserResponse authenticated) {
+        TestAttemptEntity testAttemptEntity = testAttemptRepository.findById(attemptId)
+                .orElseThrow(() -> new ResourceNotFoundException("TestAttempt", attemptId));
+        UUID userId = authenticated.getUuid();
+
+        if (!testAttemptEntity.getCompletedBy().getUuid().equals(userId)) {
+            throw new NoAccessException("This user has no access to this attempt");
+        }
+    }
+
+    @Override
+    public void submitAttempt(UUID attemptId) {
+        Optional<TestAttemptEntity> attemptOptional = testAttemptRepository.findById(attemptId);
+
+        if (attemptOptional.isEmpty()) {
+            throw new ResourceNotFoundException("TestAttempt", attemptId);
+        }
+
+        TestAttemptEntity attempt = attemptOptional.get();
+
+        if (attempt.isSubmitted()) {
+            throw new IllegalStateException("Attempt has already been submitted.");
+        }
+
+        attempt.setSubmitted(true);
+        attempt.setEndTime(LocalDateTime.now());
+
+        testAttemptRepository.save(attempt);
     }
 }

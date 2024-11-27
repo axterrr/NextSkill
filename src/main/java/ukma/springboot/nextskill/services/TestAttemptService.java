@@ -1,6 +1,7 @@
 package ukma.springboot.nextskill.services;
 
 import ukma.springboot.nextskill.models.responses.TestAttemptResponse;
+import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.TestAttemptView;
 
 import java.util.List;
@@ -11,4 +12,8 @@ public interface TestAttemptService extends GenericService<TestAttemptView, Test
     Optional<TestAttemptResponse> getUnfinishedAttempt(UUID testId, UUID userID);
     List<TestAttemptResponse> getFinishedAttempts(UUID testId, UUID userId);
     TestAttemptResponse createNewAttempt(UUID testId, UUID userId);
+
+    void checkAttemptAccess(UUID attemptId, UserResponse authenticated);
+
+    void submitAttempt(UUID attemptId);
 }

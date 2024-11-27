@@ -58,4 +58,15 @@ public class QuestionServiceImpl implements QuestionService {
                 .orElseThrow(() -> new ResourceNotFoundException("Question", id));
         questionRepository.deleteById(id);
     }
+
+    @Override
+    public List<QuestionResponse> getTestQuestions(UUID testId) {
+        return questionRepository.findByTestUuid(testId)
+                .stream()
+                .map(question -> {
+                    question.getQuestionOptions().size();
+                    return QuestionMapper.toQuestionResponse(question);
+                })
+                .toList();
+    }
 }

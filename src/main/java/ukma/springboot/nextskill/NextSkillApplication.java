@@ -117,6 +117,7 @@ public class NextSkillApplication implements CommandLineRunner {
         CourseResponse createdCourse3 = courseService.create(course3);
 
         courseService.enrollStudent(createdCourse1.getUuid(), createdStudent.getUuid());
+        courseService.enrollStudent(createdCourse1.getUuid(), createdAdmin.getUuid());
         courseService.enrollStudent(createdCourse1.getUuid(), createdStudent2.getUuid());
         courseService.enrollStudent(createdCourse2.getUuid(), createdStudent.getUuid());
         courseService.enrollStudent(createdCourse3.getUuid(), createdStudent.getUuid());
@@ -187,6 +188,42 @@ public class NextSkillApplication implements CommandLineRunner {
 
         optionService.create(option1);
         optionService.create(option2);
+
+        QuestionView question2 = QuestionView.builder()
+                .questionText("Which animal do you like?")
+                .testId(createdTest.getUuid())
+                .build();
+
+        QuestionResponse createdQuestion2 = questionService.create(question2);
+
+        QuestionOptionView option21 = QuestionOptionView.builder()
+                .isCorrect(true)
+                .optionText("Cats")
+                .questionId(createdQuestion2.getId())
+                .build();
+
+        QuestionOptionView option22 = QuestionOptionView.builder()
+                .isCorrect(false)
+                .optionText("Dogs")
+                .questionId(createdQuestion2.getId())
+                .build();
+
+        QuestionOptionView option23 = QuestionOptionView.builder()
+                .isCorrect(false)
+                .optionText("Lions")
+                .questionId(createdQuestion2.getId())
+                .build();
+
+        QuestionOptionView option24 = QuestionOptionView.builder()
+                .isCorrect(false)
+                .optionText("Capybara")
+                .questionId(createdQuestion2.getId())
+                .build();
+
+        optionService.create(option21);
+        optionService.create(option22);
+        optionService.create(option23);
+        optionService.create(option24);
 
         PostResponse createdPost1 = postService.create(post1);
         PostResponse createdPost2 = postService.create(post2);
