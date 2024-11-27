@@ -30,6 +30,7 @@ public class SectionMapper {
     }
 
     public static SectionResponse toSectionResponse(SectionEntity sectionEntity) {
+        if (sectionEntity == null) { return null; }
         return SectionResponse.builder()
                 .uuid(sectionEntity.getUuid())
                 .name(sectionEntity.getName())

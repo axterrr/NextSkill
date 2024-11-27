@@ -40,7 +40,7 @@ public class UserView {
     private Boolean isDisabled;
 
     @NotNull(message = "Password cannot be blank")
-    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\\\d).*$", message = "Password must contain upper and lower letters and digits")
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).*$", message = "Password must contain upper and lower letters and digits")
     @Size(min = 8, message = "Password length should be at least 8 symbols")
     private String password;
 

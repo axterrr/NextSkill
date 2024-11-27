@@ -29,6 +29,7 @@ public class PostMapper {
     }
 
     public static PostResponse toPostResponse(PostEntity postEntity) {
+        if (postEntity == null) { return null; }
         return PostResponse.builder()
                 .uuid(postEntity.getUuid())
                 .name(postEntity.getName())
