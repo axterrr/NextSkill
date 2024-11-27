@@ -53,7 +53,7 @@ public class UserMapper {
                 .createdAt(userEntity.getCreatedAt())
                 .role(userEntity.getRole())
                 .isDisabled(userEntity.isDisabled())
-                .ownCourses(mapIfInitialized(userEntity.getOwnCourses(), CourseMapper::toCourseResponse))
+                .ownCourses(mapIfInitialized(userEntity.getOwnCourses(), CourseMapper::toCourseResponseWithoutTeacher))
                 .courses(mapIfInitialized(userEntity.getCourses(), CourseMapper::toCourseResponse))
                 .build();
     }

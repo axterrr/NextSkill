@@ -10,7 +10,7 @@ public interface CourseService extends GenericService<CourseView, CourseResponse
     List<CourseResponse> getCoursesWhereStudent(UUID studentId);
     List<CourseResponse> getCoursesWhereTeacher(UUID teacherId);
     void enrollStudent(UUID courseId, UUID studentId);
-
+    CourseResponse getWithSectionsWithPosts(UUID id);
     CourseResponse getWithUsers(UUID id);
     List<CourseResponse> getAllWithUsers();
 }

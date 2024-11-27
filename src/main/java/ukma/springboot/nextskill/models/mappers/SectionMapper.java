@@ -36,7 +36,17 @@ public class SectionMapper {
                 .name(sectionEntity.getName())
                 .description(sectionEntity.getDescription())
                 .course(CourseMapper.toCourseResponse(sectionEntity.getCourse()))
-                .posts(mapIfInitialized(sectionEntity.getPosts(), PostMapper::toPostResponse))
+                .posts(mapIfInitialized(sectionEntity.getPosts(), PostMapper::toPostResponseWithoutSection))
+                .build();
+    }
+
+    public static SectionResponse toSectionResponseWithoutCourse(SectionEntity sectionEntity) {
+        if (sectionEntity == null) { return null; }
+        return SectionResponse.builder()
+                .uuid(sectionEntity.getUuid())
+                .name(sectionEntity.getName())
+                .description(sectionEntity.getDescription())
+                .posts(mapIfInitialized(sectionEntity.getPosts(), PostMapper::toPostResponseWithoutSection))
                 .build();
     }
 }

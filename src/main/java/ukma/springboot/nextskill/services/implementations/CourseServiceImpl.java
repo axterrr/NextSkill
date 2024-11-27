@@ -101,6 +101,14 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
+    public CourseResponse getWithSectionsWithPosts(UUID id) {
+        CourseEntity courseEntity = courseRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Course", id));
+        courseEntity.getSections().forEach(s -> Hibernate.initialize(s.getPosts()));
+        return CourseMapper.toCourseResponse(courseEntity);
+    }
+
+    @Override
+    @Transactional
     public List<CourseResponse> getAllWithUsers() {
         List<CourseEntity> courses = courseRepository.findAll();
         courses.forEach(course -> Hibernate.initialize(course.getStudents()));
@@ -108,6 +116,4 @@ public class CourseServiceImpl implements CourseService {
                 .map(CourseMapper::toCourseResponse)
                 .toList();
     }
-
-
 }
