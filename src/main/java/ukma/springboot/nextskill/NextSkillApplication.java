@@ -97,9 +97,20 @@ public class NextSkillApplication implements CommandLineRunner {
                 .passwordHash(passwordEncoder.encode("student"))
                 .build();
 
+        UserEntity newTeacher = UserEntity.builder()
+                .username("newTeacher")
+                .name("Natalia")
+                .surname("Kovalenko")
+                .email("email.newTeacher")
+                .role(UserRole.TEACHER)
+                .passwordHash(passwordEncoder.encode("newTeacher"))
+                .build();
+
         userRepository.save(teacher);
         userRepository.save(student);
         userRepository.save(admin);
+        userRepository.save(newTeacher);
+
 
         CourseEntity course = CourseEntity.builder()
                 .name("Web Development")
@@ -108,14 +119,42 @@ public class NextSkillApplication implements CommandLineRunner {
                 .students(List.of(student))
                 .build();
 
+        CourseEntity course2 = CourseEntity.builder()
+                .name("Data Structures and Algorithms")
+                .description("Master the fundamentals of algorithms and data structures.")
+                .teacher(teacher)
+                .students(List.of(student))
+                .build();
+
+        CourseEntity course3 = CourseEntity.builder()
+                .name("Introduction to AI")
+                .description("Learn the basics of Artificial Intelligence and its applications.")
+                .teacher(newTeacher)
+                .students(List.of(student))
+                .build();
+
         courseRepository.save(course);
+        courseRepository.save(course2);
+        courseRepository.save(course3);
 
         SectionEntity section = SectionEntity.builder()
                 .name("name")
                 .course(course)
                 .build();
 
+        SectionEntity section2 = SectionEntity.builder()
+                .name("Basics")
+                .course(course2)
+                .build();
+
+        SectionEntity section3 = SectionEntity.builder()
+                .name("Introduction")
+                .course(course3)
+                .build();
+
         sectionRepository.save(section);
+        sectionRepository.save(section2);
+        sectionRepository.save(section3);
 
         PostEntity post = PostEntity.builder()
                 .name("name")
@@ -123,8 +162,21 @@ public class NextSkillApplication implements CommandLineRunner {
                 .section(section)
                 .build();
 
-        postRepository.save(post);
+        PostEntity post2 = PostEntity.builder()
+                .name("Algorithm Basics")
+                .content("Let's discuss the fundamentals of algorithms.")
+                .section(section2)
+                .build();
 
+        PostEntity post3 = PostEntity.builder()
+                .name("What is AI?")
+                .content("An introductory post about Artificial Intelligence.")
+                .section(section3)
+                .build();
+
+        postRepository.save(post);
+        postRepository.save(post2);
+        postRepository.save(post3);
 
 
         UserEntity userEntity = userRepository.findById(student.getUuid()).orElseThrow();
