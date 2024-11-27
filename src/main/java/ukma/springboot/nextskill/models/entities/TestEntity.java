@@ -26,6 +26,10 @@ public class TestEntity {
     @Column
     private String description;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "section_uuid", updatable = false)
+    private SectionEntity section;
+
     @OneToMany(mappedBy = "test", cascade = CascadeType.ALL)
     private List<QuestionEntity> questions;
 

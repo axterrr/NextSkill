@@ -34,4 +34,7 @@ public class SectionEntity {
 
     @OneToMany(mappedBy = "section")
     private List<PostEntity> posts;
+
+    @OneToMany(mappedBy = "section")
+    private List<TestEntity> tests;
 }
