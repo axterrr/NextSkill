@@ -5,19 +5,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import ukma.springboot.nextskill.models.enums.UserRole;
-import ukma.springboot.nextskill.models.responses.CourseResponse;
-import ukma.springboot.nextskill.models.responses.PostResponse;
-import ukma.springboot.nextskill.models.responses.SectionResponse;
-import ukma.springboot.nextskill.models.responses.UserResponse;
-import ukma.springboot.nextskill.models.views.CourseView;
-import ukma.springboot.nextskill.models.views.PostView;
-import ukma.springboot.nextskill.models.views.SectionView;
-import ukma.springboot.nextskill.models.views.UserView;
+import ukma.springboot.nextskill.models.responses.*;
+import ukma.springboot.nextskill.models.views.*;
 import ukma.springboot.nextskill.repositories.*;
-import ukma.springboot.nextskill.services.CourseService;
-import ukma.springboot.nextskill.services.PostService;
-import ukma.springboot.nextskill.services.SectionService;
-import ukma.springboot.nextskill.services.UserService;
+import ukma.springboot.nextskill.services.*;
+import ukma.springboot.nextskill.services.implementations.TestServiceImpl;
 
 @SpringBootApplication
 public class NextSkillApplication implements CommandLineRunner {
@@ -31,7 +23,11 @@ public class NextSkillApplication implements CommandLineRunner {
     @Autowired
     private PostService postService;
     @Autowired
-    private TestRepository testRepository;
+    private TestService testService;
+    @Autowired
+    private QuestionService questionService;
+    @Autowired
+    private QuestionOptionService optionService;
 
     public static void main(String[] args) {
         SpringApplication.run(NextSkillApplication.class, args);
@@ -161,6 +157,36 @@ public class NextSkillApplication implements CommandLineRunner {
                 .content("An introductory post about Artificial Intelligence.")
                 .sectionId(createdSection3.getUuid())
                 .build();
+
+        TestView test = TestView.builder()
+                .name("Testing Test")
+                .description("Pass it if you can!")
+                .sectionId(createdSection1.getUuid())
+                .build();
+
+        TestResponse createdTest = testService.create(test);
+
+        QuestionView question = QuestionView.builder()
+                .questionText("How do you feel?")
+                .testId(createdTest.getUuid())
+                .build();
+
+        QuestionResponse createdQuestion = questionService.create(question);
+
+        QuestionOptionView option1 = QuestionOptionView.builder()
+                .isCorrect(true)
+                .optionText("Good")
+                .questionId(createdQuestion.getId())
+                .build();
+
+        QuestionOptionView option2 = QuestionOptionView.builder()
+                .isCorrect(false)
+                .optionText("Bad")
+                .questionId(createdQuestion.getId())
+                .build();
+
+        optionService.create(option1);
+        optionService.create(option2);
 
         PostResponse createdPost1 = postService.create(post1);
         PostResponse createdPost2 = postService.create(post2);
