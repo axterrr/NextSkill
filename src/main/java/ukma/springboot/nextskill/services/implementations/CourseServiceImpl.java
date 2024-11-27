@@ -76,4 +76,13 @@ public class CourseServiceImpl implements CourseService {
         courseEntity.getStudents().add(userEntity);
         courseRepository.save(courseEntity);
     }
+
+    @Override
+    public List<CourseResponse> getCoursesWhereTeacher(UUID teacherId) {
+        List<CourseEntity> courses = courseRepository.findByTeacherUuid(teacherId);
+        return courses.stream()
+                .map(CourseMapper::toCourseResponse)
+                .toList();
+    }
+
 }

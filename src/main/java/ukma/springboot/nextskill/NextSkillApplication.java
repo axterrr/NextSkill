@@ -70,6 +70,16 @@ public class NextSkillApplication implements CommandLineRunner {
                 .confirmPassword("Student1")
                 .build();
 
+        UserView student2 = UserView.builder()
+                .username("student2")
+                .name("Grygori2")
+                .surname("surname")
+                .email("email_2@student")
+                .role(UserRole.STUDENT)
+                .password("Student2")
+                .confirmPassword("Student2")
+                .build();
+
         UserView newTeacher = UserView.builder()
                 .username("newteacher")
                 .name("Natalia")
@@ -80,8 +90,10 @@ public class NextSkillApplication implements CommandLineRunner {
                 .confirmPassword("NewTeacher1")
                 .build();
 
+
         UserResponse createdTeacher = userService.create(teacher);
         UserResponse createdStudent = userService.create(student);
+        UserResponse createdStudent2 = userService.create(student2);
         UserResponse createdAdmin = userService.create(admin);
         UserResponse createdNewTeacher =  userService.create(newTeacher);
 
@@ -109,6 +121,7 @@ public class NextSkillApplication implements CommandLineRunner {
         CourseResponse createdCourse3 = courseService.create(course3);
 
         courseService.enrollStudent(createdCourse1.getUuid(), createdStudent.getUuid());
+        courseService.enrollStudent(createdCourse1.getUuid(), createdStudent2.getUuid());
         courseService.enrollStudent(createdCourse2.getUuid(), createdStudent.getUuid());
         courseService.enrollStudent(createdCourse3.getUuid(), createdStudent.getUuid());
 

@@ -23,11 +23,16 @@ public class PagesController {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity user = userService.getUserByUsername(username);
 
-        List<CourseResponse> courses = courseService.getCoursesWhereStudent(user.getUuid());
-
-        model.addAttribute("courses", courses);
         model.addAttribute("user", user);
         return "home";
+    }
+
+    @GetMapping("/all-courses")
+    public String allCourses(Model model) {
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity user = userService.getUserByUsername(username);
+        model.addAttribute("user", user);
+        return "allCourses";
     }
 
     @Autowired
