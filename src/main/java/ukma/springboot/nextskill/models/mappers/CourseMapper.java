@@ -31,6 +31,7 @@ public class CourseMapper {
     }
 
     public static CourseResponse toCourseResponse(CourseEntity courseEntity) {
+        if (courseEntity == null) { return null; }
         return CourseResponse.builder()
                 .uuid(courseEntity.getUuid())
                 .name(courseEntity.getName())

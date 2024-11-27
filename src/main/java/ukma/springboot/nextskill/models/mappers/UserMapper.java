@@ -41,6 +41,7 @@ public class UserMapper {
     }
 
     public static UserResponse toUserResponse(UserEntity userEntity) {
+        if (userEntity == null) { return null; }
         return UserResponse.builder()
                 .uuid(userEntity.getUuid())
                 .username(userEntity.getUsername())

@@ -14,7 +14,7 @@ public class MapperUtility {
     }
 
     public static <T, R> List<R> mapIfInitialized(Collection<T> collection, Function<T, R> mapper) {
-        if (Hibernate.isInitialized(collection)) {
+        if (collection != null && Hibernate.isInitialized(collection)) {
             return collection.stream().map(mapper).toList();
         }
         return new ArrayList<>();

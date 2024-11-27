@@ -1,6 +1,7 @@
 package ukma.springboot.nextskill.models.views;
 
 import jakarta.validation.constraints.*;
+import lombok.Builder;
 import lombok.Data;
 import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.validation.constraints.ConfirmPassword;
@@ -8,6 +9,7 @@ import ukma.springboot.nextskill.validation.constraints.ConfirmPassword;
 import java.util.UUID;
 
 @Data
+@Builder
 @ConfirmPassword
 public class UserView {
 
@@ -40,7 +42,7 @@ public class UserView {
     private Boolean isDisabled;
 
     @NotNull(message = "Password cannot be blank")
-    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\\\d).*$", message = "Password must contain upper and lower letters and digits")
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).*$", message = "Password must contain upper and lower letters and digits")
     @Size(min = 8, message = "Password length should be at least 8 symbols")
     private String password;
 
