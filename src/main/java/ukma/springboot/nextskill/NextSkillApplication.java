@@ -4,13 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import ukma.springboot.nextskill.models.entities.*;
 import ukma.springboot.nextskill.models.enums.UserRole;
-import ukma.springboot.nextskill.models.mappers.CourseMapper;
-import ukma.springboot.nextskill.models.mappers.PostMapper;
-import ukma.springboot.nextskill.models.mappers.SectionMapper;
-import ukma.springboot.nextskill.models.mappers.UserMapper;
 import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.responses.PostResponse;
 import ukma.springboot.nextskill.models.responses.SectionResponse;
@@ -25,21 +19,9 @@ import ukma.springboot.nextskill.services.PostService;
 import ukma.springboot.nextskill.services.SectionService;
 import ukma.springboot.nextskill.services.UserService;
 
-import java.util.List;
-
 @SpringBootApplication
 public class NextSkillApplication implements CommandLineRunner {
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private CourseRepository courseRepository;
-    @Autowired
-    private SectionRepository sectionRepository;
-    @Autowired
-    private PostRepository postRepository;
     @Autowired
     private UserService userService;
     @Autowired
@@ -58,155 +40,152 @@ public class NextSkillApplication implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        UserEntity teacher = UserEntity.builder()
+        UserView teacher = UserView.builder()
                 .username("teacher")
                 .name("Oleksander")
-                .surname("Olesiy")
-                .email("email.teacher")
+                .surname("Oleksiy")
+                .email("email@teacher")
                 .role(UserRole.TEACHER)
-                .passwordHash(passwordEncoder.encode("teacher"))
+                .password("Teacher1")
+                .confirmPassword("Teacher1")
                 .build();
 
-        UserEntity admin = UserEntity.builder()
+        UserView admin = UserView.builder()
                 .username("admin")
                 .name("name")
                 .surname("surname")
-                .email("email.admin")
+                .email("email@admin")
                 .role(UserRole.ADMIN)
-                .passwordHash(passwordEncoder.encode("admin"))
+                .password("Admin123")
+                .confirmPassword("Admin123")
                 .build();
 
-        UserEntity student = UserEntity.builder()
+        UserView student = UserView.builder()
                 .username("student")
                 .name("Grygorii")
                 .surname("surname")
-                .email("email.student")
+                .email("email@student")
                 .role(UserRole.STUDENT)
-                .passwordHash(passwordEncoder.encode("student"))
+                .password("Student1")
+                .confirmPassword("Student1")
                 .build();
 
-        UserEntity newTeacher = UserEntity.builder()
-                .username("newTeacher")
+        UserView newTeacher = UserView.builder()
+                .username("newteacher")
                 .name("Natalia")
                 .surname("Kovalenko")
-                .email("email.newTeacher")
+                .email("email@newTeacher")
                 .role(UserRole.TEACHER)
-                .passwordHash(passwordEncoder.encode("newTeacher"))
+                .password("NewTeacher1")
+                .confirmPassword("NewTeacher1")
                 .build();
 
-        userRepository.save(teacher);
-        userRepository.save(student);
-        userRepository.save(admin);
-        userRepository.save(newTeacher);
+        UserResponse createdTeacher = userService.create(teacher);
+        UserResponse createdStudent = userService.create(student);
+        UserResponse createdAdmin = userService.create(admin);
+        UserResponse createdNewTeacher =  userService.create(newTeacher);
 
 
-        CourseEntity course = CourseEntity.builder()
+        CourseView course1 = CourseView.builder()
                 .name("Web Development")
                 .description("Learn how to build single-page applications!")
-                .teacher(teacher)
-                .students(List.of(student))
+                .teacherId(createdTeacher.getUuid())
                 .build();
 
-        CourseEntity course2 = CourseEntity.builder()
+        CourseView course2 = CourseView.builder()
                 .name("Data Structures and Algorithms")
                 .description("Master the fundamentals of algorithms and data structures.")
-                .teacher(teacher)
-                .students(List.of(student))
+                .teacherId(createdTeacher.getUuid())
                 .build();
 
-        CourseEntity course3 = CourseEntity.builder()
+        CourseView course3 = CourseView.builder()
                 .name("Introduction to AI")
                 .description("Learn the basics of Artificial Intelligence and its applications.")
-                .teacher(newTeacher)
-                .students(List.of(student))
+                .teacherId(createdNewTeacher.getUuid())
                 .build();
 
-        courseRepository.save(course);
-        courseRepository.save(course2);
-        courseRepository.save(course3);
+        CourseResponse createdCourse1 = courseService.create(course1);
+        CourseResponse createdCourse2 = courseService.create(course2);
+        CourseResponse createdCourse3 = courseService.create(course3);
 
-        SectionEntity section = SectionEntity.builder()
+        courseService.enrollStudent(createdCourse1.getUuid(), createdStudent.getUuid());
+        courseService.enrollStudent(createdCourse2.getUuid(), createdStudent.getUuid());
+        courseService.enrollStudent(createdCourse3.getUuid(), createdStudent.getUuid());
+
+        SectionView section1 = SectionView.builder()
                 .name("name")
-                .course(course)
+                .courseId(createdCourse1.getUuid())
                 .build();
 
-        SectionEntity section2 = SectionEntity.builder()
+        SectionView section2 = SectionView.builder()
                 .name("Basics")
-                .course(course2)
+                .courseId(createdCourse2.getUuid())
                 .build();
 
-        SectionEntity section3 = SectionEntity.builder()
+        SectionView section3 = SectionView.builder()
                 .name("Introduction")
-                .course(course3)
+                .courseId(createdCourse3.getUuid())
                 .build();
 
-        sectionRepository.save(section);
-        sectionRepository.save(section2);
-        sectionRepository.save(section3);
+        SectionResponse createdSection1 = sectionService.create(section1);
+        SectionResponse createdSection2 = sectionService.create(section2);
+        SectionResponse createdSection3 = sectionService.create(section3);
 
-        PostEntity post = PostEntity.builder()
+        PostView post1 = PostView.builder()
                 .name("name")
                 .content("content")
-                .section(section)
+                .sectionId(createdSection1.getUuid())
                 .build();
 
-        PostEntity post2 = PostEntity.builder()
+        PostView post2 = PostView.builder()
                 .name("Algorithm Basics")
                 .content("Let's discuss the fundamentals of algorithms.")
-                .section(section2)
+                .sectionId(createdSection2.getUuid())
                 .build();
 
-        PostEntity post3 = PostEntity.builder()
+        PostView post3 = PostView.builder()
                 .name("What is AI?")
                 .content("An introductory post about Artificial Intelligence.")
-                .section(section3)
+                .sectionId(createdSection3.getUuid())
                 .build();
 
-        postRepository.save(post);
-        postRepository.save(post2);
-        postRepository.save(post3);
+        PostResponse createdPost1 = postService.create(post1);
+        PostResponse createdPost2 = postService.create(post2);
+        PostResponse createdPost3 = postService.create(post3);
 
-        TestEntity test = TestEntity.builder()
-                .name("Testing test")
-                .description("Complete this test!")
-                .section(section)
+        /*UserView userView = UserView.builder()
+                .uuid(createdTeacher.getUuid())
+                .name("teacher 2.0")
                 .build();
-
-        testRepository.save(test);
-
-        UserEntity userEntity = userRepository.findById(student.getUuid()).orElseThrow();
-        UserResponse userResponse = UserMapper.toUserResponse(userEntity);
-
-        CourseEntity courseEntity = courseRepository.findById(course.getUuid()).orElseThrow();
-        CourseResponse courseResponse = CourseMapper.toCourseResponse(courseEntity);
-
-        SectionEntity sectionEntity = sectionRepository.findById(section.getUuid()).orElseThrow();
-        SectionResponse sectionResponse = SectionMapper.toSectionResponse(sectionEntity);
-
-        PostEntity postEntity = postRepository.findById(post.getUuid()).orElseThrow();
-        PostResponse postResponse = PostMapper.toPostResponse(postEntity);
-
-
-        UserView userView = new UserView();
-        userView.setUuid(teacher.getUuid());
-        userView.setName("teacher 2.0");
         userService.update(userView);
 
-        CourseView courseView = new CourseView();
-        courseView.setUuid(course.getUuid());
-        courseView.setName("course 2.0");
+        CourseView courseView = CourseView.builder()
+                .uuid(createdCourse1.getUuid())
+                .name("course 2.0")
+                .build();
         courseService.update(courseView);
 
-        SectionView sectionView = new SectionView();
-        sectionView.setUuid(section.getUuid());
-        sectionView.setName("section 2.0");
+        SectionView sectionView = SectionView.builder()
+                .uuid(createdSection1.getUuid())
+                .name("section 2.0")
+                .build();
         sectionService.update(sectionView);
 
-        PostView postView = new PostView();
-        postView.setUuid(post.getUuid());
-        postView.setName("post 2.0");
-        postService.update(postView);
+        PostView postView = PostView.builder()
+                .uuid(createdPost1.getUuid())
+                .name("post 2.0")
+                .build();
+        postService.update(postView);*/
 
+//        TestEntity test = TestEntity.builder()
+//            .name("Testing test")
+//            .description("Complete this test!")
+//            .section(section)
+//            .build();
+//
+//        testRepository.save(test);
+
+        // для дебагу щоб поставити брейкпойнт
         System.out.println();
     }
 }

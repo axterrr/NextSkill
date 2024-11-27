@@ -2,12 +2,15 @@ package ukma.springboot.nextskill.services.implementations;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
 import ukma.springboot.nextskill.models.entities.CourseEntity;
+import ukma.springboot.nextskill.models.entities.UserEntity;
 import ukma.springboot.nextskill.models.mappers.CourseMapper;
 import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.views.CourseView;
 import ukma.springboot.nextskill.repositories.CourseRepository;
+import ukma.springboot.nextskill.repositories.UserRepository;
 import ukma.springboot.nextskill.services.CourseService;
 import ukma.springboot.nextskill.validation.CourseValidator;
 
@@ -19,6 +22,7 @@ import java.util.UUID;
 public class CourseServiceImpl implements CourseService {
 
     private CourseRepository courseRepository;
+    private UserRepository userRepository;
     private CourseValidator courseValidator;
 
     @Override
@@ -60,5 +64,16 @@ public class CourseServiceImpl implements CourseService {
         return courses.stream()
                 .map(CourseMapper::toCourseResponse)
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public void enrollStudent(UUID courseId, UUID studentId) {
+        CourseEntity courseEntity = courseRepository.findById(courseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Course", courseId));
+        UserEntity userEntity = userRepository.findById(studentId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", studentId));
+        courseEntity.getStudents().add(userEntity);
+        courseRepository.save(courseEntity);
     }
 }

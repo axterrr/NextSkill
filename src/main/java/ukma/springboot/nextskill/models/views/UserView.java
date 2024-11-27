@@ -1,6 +1,7 @@
 package ukma.springboot.nextskill.models.views;
 
 import jakarta.validation.constraints.*;
+import lombok.Builder;
 import lombok.Data;
 import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.validation.constraints.ConfirmPassword;
@@ -8,6 +9,7 @@ import ukma.springboot.nextskill.validation.constraints.ConfirmPassword;
 import java.util.UUID;
 
 @Data
+@Builder
 @ConfirmPassword
 public class UserView {
 
