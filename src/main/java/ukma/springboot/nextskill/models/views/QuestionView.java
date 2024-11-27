@@ -6,7 +6,7 @@ import java.util.UUID;
 
 @Data
 public class QuestionView {
-    private Long id;
+    private UUID id;
     private String questionText;
     private UUID testId;
 }

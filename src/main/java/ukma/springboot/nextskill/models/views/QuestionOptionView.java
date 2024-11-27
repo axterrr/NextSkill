@@ -6,8 +6,8 @@ import java.util.UUID;
 
 @Data
 public class QuestionOptionView {
-    private Long id;
+    private UUID id;
     private String optionText;
     private boolean isCorrect;
-    private Long questionId;
+    private UUID questionId;
 }

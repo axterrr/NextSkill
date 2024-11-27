@@ -51,6 +51,11 @@ public class TestController {
         return "testInfo";
     }
 
+    @GetMapping("/test/{uuid}/attempt")
+    public String doAttempt(@PathVariable String uuid, Model model) {
+        return "";
+    }
+
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
