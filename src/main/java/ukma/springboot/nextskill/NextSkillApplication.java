@@ -5,10 +5,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import ukma.springboot.nextskill.models.entities.CourseEntity;
-import ukma.springboot.nextskill.models.entities.PostEntity;
-import ukma.springboot.nextskill.models.entities.SectionEntity;
-import ukma.springboot.nextskill.models.entities.UserEntity;
+import ukma.springboot.nextskill.models.entities.*;
 import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.mappers.CourseMapper;
 import ukma.springboot.nextskill.models.mappers.PostMapper;
@@ -22,10 +19,7 @@ import ukma.springboot.nextskill.models.views.CourseView;
 import ukma.springboot.nextskill.models.views.PostView;
 import ukma.springboot.nextskill.models.views.SectionView;
 import ukma.springboot.nextskill.models.views.UserView;
-import ukma.springboot.nextskill.repositories.CourseRepository;
-import ukma.springboot.nextskill.repositories.PostRepository;
-import ukma.springboot.nextskill.repositories.SectionRepository;
-import ukma.springboot.nextskill.repositories.UserRepository;
+import ukma.springboot.nextskill.repositories.*;
 import ukma.springboot.nextskill.services.CourseService;
 import ukma.springboot.nextskill.services.PostService;
 import ukma.springboot.nextskill.services.SectionService;
@@ -37,31 +31,25 @@ import java.util.List;
 public class NextSkillApplication implements CommandLineRunner {
 
     @Autowired
+    PasswordEncoder passwordEncoder;
+    @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private CourseRepository courseRepository;
-
     @Autowired
     private SectionRepository sectionRepository;
-
     @Autowired
     private PostRepository postRepository;
-
     @Autowired
     private UserService userService;
-
     @Autowired
     private CourseService courseService;
-
     @Autowired
     private SectionService sectionService;
-
     @Autowired
     private PostService postService;
-
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private TestRepository testRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(NextSkillApplication.class, args);
@@ -178,6 +166,13 @@ public class NextSkillApplication implements CommandLineRunner {
         postRepository.save(post2);
         postRepository.save(post3);
 
+        TestEntity test = TestEntity.builder()
+                .name("Testing test")
+                .description("Complete this test!")
+                .section(section)
+                .build();
+
+        testRepository.save(test);
 
         UserEntity userEntity = userRepository.findById(student.getUuid()).orElseThrow();
         UserResponse userResponse = UserMapper.toUserResponse(userEntity);
@@ -190,7 +185,6 @@ public class NextSkillApplication implements CommandLineRunner {
 
         PostEntity postEntity = postRepository.findById(post.getUuid()).orElseThrow();
         PostResponse postResponse = PostMapper.toPostResponse(postEntity);
-
 
 
         UserView userView = new UserView();
