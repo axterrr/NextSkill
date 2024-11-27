@@ -1,6 +1,7 @@
 package ukma.springboot.nextskill.services.implementations;
 
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
@@ -54,6 +55,11 @@ public class UserServiceImpl implements UserService {
     public void delete(UUID id) {
         userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", id));
         userRepository.deleteById(id);
+    }
+
+    public UserResponse getAuthenticatedUser() {
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return UserMapper.toUserResponse(getUserByUsername(username));
     }
 
     @Override

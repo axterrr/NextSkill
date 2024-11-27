@@ -6,4 +6,5 @@ import ukma.springboot.nextskill.models.views.UserView;
 
 public interface UserService extends GenericService<UserView, UserResponse> {
     UserEntity getUserByUsername(String username);
+    UserResponse getAuthenticatedUser();
 }
