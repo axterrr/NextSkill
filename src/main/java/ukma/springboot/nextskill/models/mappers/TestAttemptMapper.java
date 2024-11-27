@@ -5,7 +5,6 @@ import ukma.springboot.nextskill.models.entities.TestEntity;
 import ukma.springboot.nextskill.models.entities.UserEntity;
 import ukma.springboot.nextskill.models.responses.TestAttemptResponse;
 import ukma.springboot.nextskill.models.views.TestAttemptView;
-import ukma.springboot.nextskill.models.views.TestView;
 
 public class TestAttemptMapper {
 
@@ -22,7 +21,7 @@ public class TestAttemptMapper {
                 .build();
     }
 
-    public static TestAttemptEntity toTestEntity(TestAttemptView view) {
+    public static TestAttemptEntity toTestAttemptEntity(TestAttemptView view) {
         return TestAttemptEntity.builder()
                 .uuid(view.getUuid())
                 .startTime(view.getStartTime())
