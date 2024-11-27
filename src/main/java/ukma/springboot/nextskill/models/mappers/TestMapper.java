@@ -10,6 +10,21 @@ public class TestMapper {
     private TestMapper() {}
 
     public static TestResponse toTestResponse(TestEntity testEntity) {
+        if (testEntity == null) { return null; }
+        return TestResponse.builder()
+                .uuid(testEntity.getUuid())
+                .name(testEntity.getName())
+                .description(testEntity.getDescription())
+                .createdAt(testEntity.getCreatedAt())
+                .isHidden(testEntity.isHidden())
+                .section(SectionMapper.toSectionResponse(testEntity.getSection()))
+                .questions(MapperUtility.mapIfInitialized(testEntity.getQuestions(), QuestionMapper::toQuestionResponse))
+                .attempts(MapperUtility.mapIfInitialized(testEntity.getAttempts(), TestAttemptMapper::toTestAttemptResponse))
+                .build();
+    }
+
+    public static TestResponse toTestResponseWithoutSection(TestEntity testEntity) {
+        if (testEntity == null) { return null; }
         return TestResponse.builder()
                 .uuid(testEntity.getUuid())
                 .name(testEntity.getName())

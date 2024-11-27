@@ -35,6 +35,20 @@ public class PagesController {
         return "home";
     }
 
+    @GetMapping("course/{courseUuid}")
+    public String course(@PathVariable UUID courseUuid, Model model) {
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity user = userService.getUserByUsername(username);
+        UserMapper.toUserResponse(user);
+
+        CourseResponse course = courseService.getWithSectionsWithPostsAndTests(courseUuid);
+
+        model.addAttribute("course", course);
+        model.addAttribute("user", user);
+        model.addAttribute("isEnrolled", courseService.isEnrolled(courseUuid, user.getUuid()));
+        return "course";
+    }
+
     @GetMapping("course/{courseUuid}/enrolledStudents")
     public String enrolledStudents(@PathVariable UUID courseUuid, Model model) {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

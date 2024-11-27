@@ -14,4 +14,5 @@ public class SectionResponse {
     private String description;
     private CourseResponse course;
     private List<PostResponse> posts;
+    private List<TestResponse> tests;
 }

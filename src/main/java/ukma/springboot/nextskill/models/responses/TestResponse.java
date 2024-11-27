@@ -17,4 +17,5 @@ public class TestResponse {
     private boolean isHidden;
     private List<QuestionResponse> questions;
     private List<TestAttemptResponse> attempts;
+    private SectionResponse section;
 }

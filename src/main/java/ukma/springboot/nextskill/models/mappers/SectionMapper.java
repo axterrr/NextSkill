@@ -17,6 +17,7 @@ public class SectionMapper {
                 .description(orElse(sectionView.getDescription(), sectionEntity.getDescription()))
                 .course(sectionEntity.getCourse())
                 .posts(sectionEntity.getPosts())
+                .tests(sectionEntity.getTests())
                 .build();
     }
 
@@ -36,7 +37,19 @@ public class SectionMapper {
                 .name(sectionEntity.getName())
                 .description(sectionEntity.getDescription())
                 .course(CourseMapper.toCourseResponse(sectionEntity.getCourse()))
-                .posts(mapIfInitialized(sectionEntity.getPosts(), PostMapper::toPostResponse))
+                .posts(mapIfInitialized(sectionEntity.getPosts(), PostMapper::toPostResponseWithoutSection))
+                .tests(mapIfInitialized(sectionEntity.getTests(), TestMapper::toTestResponseWithoutSection))
+                .build();
+    }
+
+    public static SectionResponse toSectionResponseWithoutCourse(SectionEntity sectionEntity) {
+        if (sectionEntity == null) { return null; }
+        return SectionResponse.builder()
+                .uuid(sectionEntity.getUuid())
+                .name(sectionEntity.getName())
+                .description(sectionEntity.getDescription())
+                .posts(mapIfInitialized(sectionEntity.getPosts(), PostMapper::toPostResponseWithoutSection))
+                .tests(mapIfInitialized(sectionEntity.getTests(), TestMapper::toTestResponseWithoutSection))
                 .build();
     }
 }

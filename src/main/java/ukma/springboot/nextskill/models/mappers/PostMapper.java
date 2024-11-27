@@ -39,4 +39,15 @@ public class PostMapper {
                 .section(SectionMapper.toSectionResponse(postEntity.getSection()))
                 .build();
     }
+
+    public static PostResponse toPostResponseWithoutSection(PostEntity postEntity) {
+        if (postEntity == null) { return null; }
+        return PostResponse.builder()
+                .uuid(postEntity.getUuid())
+                .name(postEntity.getName())
+                .createdAt(postEntity.getCreatedAt())
+                .isHidden(postEntity.isHidden())
+                .content(postEntity.getContent())
+                .build();
+    }
 }

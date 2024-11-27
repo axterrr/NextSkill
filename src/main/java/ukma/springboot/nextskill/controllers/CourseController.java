@@ -48,16 +48,11 @@ public class CourseController {
         } else{
             return courseService.getCoursesWhereStudent(user.getUuid());
         }
-
     }
-
 
     @GetMapping("/api/all-courses")
     public List<CourseResponse> getAllCourses() {
-        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity user = userService.getUserByUsername(username);
-
-        List<CourseResponse> courses = courseService.getAll();
+        List<CourseResponse> courses = courseService.getAllWithUsers();
         return courses;
     }
 }

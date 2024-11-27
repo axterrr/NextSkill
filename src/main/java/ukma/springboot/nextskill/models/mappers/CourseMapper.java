@@ -39,7 +39,19 @@ public class CourseMapper {
                 .createdAt(courseEntity.getCreatedAt())
                 .teacher(UserMapper.toUserResponse(courseEntity.getTeacher()))
                 .students(mapIfInitialized(courseEntity.getStudents(), UserMapper::toUserResponse))
-                .sections(mapIfInitialized(courseEntity.getSections(), SectionMapper::toSectionResponse))
+                .sections(mapIfInitialized(courseEntity.getSections(), SectionMapper::toSectionResponseWithoutCourse))
+                .build();
+    }
+
+    public static CourseResponse toCourseResponseWithoutTeacher(CourseEntity courseEntity) {
+        if (courseEntity == null) { return null; }
+        return CourseResponse.builder()
+                .uuid(courseEntity.getUuid())
+                .name(courseEntity.getName())
+                .description(courseEntity.getDescription())
+                .createdAt(courseEntity.getCreatedAt())
+                .students(mapIfInitialized(courseEntity.getStudents(), UserMapper::toUserResponse))
+                .sections(mapIfInitialized(courseEntity.getSections(), SectionMapper::toSectionResponseWithoutCourse))
                 .build();
     }
 }
