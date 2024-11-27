@@ -116,4 +116,15 @@ public class CourseServiceImpl implements CourseService {
                 .map(CourseMapper::toCourseResponse)
                 .toList();
     }
+
+    @Override
+    public Object isEnrolled(UUID courseUuid, UUID studentUuid) {
+        CourseEntity courseEntity = courseRepository.findById(courseUuid).orElseThrow(() -> new ResourceNotFoundException("Course", courseUuid));
+        Hibernate.initialize(courseEntity.getStudents());
+        UserEntity userEntity = userRepository.findById(studentUuid)
+                .orElseThrow(() -> new ResourceNotFoundException("User", studentUuid));
+        return (courseEntity.getStudents().contains(userEntity));
+    }
+
+
 }

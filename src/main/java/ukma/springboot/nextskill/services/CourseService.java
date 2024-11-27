@@ -13,4 +13,6 @@ public interface CourseService extends GenericService<CourseView, CourseResponse
     CourseResponse getWithSectionsWithPosts(UUID id);
     CourseResponse getWithUsers(UUID id);
     List<CourseResponse> getAllWithUsers();
+
+    Object isEnrolled(UUID courseUuid, UUID studentUuid);
 }
