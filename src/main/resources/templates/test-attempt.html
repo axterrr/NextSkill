@@ -23,36 +23,41 @@
                       id="testForm"
                       th:attr="data-test-uuid=${testUuid},data-attempt-id=${attemptId}"
                 >
-                    <div class="row">
+                    <div class="row mb-2">
                         <div class="col-12">
-                            <h2>Test Questions</h2>
+                            <h2 class="text-center">Test Questions</h2>
                         </div>
                     </div>
-                    <div class="row">
-                        <div th:each="question : ${questions}" class="mb-4">
-                            <div class="col-12">
-                                <h5 th:text="${question.questionText}">Question Text</h5>
-                                <ul class="list-group">
-                                    <!-- Iterate through question options -->
-                                    <li th:each="option : ${question.questionOptions}" class="list-group-item">
-                                        <div class="form-check">
-                                            <!-- Checkbox or Radio Input -->
-                                            <input type="radio"
-                                                   th:id="${'option-' + option.id}"
-                                                   th:name="${question.id}"
-                                                   th:value="${option.id}"
-                                                   th:checked="${#lists.contains(answers, option.id)}"
-                                                   class="form-check-input question-option">
-                                            <label th:for="${'option-' + option.id}" th:text="${option.optionText}" class="form-check-label">Option Text</label>
-                                        </div>
-                                    </li>
-                                </ul>
+                    <div class="row gy-3">
+                        <div th:each="question, iterStat : ${questions}" class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="card-subtitle mb-2 text-muted ">
+                                        Question #<span th:text="${iterStat.count}"></span>
+                                    </h6>
+                                    <h5 th:text="${question.questionText}">Question Text</h5>
+                                    <ul class="list-group">
+                                        <!-- Iterate through question options -->
+                                        <li th:each="option : ${question.questionOptions}" class="list-group-item">
+                                            <div class="form-check">
+                                                <!-- Checkbox or Radio Input -->
+                                                <input type="radio"
+                                                       th:id="${'option-' + option.id}"
+                                                       th:name="${question.id}"
+                                                       th:value="${option.id}"
+                                                       th:checked="${#lists.contains(answers, option.id)}"
+                                                       class="form-check-input question-option">
+                                                <label th:for="${'option-' + option.id}" th:text="${option.optionText}" class="form-check-label">Option Text</label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="row mt-4">
                         <div class="col-12">
-                            <button type="submit" class="btn btn-primary">Save & Continue</button>
+                            <button type="submit" class="btn btn-primary w-100">Submit</button>
                         </div>
                     </div>
                 </form>
