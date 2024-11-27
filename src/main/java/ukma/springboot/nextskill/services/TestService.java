@@ -9,4 +9,5 @@ import java.util.UUID;
 public interface TestService extends GenericService<TestView, TestResponse> {
     boolean hasOwnerRights(UUID userId, UUID testId);
     void checkTestAccess(UUID testUuid, UserResponse user);
+    TestResponse getTestByAttempt(UUID attemptId);
 }

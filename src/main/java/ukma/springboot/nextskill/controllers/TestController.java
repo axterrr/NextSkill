@@ -2,7 +2,6 @@ package ukma.springboot.nextskill.controllers;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,16 +10,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ukma.springboot.nextskill.exceptions.MaxAttemptsException;
-import ukma.springboot.nextskill.models.responses.QuestionResponse;
-import ukma.springboot.nextskill.models.responses.TestAttemptResponse;
-import ukma.springboot.nextskill.models.responses.TestResponse;
-import ukma.springboot.nextskill.models.responses.UserResponse;
+import ukma.springboot.nextskill.models.responses.*;
 import ukma.springboot.nextskill.services.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @AllArgsConstructor
@@ -156,9 +149,34 @@ public class TestController {
         questionAnswerService.updateSavedAnswers(formData, UUID.fromString(attemptUuid));
         return ResponseEntity.ok("Answers saved successfully");
     }
-}
 
-/*
-    TODO:
-        1. Restrict access to the page if user is not a part of the course
- */
+    @GetMapping("/attempts/{attemptUuid}/view")
+    public String viewAttemptInfo(
+            @PathVariable(name = "attemptUuid") String attemptUuid,
+            Model model
+    ) {
+        UUID attemptId = UUID.fromString(attemptUuid);
+        TestAttemptResponse attempt = attemptService.get(attemptId);
+        if(!attempt.isSubmitted()) return "redirect:/home";
+
+        List<UUID> answeredQuestions = attempt.getAnswers().stream()
+                .map(answer -> answer.getQuestion().getId()).toList();
+        Map<UUID, QuestionOptionResponse> questionAnswerMap = new HashMap<>();
+
+        for (QuestionAnswerResponse answer : attempt.getAnswers()) {
+            questionAnswerMap.put(answer.getQuestion().getId(), answer.getAnswerOption());
+        }
+
+        TestResponse test = testService.getTestByAttempt(attempt.getUuid());
+        List<QuestionResponse> questions = questionService.getTestQuestions(test.getUuid());
+
+        UserResponse authenticated = userService.getAuthenticatedUser();
+
+        model.addAttribute("answeredQuestions", answeredQuestions); //ids of questions that were answered
+        model.addAttribute("questionAnswerMap", questionAnswerMap); //map question_id -> answered option
+        model.addAttribute("questions", questions); //Just questions.
+        model.addAttribute("user", authenticated);
+
+        return "attempt-view";
+    }
+}

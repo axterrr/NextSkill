@@ -72,4 +72,13 @@ public class TestServiceImpl implements TestService {
             throw new NoAccessException("This user has no access to this test");
         }
     }
+
+    @Override
+    public TestResponse getTestByAttempt(UUID attemptId) {
+        TestEntity test = testRepository.findTestEntityByAttemptsUuid(attemptId)
+                .orElseThrow(() -> new ResourceNotFoundException("Test with attempt", attemptId));
+        test.getQuestions().size();
+        test.getQuestions().size();
+        return TestMapper.toTestResponse(test);
+    }
 }
