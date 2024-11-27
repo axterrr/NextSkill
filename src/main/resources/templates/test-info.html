@@ -100,9 +100,10 @@
                                 <td>
                                     <button
                                             class="btn btn-primary btn-sm"
-                                            th:attr="data-url='/attempts/' + ${attempt.uuid} + '/view-answers'"
+                                            th:disabled="${!attempt.submitted}"
+                                            th:attr="data-url='/attempts/' + ${attempt.uuid} + '/view'"
                                             onclick="visitLink(this)">
-                                        View Answers
+                                        View
                                     </button>
                                 </td>
                             </tr>
