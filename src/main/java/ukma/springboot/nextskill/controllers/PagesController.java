@@ -5,12 +5,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import ukma.springboot.nextskill.models.entities.CourseEntity;
 import ukma.springboot.nextskill.models.entities.UserEntity;
+import ukma.springboot.nextskill.models.mappers.UserMapper;
 import ukma.springboot.nextskill.models.responses.CourseResponse;
+import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.services.CourseService;
 import ukma.springboot.nextskill.services.UserService;
 
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 public class PagesController {
@@ -28,6 +33,19 @@ public class PagesController {
         model.addAttribute("courses", courses);
         model.addAttribute("user", user);
         return "home";
+    }
+
+    @GetMapping("course/{courseUuid}/enrolledStudents")
+    public String enrolledStudents(@PathVariable UUID courseUuid, Model model) {
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity user = userService.getUserByUsername(username);
+        UserMapper.toUserResponse(user);
+
+        CourseResponse course = courseService.getWithUsers(courseUuid);
+
+        model.addAttribute("course", course);
+        model.addAttribute("user", user);
+        return "enrolledStudents";
     }
 
     @Autowired

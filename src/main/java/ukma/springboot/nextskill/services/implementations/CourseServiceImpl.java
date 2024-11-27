@@ -1,6 +1,7 @@
 package ukma.springboot.nextskill.services.implementations;
 
 import lombok.AllArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
@@ -75,5 +76,13 @@ public class CourseServiceImpl implements CourseService {
                 .orElseThrow(() -> new ResourceNotFoundException("User", studentId));
         courseEntity.getStudents().add(userEntity);
         courseRepository.save(courseEntity);
+    }
+
+    @Override
+    @Transactional
+    public CourseResponse getWithUsers(UUID id) {
+        CourseEntity courseEntity = courseRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Course", id));
+        Hibernate.initialize(courseEntity.getStudents());
+        return CourseMapper.toCourseResponse(courseEntity);
     }
 }

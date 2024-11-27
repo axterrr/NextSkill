@@ -8,5 +8,8 @@ import java.util.UUID;
 
 public interface CourseService extends GenericService<CourseView, CourseResponse> {
     List<CourseResponse> getCoursesWhereStudent(UUID studentId);
+
     void enrollStudent(UUID courseId, UUID studentId);
+
+    CourseResponse getWithUsers(UUID id);
 }
