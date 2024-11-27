@@ -43,6 +43,7 @@ public class SecurityConfiguration {
                         .loginPage("/login")
                         .defaultSuccessUrl("/home")
                 )
+                .logout(logout -> logout.deleteCookies("SECRET_TOKEN"))
                 .addFilterBefore(authExceptionHandler, AuthenticationFilter.class)
                 .addFilter(new AuthenticationFilter(authenticationManager, jwtUtility))
                 .addFilterAfter(jwtAuthorizationFilter, AuthenticationFilter.class)
