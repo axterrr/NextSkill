@@ -64,16 +64,6 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
-    public List<CourseResponse> getCoursesWhereStudent(UUID studentId) {
-        List<CourseEntity> courses = courseRepository.findByStudentsUuid(studentId);
-        courses.forEach(course -> Hibernate.initialize(course.getStudents()));
-        return courses.stream()
-                .map(CourseMapper::toCourseResponse)
-                .toList();
-    }
-
-    @Override
-    @Transactional
     public void enrollStudent(UUID courseId, UUID studentId) {
         CourseEntity courseEntity = courseRepository.findById(courseId)
                 .orElseThrow(() -> new ResourceNotFoundException(COURSE, courseId));
@@ -82,17 +72,6 @@ public class CourseServiceImpl implements CourseService {
         courseEntity.getStudents().add(userEntity);
         courseRepository.save(courseEntity);
     }
-
-    @Transactional
-    @Override
-    public List<CourseResponse> getCoursesWhereTeacher(UUID teacherId) {
-        List<CourseEntity> courses = courseRepository.findByTeacherUuid(teacherId);
-        courses.forEach(course -> Hibernate.initialize(course.getStudents()));
-        return courses.stream()
-                .map(CourseMapper::toCourseResponse)
-                .toList();
-    }
-
 
     @Override
     @Transactional
