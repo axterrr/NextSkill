@@ -60,8 +60,10 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional
     public List<CourseResponse> getCoursesWhereStudent(UUID studentId) {
         List<CourseEntity> courses = courseRepository.findByStudentsUuid(studentId);
+        courses.forEach(course -> Hibernate.initialize(course.getStudents()));
         return courses.stream()
                 .map(CourseMapper::toCourseResponse)
                 .toList();
@@ -78,9 +80,11 @@ public class CourseServiceImpl implements CourseService {
         courseRepository.save(courseEntity);
     }
 
+    @Transactional
     @Override
     public List<CourseResponse> getCoursesWhereTeacher(UUID teacherId) {
         List<CourseEntity> courses = courseRepository.findByTeacherUuid(teacherId);
+        courses.forEach(course -> Hibernate.initialize(course.getStudents()));
         return courses.stream()
                 .map(CourseMapper::toCourseResponse)
                 .toList();
@@ -94,4 +98,16 @@ public class CourseServiceImpl implements CourseService {
         Hibernate.initialize(courseEntity.getStudents());
         return CourseMapper.toCourseResponse(courseEntity);
     }
+
+    @Override
+    @Transactional
+    public List<CourseResponse> getAllWithUsers() {
+        List<CourseEntity> courses = courseRepository.findAll();
+        courses.forEach(course -> Hibernate.initialize(course.getStudents()));
+        return courses.stream()
+                .map(CourseMapper::toCourseResponse)
+                .toList();
+    }
+
+
 }
