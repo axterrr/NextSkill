@@ -9,7 +9,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import ukma.springboot.nextskill.exceptions.UnknownUserException;
+import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
 import ukma.springboot.nextskill.models.entities.UserEntity;
 import ukma.springboot.nextskill.services.UserService;
 
@@ -27,8 +27,8 @@ public class AuthenticationManagerImpl implements AuthenticationManager {
         UserEntity user;
         try {
             user = userService.getUserByUsername(authentication.getPrincipal().toString());
-        } catch (UnknownUserException e) {
-            throw new BadCredentialsException(e.getMessage());
+        } catch (ResourceNotFoundException e) {
+            throw new BadCredentialsException("Incorrect Username");
         }
         if (!passwordEncoder.matches(authentication.getCredentials().toString(), user.getPasswordHash())) {
             throw new BadCredentialsException("Incorrect Password");

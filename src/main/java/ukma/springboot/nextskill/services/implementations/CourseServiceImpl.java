@@ -9,6 +9,7 @@ import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.views.CourseView;
 import ukma.springboot.nextskill.repositories.CourseRepository;
 import ukma.springboot.nextskill.services.CourseService;
+import ukma.springboot.nextskill.validation.CourseValidator;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +19,7 @@ import java.util.UUID;
 public class CourseServiceImpl implements CourseService {
 
     private CourseRepository courseRepository;
+    private CourseValidator courseValidator;
 
     @Override
     public List<CourseResponse> getAll() {
@@ -32,12 +34,14 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseResponse create(CourseView courseView) {
+        courseValidator.validateForCreation(courseView);
         CourseEntity courseEntity = courseRepository.save(CourseMapper.toCourseEntity(courseView));
         return CourseMapper.toCourseResponse(courseEntity);
     }
 
     @Override
     public CourseResponse update(CourseView courseView) {
+        courseValidator.validateForUpdate(courseView);
         CourseEntity existingCourse = courseRepository.findById(courseView.getUuid())
                 .orElseThrow(() -> new ResourceNotFoundException("Course", courseView.getUuid()));
         CourseEntity courseEntity = courseRepository.save(CourseMapper.toCourseEntity(courseView, existingCourse));
