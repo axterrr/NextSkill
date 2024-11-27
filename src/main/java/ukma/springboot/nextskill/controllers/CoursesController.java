@@ -1,6 +1,6 @@
 package ukma.springboot.nextskill.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,11 +12,11 @@ import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.services.CourseService;
 import ukma.springboot.nextskill.services.UserService;
 
-import java.util.List;
 import java.util.UUID;
 
 @Controller
-public class PagesController {
+@AllArgsConstructor
+public class CoursesController {
 
     private static final String COURSE = "course";
     private UserService userService;
@@ -27,10 +27,7 @@ public class PagesController {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity user = userService.getUserByUsername(username);
 
-        List<CourseResponse> courses = courseService.getCoursesWhereStudent(user.getUuid());
-
-        model.addAttribute("courses", courses);
-        model.addAttribute("user", user);
+        model.addAttribute("user", UserMapper.toUserResponse(user));
         return "home";
     }
 
@@ -38,12 +35,10 @@ public class PagesController {
     public String course(@PathVariable UUID courseUuid, Model model) {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity user = userService.getUserByUsername(username);
-        UserMapper.toUserResponse(user);
-
         CourseResponse course = courseService.getWithSectionsWithPostsAndTests(courseUuid);
 
         model.addAttribute(COURSE, course);
-        model.addAttribute("user", user);
+        model.addAttribute("user", UserMapper.toUserResponse(user));
         model.addAttribute("isEnrolled", courseService.isEnrolled(courseUuid, user.getUuid()));
         return COURSE;
     }
@@ -52,12 +47,10 @@ public class PagesController {
     public String enrolledStudents(@PathVariable UUID courseUuid, Model model) {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity user = userService.getUserByUsername(username);
-        UserMapper.toUserResponse(user);
-
         CourseResponse course = courseService.getWithUsers(courseUuid);
 
         model.addAttribute(COURSE, course);
-        model.addAttribute("user", user);
+        model.addAttribute("user", UserMapper.toUserResponse(user));
         return "enrolledStudents";
     }
 
@@ -65,17 +58,8 @@ public class PagesController {
     public String allCourses(Model model) {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity user = userService.getUserByUsername(username);
-        model.addAttribute("user", user);
+
+        model.addAttribute("user", UserMapper.toUserResponse(user));
         return "allCourses";
-    }
-
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    @Autowired
-    public void setCourseService(CourseService courseService) {
-        this.courseService = courseService;
     }
 }

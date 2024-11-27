@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-public class CourseController {
+public class CourseRestController {
 
     private CourseService courseService;
     private UserService userService;

@@ -25,7 +25,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class TestController {
 
-
     private static final String REDIRECT_TO_TEST = "redirect:/test/";
     private QuestionAnswerService questionAnswerService;
     private TestService testService;
