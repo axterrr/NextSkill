@@ -57,6 +57,7 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
+    @Override
     public UserResponse getAuthenticatedUser() {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return UserMapper.toUserResponse(getUserByUsername(username));
