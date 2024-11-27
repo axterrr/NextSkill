@@ -22,6 +22,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CourseServiceImpl implements CourseService {
 
+    private static final String COURSE = "Course";
     private CourseRepository courseRepository;
     private UserRepository userRepository;
     private CourseValidator courseValidator;
@@ -33,7 +34,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseResponse get(UUID id) {
-        CourseEntity courseEntity = courseRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Course", id));
+        CourseEntity courseEntity = courseRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(COURSE, id));
         return CourseMapper.toCourseResponse(courseEntity);
     }
 
@@ -48,14 +49,16 @@ public class CourseServiceImpl implements CourseService {
     public CourseResponse update(CourseView courseView) {
         courseValidator.validateForUpdate(courseView);
         CourseEntity existingCourse = courseRepository.findById(courseView.getUuid())
-                .orElseThrow(() -> new ResourceNotFoundException("Course", courseView.getUuid()));
+                .orElseThrow(() -> new ResourceNotFoundException(COURSE, courseView.getUuid()));
         CourseEntity courseEntity = courseRepository.save(CourseMapper.toCourseEntity(courseView, existingCourse));
         return CourseMapper.toCourseResponse(courseEntity);
     }
 
     @Override
     public void delete(UUID id) {
-        courseRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Course", id));
+        if (courseRepository.findById(id).isEmpty()) {
+            throw new ResourceNotFoundException(COURSE, id);
+        }
         courseRepository.deleteById(id);
     }
 
@@ -73,7 +76,7 @@ public class CourseServiceImpl implements CourseService {
     @Transactional
     public void enrollStudent(UUID courseId, UUID studentId) {
         CourseEntity courseEntity = courseRepository.findById(courseId)
-                .orElseThrow(() -> new ResourceNotFoundException("Course", courseId));
+                .orElseThrow(() -> new ResourceNotFoundException(COURSE, courseId));
         UserEntity userEntity = userRepository.findById(studentId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", studentId));
         courseEntity.getStudents().add(userEntity);
@@ -94,7 +97,8 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional
     public CourseResponse getWithUsers(UUID id) {
-        CourseEntity courseEntity = courseRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Course", id));
+        CourseEntity courseEntity = courseRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(COURSE, id));
         Hibernate.initialize(courseEntity.getStudents());
         return CourseMapper.toCourseResponse(courseEntity);
     }
@@ -102,7 +106,8 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional
     public CourseResponse getWithSectionsWithPostsAndTests(UUID id) {
-        CourseEntity courseEntity = courseRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Course", id));
+        CourseEntity courseEntity = courseRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(COURSE, id));
         courseEntity.getSections().forEach(s -> {
             Hibernate.initialize(s.getPosts());
             Hibernate.initialize(s.getTests());
@@ -122,7 +127,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Object isEnrolled(UUID courseUuid, UUID studentUuid) {
-        CourseEntity courseEntity = courseRepository.findById(courseUuid).orElseThrow(() -> new ResourceNotFoundException("Course", courseUuid));
+        CourseEntity courseEntity = courseRepository.findById(courseUuid)
+                .orElseThrow(() -> new ResourceNotFoundException(COURSE, courseUuid));
         Hibernate.initialize(courseEntity.getStudents());
         UserEntity userEntity = userRepository.findById(studentUuid)
                 .orElseThrow(() -> new ResourceNotFoundException("User", studentUuid));

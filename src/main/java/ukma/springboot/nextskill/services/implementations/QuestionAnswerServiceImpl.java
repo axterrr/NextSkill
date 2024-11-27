@@ -21,6 +21,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class QuestionAnswerServiceImpl implements QuestionAnswerService {
 
+    private static final String QUESTION_ANSWER = "QuestionAnswer";
     private final QuestionAnswerRepository questionAnswerRepository;
     private final QuestionOptionRepository questionOptionRepository;
 
@@ -35,7 +36,7 @@ public class QuestionAnswerServiceImpl implements QuestionAnswerService {
     @Override
     public QuestionAnswerResponse get(UUID id) {
         QuestionAnswerEntity questionAnswerEntity = questionAnswerRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("QuestionAnswer", id));
+                .orElseThrow(() -> new ResourceNotFoundException(QUESTION_ANSWER, id));
         return QuestionAnswerMapper.toQuestionAnswerResponse(questionAnswerEntity);
     }
 
@@ -50,7 +51,7 @@ public class QuestionAnswerServiceImpl implements QuestionAnswerService {
     @Override
     public QuestionAnswerResponse update(QuestionAnswerView view) {
         QuestionAnswerEntity existingEntity = questionAnswerRepository.findById(view.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("QuestionAnswer", view.getId()));
+                .orElseThrow(() -> new ResourceNotFoundException(QUESTION_ANSWER, view.getId()));
         QuestionAnswerEntity updatedEntity = questionAnswerRepository.save(
                 QuestionAnswerMapper.mergeData(view, existingEntity)
         );
@@ -61,8 +62,9 @@ public class QuestionAnswerServiceImpl implements QuestionAnswerService {
 
     @Override
     public void delete(UUID id) {
-        questionAnswerRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("QuestionAnswer", id));
+        if (questionAnswerRepository.findById(id).isEmpty()) {
+            throw new ResourceNotFoundException(QUESTION_ANSWER, id);
+        }
         questionAnswerRepository.deleteById(id);
     }
 

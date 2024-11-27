@@ -3,7 +3,6 @@ package ukma.springboot.nextskill.models.mappers;
 import ukma.springboot.nextskill.models.entities.*;
 import ukma.springboot.nextskill.models.responses.QuestionAnswerResponse;
 import ukma.springboot.nextskill.models.views.QuestionAnswerView;
-import ukma.springboot.nextskill.models.views.TestView;
 
 public class QuestionAnswerMapper {
 

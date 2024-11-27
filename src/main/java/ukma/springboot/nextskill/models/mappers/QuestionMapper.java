@@ -4,7 +4,6 @@ import ukma.springboot.nextskill.models.entities.QuestionEntity;
 import ukma.springboot.nextskill.models.entities.TestEntity;
 import ukma.springboot.nextskill.models.responses.QuestionResponse;
 import ukma.springboot.nextskill.models.views.QuestionView;
-import ukma.springboot.nextskill.models.views.TestView;
 
 public class QuestionMapper {
 

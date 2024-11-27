@@ -9,24 +9,28 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final String STATUS = "status";
+    private static final String MESSAGE = "message";
+    private static final String ERROR = "error";
+
     @ExceptionHandler(ResourceNotFoundException.class)
     public String handleResourceNotFoundException(ResourceNotFoundException ex, Model model) {
-        model.addAttribute("status", "404");
-        model.addAttribute("message", ex.getMessage());
-        return "error";
+        model.addAttribute(STATUS, "404");
+        model.addAttribute(MESSAGE, ex.getMessage());
+        return ERROR;
     }
 
     @ExceptionHandler(ValidationException.class)
     public String handleValidationException(ValidationException ex, Model model) {
-        model.addAttribute("status", "400");
-        model.addAttribute("message", ex.getMessage());
-        return "error";
+        model.addAttribute(STATUS, "400");
+        model.addAttribute(MESSAGE, ex.getMessage());
+        return ERROR;
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public String handleDataIntegrityViolationException(DataIntegrityViolationException ex, Model model) {
-        model.addAttribute("status", "409");
-        model.addAttribute("message", "Data integrity violation");
-        return "error";
+        model.addAttribute(STATUS, "409");
+        model.addAttribute(MESSAGE, "Data integrity violation");
+        return ERROR;
     }
 }

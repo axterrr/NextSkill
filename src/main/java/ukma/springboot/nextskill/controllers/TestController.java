@@ -2,7 +2,6 @@ package ukma.springboot.nextskill.controllers;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,11 +25,13 @@ import java.util.UUID;
 @AllArgsConstructor
 public class TestController {
 
-    QuestionAnswerService questionAnswerService;
-    TestService testService;
-    UserService userService;
-    TestAttemptService attemptService;
-    QuestionService questionService;
+
+    private static final String REDIRECT_TO_TEST = "redirect:/test/";
+    private QuestionAnswerService questionAnswerService;
+    private TestService testService;
+    private UserService userService;
+    private TestAttemptService attemptService;
+    private QuestionService questionService;
 
     @GetMapping("/test/{uuid}")
     public String testInfo(@PathVariable String uuid, Model model) {
@@ -71,7 +72,7 @@ public class TestController {
 
         Optional<TestAttemptResponse> unfinishedAttempt = attemptService.getUnfinishedAttempt(testId, userId);
         if (unfinishedAttempt.isPresent()) {
-            return "redirect:/test/" + testUuid + "/attempt/" + unfinishedAttempt.get().getUuid();
+            return REDIRECT_TO_TEST + testUuid + "/attempt/" + unfinishedAttempt.get().getUuid();
         }
 
         List<TestAttemptResponse> finishedAttempts = attemptService.getFinishedAttempts(testId, userId);
@@ -79,7 +80,7 @@ public class TestController {
 
         TestAttemptResponse newAttempt = attemptService.createNewAttempt(testId, userId);
 
-        return "redirect:/test/" + testUuid + "/attempt/" + newAttempt.getUuid();
+        return REDIRECT_TO_TEST + testUuid + "/attempt/" + newAttempt.getUuid();
     }
 
     @GetMapping("/test/{testUuid}/attempt/{attemptId}")
@@ -122,7 +123,7 @@ public class TestController {
 
         TestAttemptResponse attempt = attemptService.get(attemptId);
         if(attempt.isSubmitted())
-            return "redirect:/test/" + testUuid;
+            return REDIRECT_TO_TEST + testUuid;
 
         UserResponse authenticated = userService.getAuthenticatedUser();
         testService.checkTestAccess(testId, authenticated);
@@ -131,7 +132,7 @@ public class TestController {
         questionAnswerService.updateSavedAnswers(formData, UUID.fromString(attemptUuid));
         attemptService.submitAttempt(attemptId);
 
-        return "redirect:/test/" + testUuid;
+        return REDIRECT_TO_TEST + testUuid;
     }
 
     @PostMapping("/test/{testUuid}/attempt/{attemptId}/save")
