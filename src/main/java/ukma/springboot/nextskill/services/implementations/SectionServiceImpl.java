@@ -18,6 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class SectionServiceImpl implements SectionService {
 
+    private static final String SECTION = "Section";
     private SectionRepository sectionRepository;
     private SectionValidator sectionValidator;
 
@@ -28,7 +29,7 @@ public class SectionServiceImpl implements SectionService {
 
     @Override
     public SectionResponse get(UUID id) {
-        SectionEntity sectionEntity = sectionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Section", id));
+        SectionEntity sectionEntity = sectionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(SECTION, id));
         return SectionMapper.toSectionResponse(sectionEntity);
     }
 
@@ -43,14 +44,16 @@ public class SectionServiceImpl implements SectionService {
     public SectionResponse update(SectionView sectionView) {
         sectionValidator.validateForUpdate(sectionView);
         SectionEntity existingSection = sectionRepository.findById(sectionView.getUuid())
-                .orElseThrow(() -> new ResourceNotFoundException("Section", sectionView.getUuid()));
+                .orElseThrow(() -> new ResourceNotFoundException(SECTION, sectionView.getUuid()));
         SectionEntity sectionEntity = sectionRepository.save(SectionMapper.toSectionEntity(sectionView, existingSection));
         return SectionMapper.toSectionResponse(sectionEntity);
     }
 
     @Override
     public void delete(UUID id) {
-        sectionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Section", id));
+        if (sectionRepository.findById(id).isEmpty()) {
+            throw new ResourceNotFoundException(SECTION, id);
+        }
         sectionRepository.deleteById(id);
     }
 }

@@ -1,6 +1,7 @@
 package ukma.springboot.nextskill.services.implementations;
 
 import lombok.AllArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import ukma.springboot.nextskill.exceptions.NoAccessException;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
@@ -30,8 +31,8 @@ public class TestServiceImpl implements TestService {
     @Override
     public TestResponse get(UUID id) {
         TestEntity test = testRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Test", id));
-        test.getQuestions().size();
-        test.getAttempts().size();
+        Hibernate.initialize(test.getQuestions());
+        Hibernate.initialize(test.getAttempts());
         return TestMapper.toTestResponse(test);
     }
 
@@ -51,7 +52,9 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public void delete(UUID id) {
-        testRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Test", id));
+        if (testRepository.findById(id).isEmpty()) {
+            throw new ResourceNotFoundException("Test", id);
+        }
         testRepository.deleteById(id);
     }
 

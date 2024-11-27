@@ -10,6 +10,8 @@ import static ukma.springboot.nextskill.models.mappers.MapperUtility.orElse;
 
 public class CourseMapper {
 
+    private CourseMapper() {}
+
     public static CourseEntity toCourseEntity(CourseView courseView, CourseEntity courseEntity) {
         return CourseEntity.builder()
                 .uuid(courseEntity.getUuid())

@@ -9,6 +9,8 @@ import static ukma.springboot.nextskill.models.mappers.MapperUtility.orElse;
 
 public class PostMapper {
 
+    private PostMapper() {}
+
     public static PostEntity toPostEntity(PostView postView, PostEntity postEntity) {
         return PostEntity.builder()
                 .uuid(postEntity.getUuid())

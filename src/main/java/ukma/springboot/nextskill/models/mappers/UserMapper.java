@@ -10,6 +10,8 @@ import static ukma.springboot.nextskill.models.mappers.MapperUtility.mapIfInitia
 
 public class UserMapper {
 
+    private UserMapper() {}
+
     public static UserEntity toUserEntity(UserView userView, UserEntity userEntity, PasswordEncoder passwordEncoder) {
         return UserEntity.builder()
                 .uuid(userEntity.getUuid())

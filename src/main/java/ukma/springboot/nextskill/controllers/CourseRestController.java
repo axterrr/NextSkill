@@ -1,6 +1,6 @@
 package ukma.springboot.nextskill.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,11 +13,10 @@ import ukma.springboot.nextskill.services.UserService;
 import java.util.List;
 
 @RestController
-public class CourseController {
+@AllArgsConstructor
+public class CourseRestController {
 
-    @Autowired
     private CourseService courseService;
-    @Autowired
     private UserService userService;
 
     @GetMapping("/api/courses-for-student")
@@ -25,8 +24,7 @@ public class CourseController {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity user = userService.getUserByUsername(username);
 
-        List<CourseResponse> courses = courseService.getCoursesWhereStudent(user.getUuid());
-        return courses;
+        return courseService.getCoursesWhereStudent(user.getUuid());
     }
 
     @GetMapping("/api/courses-for-teacher")
@@ -34,8 +32,7 @@ public class CourseController {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity user = userService.getUserByUsername(username);
 
-        List<CourseResponse> courses = courseService.getCoursesWhereTeacher(user.getUuid());
-        return courses;
+        return courseService.getCoursesWhereTeacher(user.getUuid());
     }
 
     @GetMapping("/api/courses-for-user")
@@ -52,7 +49,6 @@ public class CourseController {
 
     @GetMapping("/api/all-courses")
     public List<CourseResponse> getAllCourses() {
-        List<CourseResponse> courses = courseService.getAllWithUsers();
-        return courses;
+        return courseService.getAllWithUsers();
     }
 }

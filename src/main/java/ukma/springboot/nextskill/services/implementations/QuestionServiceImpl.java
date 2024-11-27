@@ -1,6 +1,7 @@
 package ukma.springboot.nextskill.services.implementations;
 
 import lombok.AllArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
 import ukma.springboot.nextskill.models.entities.QuestionEntity;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class QuestionServiceImpl implements QuestionService {
 
+    private static final String QUESTION = "Question";
     private final QuestionRepository questionRepository;
 
     @Override
@@ -30,7 +32,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public QuestionResponse get(UUID id) {
         QuestionEntity questionEntity = questionRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Question", id));
+                .orElseThrow(() -> new ResourceNotFoundException(QUESTION, id));
         return QuestionMapper.toQuestionResponse(questionEntity);
     }
 
@@ -45,7 +47,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public QuestionResponse update(QuestionView view) {
         QuestionEntity existingEntity = questionRepository.findById(view.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Question", view.getId()));
+                .orElseThrow(() -> new ResourceNotFoundException(QUESTION, view.getId()));
         QuestionEntity updatedEntity = questionRepository.save(
                 QuestionMapper.mergeData(view, existingEntity)
         );
@@ -54,8 +56,9 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public void delete(UUID id) {
-        questionRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Question", id));
+        if (questionRepository.findById(id).isEmpty()) {
+            throw new ResourceNotFoundException(QUESTION, id);
+        }
         questionRepository.deleteById(id);
     }
 
@@ -64,7 +67,7 @@ public class QuestionServiceImpl implements QuestionService {
         return questionRepository.findByTestUuid(testId)
                 .stream()
                 .map(question -> {
-                    question.getQuestionOptions().size();
+                    Hibernate.initialize(question.getQuestionOptions());
                     return QuestionMapper.toQuestionResponse(question);
                 })
                 .toList();

@@ -1,32 +1,24 @@
 package ukma.springboot.nextskill;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.responses.*;
 import ukma.springboot.nextskill.models.views.*;
-import ukma.springboot.nextskill.repositories.*;
 import ukma.springboot.nextskill.services.*;
-import ukma.springboot.nextskill.services.implementations.TestServiceImpl;
 
 @SpringBootApplication
+@AllArgsConstructor
 public class NextSkillApplication implements CommandLineRunner {
 
-    @Autowired
     private UserService userService;
-    @Autowired
     private CourseService courseService;
-    @Autowired
     private SectionService sectionService;
-    @Autowired
     private PostService postService;
-    @Autowired
     private TestService testService;
-    @Autowired
     private QuestionService questionService;
-    @Autowired
     private QuestionOptionService optionService;
 
     public static void main(String[] args) {
@@ -49,7 +41,7 @@ public class NextSkillApplication implements CommandLineRunner {
         UserView admin = UserView.builder()
                 .username("admin")
                 .name("name")
-                .surname("surname")
+                .surname("surname1")
                 .email("email@admin")
                 .role(UserRole.ADMIN)
                 .password("Admin123")
@@ -59,7 +51,7 @@ public class NextSkillApplication implements CommandLineRunner {
         UserView student = UserView.builder()
                 .username("student")
                 .name("Grygorii")
-                .surname("surname")
+                .surname("surname2")
                 .email("email@student")
                 .role(UserRole.STUDENT)
                 .password("Student1")
@@ -69,7 +61,7 @@ public class NextSkillApplication implements CommandLineRunner {
         UserView student2 = UserView.builder()
                 .username("student2")
                 .name("Grygori2")
-                .surname("surname")
+                .surname("surname3")
                 .email("email_2@student")
                 .role(UserRole.STUDENT)
                 .password("Student2")
@@ -225,41 +217,9 @@ public class NextSkillApplication implements CommandLineRunner {
         optionService.create(option23);
         optionService.create(option24);
 
-        PostResponse createdPost1 = postService.create(post1);
-        PostResponse createdPost2 = postService.create(post2);
-        PostResponse createdPost3 = postService.create(post3);
-
-        /*UserView userView = UserView.builder()
-                .uuid(createdTeacher.getUuid())
-                .name("teacher 2.0")
-                .build();
-        userService.update(userView);
-
-        CourseView courseView = CourseView.builder()
-                .uuid(createdCourse1.getUuid())
-                .name("course 2.0")
-                .build();
-        courseService.update(courseView);
-
-        SectionView sectionView = SectionView.builder()
-                .uuid(createdSection1.getUuid())
-                .name("section 2.0")
-                .build();
-        sectionService.update(sectionView);
-
-        PostView postView = PostView.builder()
-                .uuid(createdPost1.getUuid())
-                .name("post 2.0")
-                .build();
-        postService.update(postView);*/
-
-//        TestEntity test = TestEntity.builder()
-//            .name("Testing test")
-//            .description("Complete this test!")
-//            .section(section)
-//            .build();
-//
-//        testRepository.save(test);
+        postService.create(post1);
+        postService.create(post2);
+        postService.create(post3);
 
         // для дебагу щоб поставити брейкпойнт
         System.out.println();

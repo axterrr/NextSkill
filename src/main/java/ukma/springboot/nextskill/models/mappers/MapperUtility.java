@@ -9,6 +9,8 @@ import java.util.function.Function;
 
 public class MapperUtility {
 
+    private MapperUtility() {}
+
     public static <T> T orElse(T first, T second) {
         return first == null ? second : first;
     }

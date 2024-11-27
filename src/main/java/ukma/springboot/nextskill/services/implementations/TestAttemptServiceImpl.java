@@ -1,6 +1,7 @@
 package ukma.springboot.nextskill.services.implementations;
 
 import lombok.AllArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import ukma.springboot.nextskill.exceptions.NoAccessException;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
@@ -25,6 +26,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class TestAttemptServiceImpl implements TestAttemptService {
 
+    private static final String TEST_ATTEMPT = "TestAttempt";
     private final TestAttemptRepository testAttemptRepository;
     private final TestRepository testRepository;
 
@@ -39,8 +41,8 @@ public class TestAttemptServiceImpl implements TestAttemptService {
     @Override
     public TestAttemptResponse get(UUID id) {
         TestAttemptEntity testAttemptEntity = testAttemptRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("TestAttempt", id));
-        testAttemptEntity.getAnswers().size();
+                .orElseThrow(() -> new ResourceNotFoundException(TEST_ATTEMPT, id));
+        Hibernate.initialize(testAttemptEntity.getAnswers());
         return TestAttemptMapper.toTestAttemptResponse(testAttemptEntity);
     }
 
@@ -55,7 +57,7 @@ public class TestAttemptServiceImpl implements TestAttemptService {
     @Override
     public TestAttemptResponse update(TestAttemptView view) {
         TestAttemptEntity existingEntity = testAttemptRepository.findById(view.getUuid())
-                .orElseThrow(() -> new ResourceNotFoundException("TestAttempt", view.getUuid()));
+                .orElseThrow(() -> new ResourceNotFoundException(TEST_ATTEMPT, view.getUuid()));
         TestAttemptEntity updatedEntity = testAttemptRepository.save(
                 TestAttemptMapper.mergeData(view, existingEntity)
         );
@@ -64,8 +66,9 @@ public class TestAttemptServiceImpl implements TestAttemptService {
 
     @Override
     public void delete(UUID id) {
-        testAttemptRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("TestAttempt", id));
+        if (testAttemptRepository.findById(id).isEmpty()) {
+            throw new ResourceNotFoundException(TEST_ATTEMPT, id);
+        }
         testAttemptRepository.deleteById(id);
     }
 
@@ -109,7 +112,7 @@ public class TestAttemptServiceImpl implements TestAttemptService {
     @Override
     public void checkAttemptAccess(UUID attemptId, UserResponse authenticated) {
         TestAttemptEntity testAttemptEntity = testAttemptRepository.findById(attemptId)
-                .orElseThrow(() -> new ResourceNotFoundException("TestAttempt", attemptId));
+                .orElseThrow(() -> new ResourceNotFoundException(TEST_ATTEMPT, attemptId));
         UUID userId = authenticated.getUuid();
 
         if (!testAttemptEntity.getCompletedBy().getUuid().equals(userId)) {
@@ -122,7 +125,7 @@ public class TestAttemptServiceImpl implements TestAttemptService {
         Optional<TestAttemptEntity> attemptOptional = testAttemptRepository.findById(attemptId);
 
         if (attemptOptional.isEmpty()) {
-            throw new ResourceNotFoundException("TestAttempt", attemptId);
+            throw new ResourceNotFoundException(TEST_ATTEMPT, attemptId);
         }
 
         TestAttemptEntity attempt = attemptOptional.get();

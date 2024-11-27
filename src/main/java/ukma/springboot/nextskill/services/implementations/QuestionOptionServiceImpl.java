@@ -17,6 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class QuestionOptionServiceImpl implements QuestionOptionService {
 
+    private static final String QUESTION_OPTION = "QuestionOption";
     private final QuestionOptionRepository questionOptionRepository;
 
     @Override
@@ -30,7 +31,7 @@ public class QuestionOptionServiceImpl implements QuestionOptionService {
     @Override
     public QuestionOptionResponse get(UUID id) {
         QuestionOptionEntity questionOptionEntity = questionOptionRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("QuestionOption", id));
+                .orElseThrow(() -> new ResourceNotFoundException(QUESTION_OPTION, id));
         return QuestionOptionMapper.toQuestionOptionResponse(questionOptionEntity);
     }
 
@@ -45,7 +46,7 @@ public class QuestionOptionServiceImpl implements QuestionOptionService {
     @Override
     public QuestionOptionResponse update(QuestionOptionView view) {
         QuestionOptionEntity existingEntity = questionOptionRepository.findById(view.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("QuestionOption", view.getId()));
+                .orElseThrow(() -> new ResourceNotFoundException(QUESTION_OPTION, view.getId()));
         QuestionOptionEntity updatedEntity = questionOptionRepository.save(
                 QuestionOptionMapper.mergeData(view, existingEntity)
         );
@@ -54,8 +55,9 @@ public class QuestionOptionServiceImpl implements QuestionOptionService {
 
     @Override
     public void delete(UUID id) {
-        questionOptionRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("QuestionOption", id));
+        if (questionOptionRepository.findById(id).isEmpty()) {
+            throw new ResourceNotFoundException(QUESTION_OPTION, id);
+        }
         questionOptionRepository.deleteById(id);
     }
 }

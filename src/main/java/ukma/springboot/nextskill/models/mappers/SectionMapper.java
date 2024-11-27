@@ -10,6 +10,8 @@ import static ukma.springboot.nextskill.models.mappers.MapperUtility.orElse;
 
 public class SectionMapper {
 
+    private SectionMapper() {}
+
     public static SectionEntity toSectionEntity(SectionView sectionView, SectionEntity sectionEntity) {
         return SectionEntity.builder()
                 .uuid(sectionEntity.getUuid())

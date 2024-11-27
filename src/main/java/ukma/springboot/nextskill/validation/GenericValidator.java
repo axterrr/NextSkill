@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 public class GenericValidator<T> {
 
-    @Autowired
     private Validator validator;
 
     public void validateForCreation(T view) {
@@ -36,5 +35,10 @@ public class GenericValidator<T> {
             errorMessage.append(violation.getPropertyPath()).append(": ").append(violation.getMessage()).append("; ");
         }
         throw new ValidationException(errorMessage.toString());
+    }
+
+    @Autowired
+    public void setValidator(Validator validator) {
+        this.validator = validator;
     }
 }

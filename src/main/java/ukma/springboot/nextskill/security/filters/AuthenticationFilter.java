@@ -24,8 +24,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        //CredentialsView credentials = new ObjectMapper().readValue(request.getInputStream(), CredentialsView.class);
-
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
@@ -49,10 +47,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     }
 
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        //response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        //response.getWriter().write(failed.getMessage());
-        //response.getWriter().flush();
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
         response.sendRedirect("/login?error");
     }
 }
