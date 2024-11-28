@@ -20,6 +20,12 @@
             <div th:if="${param.section} and ${param.added}" class="alert alert-info">
                 The section has been successfully created.
             </div>
+            <div th:if="${param.section} and ${param.deleted}" class="alert alert-info">
+                The section has been successfully deleted.
+            </div>
+            <div th:if="${param.section} and ${param.updated}" class="alert alert-info">
+                The section has been successfully updated.
+            </div>
 
             <!-- Inner container -->
             <div class="container-fluid d-flex flex-column justify-content-center">
@@ -115,7 +121,9 @@
                                     <div class="d-flex justify-content-end gap-2" th:if="${isAdmin || isOwner}">
                                         <div class="justify-content-end gap-1" style="display: none">
                                             <a class="btn btn-primary" th:href="@{'/section/' + ${section.uuid} + '/edit'}">Edit Section</a>
-                                            <a class="btn btn-danger" th:href="@{'/section/' + ${section.uuid} + '/delete'}">Delete Section</a>
+                                            <form th:action="'/section/' + ${section.uuid} + '/delete'" method="POST" style="display: inline;">
+                                                <button class="btn btn-danger">Delete Section</button>
+                                            </form>
                                         </div>
                                         <button class="btn btn-secondary" onclick="toggleSectionSettings(this)">Settings <i class="fa-solid fa-gear" style="font-size: 1.2rem;" aria-hidden="true"></i></button>
                                     </div>
