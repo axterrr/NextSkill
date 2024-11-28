@@ -46,6 +46,6 @@ public class CourseEntity {
             inverseJoinColumns = @JoinColumn(name = "user_fk"))
     private List<UserEntity> students;
 
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<SectionEntity> sections;
 }

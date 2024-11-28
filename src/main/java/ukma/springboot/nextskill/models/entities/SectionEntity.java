@@ -32,9 +32,9 @@ public class SectionEntity {
     @JoinColumn(name = "course_uuid", updatable = false)
     private CourseEntity course;
 
-    @OneToMany(mappedBy = "section")
+    @OneToMany(mappedBy = "section", cascade = CascadeType.ALL)
     private List<PostEntity> posts;
 
-    @OneToMany(mappedBy = "section")
+    @OneToMany(mappedBy = "section", cascade = CascadeType.ALL)
     private List<TestEntity> tests;
 }
