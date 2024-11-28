@@ -20,7 +20,7 @@
             <hr>
 
             <div class="container-fluid">
-                <form th:action="@{/post/edit/{postId}(postId=${post.uuid})}" method="post">
+                <form th:action="@{/post/{postId}/edit(postId=${post.uuid})}" method="post">
                     <div class="form-floating mb-3">
                         <input type="text" id="name" class="form-control" name="name"
                                th:value="${post.name}" required placeholder="Enter Post Name">

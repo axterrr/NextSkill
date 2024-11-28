@@ -210,6 +210,7 @@ public class TestController {
             return "redirect:/home";
         }
 
+        model.addAttribute("user", authenticated);
         model.addAttribute("attempts", testResponse.getAttempts());
 
         return "all-attempts";
