@@ -65,4 +65,11 @@ public class SectionController {
         model.addAttribute("section", sectionService.get(sectionUuid));
         return "add-test";
     }
+
+    @GetMapping("section/{sectionUuid}/create-post")
+    public String createPostInSection(@PathVariable UUID sectionUuid, Model model) {
+        model.addAttribute("user", userService.getAuthenticatedUser());
+        model.addAttribute("section", sectionService.get(sectionUuid));
+        return "add-post";
+    }
 }
