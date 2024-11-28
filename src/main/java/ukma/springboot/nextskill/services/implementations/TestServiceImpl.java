@@ -82,8 +82,8 @@ public class TestServiceImpl implements TestService {
     public TestResponse getTestByAttempt(UUID attemptId) {
         TestEntity test = testRepository.findTestEntityByAttemptsUuid(attemptId)
                 .orElseThrow(() -> new ResourceNotFoundException("Test with attempt", attemptId));
-        test.getQuestions().size();
-        test.getQuestions().size();
+        Hibernate.initialize(test.getQuestions());
+        Hibernate.initialize(test.getQuestions());
         return TestMapper.toTestResponse(test);
     }
 

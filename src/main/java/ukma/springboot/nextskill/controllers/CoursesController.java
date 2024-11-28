@@ -20,6 +20,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CoursesController {
 
+    private static final String REDIRECT_TO_COURSE = "redirect:/course/";
     private static final String COURSE = "course";
     private UserService userService;
     private CourseService courseService;
@@ -61,20 +62,35 @@ public class CoursesController {
         return "enrolledStudents";
     }
 
+    @GetMapping("course/{courseUuid}/unroll/{studentUuid}")
+    public String unroll(@PathVariable UUID courseUuid, @PathVariable UUID studentUuid, Model model) {
+        UserResponse authenticated = userService.getAuthenticatedUser();
+        boolean isOwner = courseService.hasOwnerRights(authenticated.getUuid(), courseUuid);
+        if(!isOwner && userService.isAdmin(authenticated.getUuid()))
+            return REDIRECT_TO_COURSE + courseUuid;
+
+        courseService.unrollStudent(courseUuid, studentUuid);
+        model.addAttribute(COURSE, courseService.getWithUsers(courseUuid));
+        model.addAttribute("user", authenticated);
+        return REDIRECT_TO_COURSE + courseUuid + "/enrolledStudents?unrolled";
+    }
+
     @GetMapping("course/{courseUuid}/enroll")
     public String enroll(@PathVariable UUID courseUuid, Model model) {
+        UserResponse user = userService.getAuthenticatedUser();
+        courseService.enrollStudent(courseUuid, user.getUuid());
         model.addAttribute(COURSE, courseService.getWithUsers(courseUuid));
-        courseService.enrollStudent(courseUuid, userService.getAuthenticatedUser().getUuid());
-        model.addAttribute("user", userService.getAuthenticatedUser());
-        return "redirect:/course?enrolled";
+        model.addAttribute("user", user);
+        return REDIRECT_TO_COURSE + courseUuid + "?enrolled";
     }
 
     @GetMapping("course/{courseUuid}/unroll")
     public String unroll(@PathVariable UUID courseUuid, Model model) {
+        UserResponse user = userService.getAuthenticatedUser();
+        courseService.unrollStudent(courseUuid, user.getUuid());
         model.addAttribute(COURSE, courseService.getWithUsers(courseUuid));
-        courseService.unrollStudent(courseUuid, userService.getAuthenticatedUser().getUuid());
-        model.addAttribute("user", userService.getAuthenticatedUser());
-        return "redirect:/course?unrolled";
+        model.addAttribute("user", user);
+        return REDIRECT_TO_COURSE + courseUuid + "?unrolled";
     }
 
     @GetMapping("/all-courses")
@@ -99,7 +115,7 @@ public class CoursesController {
         UserResponse authenticated = userService.getAuthenticatedUser();
         boolean isOwner = courseService.hasOwnerRights(authenticated.getUuid(), courseId);
         if(!isOwner && userService.isAdmin(authenticated.getUuid()))
-            return "redirect:/course/" + courseUuid;
+            return REDIRECT_TO_COURSE + courseUuid;
 
         model.addAttribute(COURSE, courseService.get(courseId));
         model.addAttribute("user", authenticated);
@@ -117,12 +133,12 @@ public class CoursesController {
         UserResponse authenticated = userService.getAuthenticatedUser();
         boolean isOwner = courseService.hasOwnerRights(authenticated.getUuid(), courseId);
         if(!isOwner && userService.isAdmin(authenticated.getUuid()))
-            return "redirect:/course/" + courseId;
+            return REDIRECT_TO_COURSE + courseId;
 
         courseView.setUuid(courseId);
         courseService.update(courseView);
 
-        return "redirect:/course/" + courseId;
+        return REDIRECT_TO_COURSE + courseId;
     }
 
     @GetMapping("course/{courseUuid}/addSection")
@@ -145,7 +161,7 @@ public class CoursesController {
 
         sectionService.create(sectionView);
 
-        return "redirect:/course/" + courseUuid + "?section&added";
+        return REDIRECT_TO_COURSE + courseUuid + "?section&added";
     }
 
     @GetMapping("course/add")

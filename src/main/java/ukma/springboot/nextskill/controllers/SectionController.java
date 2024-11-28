@@ -20,6 +20,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class SectionController {
 
+    private static final String REDIRECT_TO_COURSE = "redirect:/course/";
     private SectionService sectionService;
     private UserService userService;
     private CourseService courseService;
@@ -43,18 +44,25 @@ public class SectionController {
         UserResponse authenticated = userService.getAuthenticatedUser();
         boolean isOwner = courseService.hasOwnerRights(authenticated.getUuid(), courseId);
         if (!isOwner && !userService.isAdmin(authenticated.getUuid()))
-            return "redirect:/course/" + courseId;
+            return REDIRECT_TO_COURSE + courseId;
 
         sectionView.setUuid(sectionId);
         sectionService.update(sectionView);
 
-        return "redirect:/course/" + courseId + "?section&updated";
+        return REDIRECT_TO_COURSE + courseId + "?section&updated";
     }
 
     @PostMapping("section/{sectionUuid}/delete")
     public String deleteSection(@PathVariable UUID sectionUuid) {
         SectionResponse section = sectionService.get(sectionUuid);
         sectionService.delete(sectionUuid);
-        return "redirect:/course/" + section.getCourse().getUuid() + "?section&deleted";
+        return REDIRECT_TO_COURSE + section.getCourse().getUuid() + "?section&deleted";
+    }
+
+    @GetMapping("section/{sectionUuid}/create-test")
+    public String createTestInSection(@PathVariable UUID sectionUuid, Model model) {
+        model.addAttribute("user", userService.getAuthenticatedUser());
+        model.addAttribute("section", sectionService.get(sectionUuid));
+        return "add-test";
     }
 }

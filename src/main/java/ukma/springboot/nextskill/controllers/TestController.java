@@ -19,11 +19,13 @@ import java.util.*;
 public class TestController {
 
     public static final String REDIRECT_TO_TEST = "redirect:/test/";
+    private static final String QUESTIONS = "questions";
     private QuestionAnswerService questionAnswerService;
     private TestService testService;
     private UserService userService;
     private TestAttemptService attemptService;
     private QuestionService questionService;
+    private SectionService sectionService;
 
     @GetMapping("/test/{uuid}")
     public String testInfo(@PathVariable String uuid, Model model) {
@@ -96,7 +98,7 @@ public class TestController {
 
         model.addAttribute("user", authenticated);
         model.addAttribute("answers", answeredOptions);
-        model.addAttribute("questions", questions);
+        model.addAttribute(QUESTIONS, questions);
         model.addAttribute("testUuid", testUuid);
         model.addAttribute("attemptId", attemptUuid);
 
@@ -159,6 +161,14 @@ public class TestController {
         TestAttemptResponse attempt = attemptService.get(attemptId);
         if(!attempt.isSubmitted()) return "redirect:/home";
 
+        TestResponse test = testService.getTestByAttempt(attempt.getUuid());
+        List<QuestionResponse> questions = questionService.getTestQuestions(test.getUuid());
+
+        UserResponse authenticated = userService.getAuthenticatedUser();
+        boolean isOwner = testService.hasOwnerRights(authenticated.getUuid(), test.getUuid());
+        if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
+            return REDIRECT_TO_TEST + test.getUuid();
+
         List<UUID> answeredQuestions = attempt.getAnswers().stream()
                 .map(answer -> answer.getQuestion().getId()).toList();
         Map<UUID, QuestionOptionResponse> questionAnswerMap = new HashMap<>();
@@ -167,14 +177,9 @@ public class TestController {
             questionAnswerMap.put(answer.getQuestion().getId(), answer.getAnswerOption());
         }
 
-        TestResponse test = testService.getTestByAttempt(attempt.getUuid());
-        List<QuestionResponse> questions = questionService.getTestQuestions(test.getUuid());
-
-        UserResponse authenticated = userService.getAuthenticatedUser();
-
         model.addAttribute("answeredQuestions", answeredQuestions); //ids of questions that were answered
         model.addAttribute("questionAnswerMap", questionAnswerMap); //map question_id -> answered option
-        model.addAttribute("questions", questions); //Just questions.
+        model.addAttribute(QUESTIONS, questions); //Just questions.
         model.addAttribute("user", authenticated);
 
         StringBuilder score = new StringBuilder()
@@ -185,6 +190,31 @@ public class TestController {
         model.addAttribute("attemptData", attempt);
 
         return "attempt-view";
+    }
+
+    @PostMapping("test/create")
+    public String createTest(
+            @ModelAttribute TestView testView
+    ) {
+        SectionResponse associatedSection = sectionService.get(testView.getSectionId());
+        UserResponse authenticated = userService.getAuthenticatedUser();
+
+        if ( authenticated.getRole() != UserRole.ADMIN &&
+                !associatedSection.getCourse().getTeacher().getUuid().equals(authenticated.getUuid())
+        ) {
+            return "redirect:/home";
+        }
+
+        TestView view = TestView.builder()
+                .sectionId(testView.getSectionId())
+                .description(testView.getDescription())
+                .name(testView.getName())
+                .isHidden(testView.isHidden())
+                .build();
+
+        TestResponse res = testService.create(view);
+
+        return REDIRECT_TO_TEST + res.getUuid();
     }
 
     @PostMapping("/test/{testUuid}/delete")
@@ -288,7 +318,7 @@ public class TestController {
         List<QuestionResponse> questionResponses = test.getQuestions();
 
         model.addAttribute("test", test);
-        model.addAttribute("questions", questionResponses);
+        model.addAttribute(QUESTIONS, questionResponses);
         model.addAttribute("user", authenticated);
 
         return "manage-questions";
