@@ -71,7 +71,9 @@ public class TestServiceImpl implements TestService {
         TestEntity test = testRepository.findById(testUuid).orElseThrow(() -> new ResourceNotFoundException("Test", testUuid));
         CourseEntity course = test.getSection().getCourse();
 
-        if (course.getStudents().stream().noneMatch(stud -> stud.getUuid().equals(userId))) {
+        boolean isOwner = course.getTeacher().getUuid().equals(userId);
+
+        if (!isOwner && course.getStudents().stream().noneMatch(stud -> stud.getUuid().equals(userId))) {
             throw new NoAccessException("This user has no access to this test");
         }
     }

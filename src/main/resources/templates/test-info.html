@@ -19,21 +19,42 @@
             <!-- Inner container -->
             <div class="container-fluid">
 
-                <div class="card shadow-sm mb-3">
+                <div class="card shadow-sm mb-3 position-relative">
+
+                    <div class="d-flex position-absolute mt-3 me-3 top-0 end-0" th:if="${isOwner or user.role.name() == 'ADMIN'}">
+                        <form th:action="@{/test/{testId}/hide(testId=${test.uuid})}"
+                              method="post"
+                        >
+                            <button type="submit" class="btn btn-secondary mx-1" th:if="${!test.isHidden}"><i class="fa-solid fa-eye"></i></button>
+                        </form>
+                        <form th:action="@{/test/{testId}/unhide(testId=${test.uuid})}"
+                              method="post"
+                        >
+                            <button type="submit" class="btn btn-secondary mx-1" th:if="${test.isHidden}"><i class="fa-solid fa-eye-slash"></i></button>
+                        </form>
+
+                        <button th:attr="data-url='/test/' + ${test.uuid} + '/manage'"
+                                onclick="visitLink(this)"
+                                class="btn btn-primary mx-1"
+                        ><i class="fa-solid fa-pen"></i></button>
+
+                        <form th:action="@{/test/{testId}/delete(testId=${test.uuid})}"
+                              method="post"
+                        >
+                            <button type="submit" class="btn btn-danger mx-1"><i class="fa-solid fa-trash"></i></button>
+                        </form>
+                    </div>
+
                     <div class="card-body">
-                        <!-- Test Title -->
                         <h5 class="card-title" th:text="${test.name}">Test Name</h5>
 
-                        <!-- Test Description -->
                         <p class="card-text text-muted" th:text="${test.description}">Test Description</p>
 
-                        <!-- Creation Date -->
                         <p class="card-text">
                             <strong>Created At:</strong>
                             <span th:text="${#temporals.format(test.createdAt, 'dd MMM yyyy HH:mm')}">01 Jan 2023 10:00</span>
                         </p>
 
-                        <!-- Hidden Status -->
                         <p class="card-text" th:if="${test.isHidden}">
                             <span class="badge bg-warning text-dark">Hidden</span>
                         </p>
@@ -62,14 +83,35 @@
 
                 <div class="card mb-3">
                     <div class="card-body">
-                        <div>
-                            <span class="fs-4 bold me-1">Questions</span>
-                            <span class="text-body-secondary fs-6" th:text="${#lists.size(test.questions)}">a lot</span>
+                        <div class="d-flex justify-content-between">
+                            <span>
+                                <span class="fs-4 bold me-1">Questions</span>
+                                <span class="text-body-secondary fs-6" th:text="${#lists.size(test.questions)}">a lot</span>
+                            </span>
+                            <button
+                                    th:if="${isOwner or user.role.name() == 'ADMIN'}"
+                                    class="btn btn-primary"
+                                    th:attr="data-url='/test/' + ${test.uuid} + '/manage-questions'"
+                                    onclick="visitLink(this)"
+                            ><i class="fa-solid fa-pen"></i></button>
                         </div>
                     </div>
                 </div>
 
-                <div class="card mb-3">
+                <div class="card mb-3" th:if="${isOwner or user.role.name() == 'ADMIN'}">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <span class="fs-4 bold me-1">All Attempts</span>
+                            <button
+                                    class="btn btn-primary"
+                                    th:attr="data-url='/test/' + ${test.uuid} + '/all-attempts'"
+                                    onclick="visitLink(this)"
+                            ><i class="fa-solid fa-eye"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3" th:if="${!isOwner}">
                     <div class="card-body">
                         <div>
                             <span class="fs-4 bold me-1">My Attempts</span>
