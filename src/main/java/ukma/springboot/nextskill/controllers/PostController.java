@@ -113,6 +113,7 @@ public class PostController {
         }
 
         PostView view = PostView.builder()
+                .uuid(postId)
                 .sectionId(postView.getSectionId())
                 .name(postView.getName())
                 .content(postView.getContent())
