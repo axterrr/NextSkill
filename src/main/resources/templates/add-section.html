@@ -18,15 +18,13 @@
             <hr>
 
             <div class="container-fluid">
-                <h2 class="display-6 text-center mb-4">Add New Section to Course</h2>
+                <h1 class="mb-4">Add New Section to Course</h1>
                 <form th:action="@{'/course/' + ${course.uuid} + '/addSection'}" method="post">
-                    <label for="name">Section Name:</label>
-                    <input type="text" id="name" name="name" required>
-                    <br><br>
-                    <label for="description">Description:</label>
-                    <textarea id="description" name="description" rows="4" cols="50"></textarea>
-                    <br><br>
-                    <button type="submit">Add Section</button>
+                    <label for="name" class="form-label">Section Name:</label>
+                    <input type="text" id="name" class="form-control mb-4"  name="name" required>
+                    <label for="description" class="form-label">Description:</label>
+                    <textarea id="description" class="form-control mb-4" name="description" rows="4" cols="50"></textarea>
+                    <button type="submit" class="btn btn-primary mt-3 w-100">Add Section</button>
                 </form>
             </div>
         </div>
