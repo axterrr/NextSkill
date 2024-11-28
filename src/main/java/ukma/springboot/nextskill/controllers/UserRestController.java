@@ -46,6 +46,7 @@ public class UserRestController {
             user.setCourses(courseEntities);
         }
 
+        model.addAttribute("currentUser", userService.getAuthenticatedUser());
         model.addAttribute("user", user);
         return "profile";
     }
