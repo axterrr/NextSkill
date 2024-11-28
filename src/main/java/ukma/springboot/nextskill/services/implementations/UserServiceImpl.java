@@ -1,12 +1,13 @@
 package ukma.springboot.nextskill.services.implementations;
 
 import lombok.AllArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ukma.springboot.nextskill.exceptions.NoAccessException;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
 import ukma.springboot.nextskill.models.entities.UserEntity;
-import ukma.springboot.nextskill.models.mappers.CourseMapper;
 import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.mappers.UserMapper;
 import ukma.springboot.nextskill.models.responses.CourseResponse;
@@ -16,6 +17,7 @@ import ukma.springboot.nextskill.repositories.UserRepository;
 import ukma.springboot.nextskill.services.UserService;
 import ukma.springboot.nextskill.validation.UserValidator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -56,10 +58,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(UUID id) {
-        if (userRepository.findById(id).isEmpty()) {
-             throw new ResourceNotFoundException("User", id);
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User", id));
+        UserResponse currentUser = getAuthenticatedUser();
+
+        if (currentUser.getRole() != UserRole.ADMIN) {
+            throw new NoAccessException("You do not have permission to delete users.");
         }
-        userRepository.deleteById(id);
+
+        userRepository.delete(userEntity);
     }
 
     @Override
@@ -69,17 +76,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<CourseResponse> getCourses(UUID studentId) {
-        UserEntity userEntity = userRepository.findById(studentId)
-                .orElseThrow(() -> new ResourceNotFoundException("User", studentId));
-        return userEntity.getCourses().stream().map(CourseMapper::toCourseResponse).toList();
+    public UserResponse getWithCourses(UUID userId) {
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", userId));
+        if (userEntity.getRole() == UserRole.STUDENT) {
+            Hibernate.initialize(userEntity.getCourses());
+        }
+        if (userEntity.getRole() == UserRole.TEACHER) {
+            Hibernate.initialize(userEntity.getOwnCourses());
+        }
+        return UserMapper.toUserResponse(userEntity);
     }
 
     @Override
-    public List<CourseResponse> getOwnCourses(UUID teacherId) {
-        UserEntity userEntity = userRepository.findById(teacherId)
-                .orElseThrow(() -> new ResourceNotFoundException("User", teacherId));
-        return userEntity.getOwnCourses().stream().map(CourseMapper::toCourseResponse).toList();
+    public List<CourseResponse> getCourses(UUID userId) {
+        UserResponse user = getWithCourses(userId);
+        if (user.getRole() == UserRole.STUDENT) {
+            return user.getCourses();
+        }
+        if (user.getRole() == UserRole.TEACHER) {
+            return user.getOwnCourses();
+        }
+        return new ArrayList<>();
     }
 
     @Override
@@ -91,7 +109,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean isTeacher(UUID uuid) {
         UserEntity userEntity = userRepository.findById(uuid).orElseThrow(() -> new ResourceNotFoundException("User", uuid));
-        return userEntity.getRole() == (UserRole.STUDENT);
+        return userEntity.getRole() == (UserRole.TEACHER);
     }
 
     @Override
