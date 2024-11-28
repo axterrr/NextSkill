@@ -1,16 +1,13 @@
 package ukma.springboot.nextskill.controllers;
 
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.CourseView;
 import ukma.springboot.nextskill.models.views.SectionView;
-import ukma.springboot.nextskill.models.views.TestView;
 import ukma.springboot.nextskill.services.CourseService;
 import ukma.springboot.nextskill.services.SectionService;
 import ukma.springboot.nextskill.services.UserService;
@@ -49,7 +46,7 @@ public class CoursesController {
         model.addAttribute("isStudent", isStudent);
         model.addAttribute("isEnrolled", isEnrolled);
 
-        model.addAttribute("course", course);
+        model.addAttribute(COURSE, course);
         model.addAttribute("user", user);
 
         return COURSE;
@@ -152,12 +149,13 @@ public String editCourse(
 
     @GetMapping("course/{courseUuid}/addSection")
     public String addSection(@PathVariable UUID courseUuid, Model model) {
+        model.addAttribute("user", userService.getAuthenticatedUser());
         model.addAttribute(COURSE, courseService.get(courseUuid));
         return "add-section";
     }
 
     @PostMapping("course/{courseUuid}/addSection")
-    public ResponseEntity<String> addSection(@PathVariable UUID courseUuid,
+    public String addSection(@PathVariable UUID courseUuid,
             @RequestParam String name,
             @RequestParam(required = false) String description)
     {
@@ -169,7 +167,7 @@ public String editCourse(
 
         sectionService.create(sectionView);
 
-        return ResponseEntity.ok("Section added successfully!");
+        return "redirect:/course/" + courseUuid + "?section&added";
     }
 
 
@@ -194,14 +192,14 @@ public String editCourse(
 
 
 
-    @GetMapping("courses/add")
+    @GetMapping("course/add")
     public String showAddCoursePage(Model model) {
         model.addAttribute("user", userService.getAuthenticatedUser());
-        return "add-course"; // Points to add-course.html
+        return "add-course";
     }
 
-    @PostMapping("courses/add")
-    public ResponseEntity<String> addCourse(
+    @PostMapping("course/add")
+    public String addCourse(
             @RequestParam String name,
             @RequestParam(required = false) String description)
             {
@@ -213,6 +211,6 @@ public String editCourse(
                 .build();
 
         courseService.create(courseView);
-        return ResponseEntity.ok("Course added successfully!");
+        return "redirect:/home?course&added";
     }
 }
