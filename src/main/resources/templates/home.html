@@ -25,6 +25,10 @@
 
             <hr>
 
+            <div th:if="${param.course} and ${param.deleted}" class="alert alert-info">
+                The course has been successfully deleted.
+            </div>
+
             <!-- Inner container -->
             <div class="container-fluid">
                 <h2 class="display-6 text-center mb-4">My Courses</h2>

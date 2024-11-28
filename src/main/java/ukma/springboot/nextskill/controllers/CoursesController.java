@@ -3,6 +3,7 @@ package ukma.springboot.nextskill.controllers;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import ukma.springboot.nextskill.models.responses.UserResponse;
@@ -45,5 +46,11 @@ public class CoursesController {
     public String allCourses(Model model) {
         model.addAttribute("user", userService.getAuthenticatedUser());
         return "allCourses";
+    }
+
+    @DeleteMapping("course/{courseUuid}")
+    public String deleteCourse(@PathVariable UUID courseUuid) {
+        courseService.delete(courseUuid);
+        return "home?course&deleted";
     }
 }
