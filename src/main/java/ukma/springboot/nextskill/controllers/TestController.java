@@ -178,6 +178,13 @@ public class TestController {
         model.addAttribute("questions", questions); //Just questions.
         model.addAttribute("user", authenticated);
 
+        StringBuilder score = new StringBuilder()
+                .append(questionAnswerMap.values().stream().filter(QuestionOptionResponse::isCorrect).count())
+                .append(" / ")
+                .append(questions.size());
+        model.addAttribute("score", score.toString());
+        model.addAttribute("attemptData", attempt);
+
         return "attempt-view";
     }
 }
