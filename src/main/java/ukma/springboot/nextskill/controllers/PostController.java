@@ -1,10 +1,12 @@
 package ukma.springboot.nextskill.controllers;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ukma.springboot.nextskill.models.enums.UserRole;
+import ukma.springboot.nextskill.models.responses.PostResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.PostView;
 import ukma.springboot.nextskill.models.views.UserView;
@@ -35,6 +37,15 @@ public class PostController {
         postService.delete(postId);
 
         return "redirect:/course/" + courseId + "?post&deleted";
+    }
+
+    @GetMapping("/post/{postId}")
+    public String getPostById(@PathVariable UUID postId, Model model) {
+        UserResponse authenticated = userService.getAuthenticatedUser();
+        PostResponse postResponse = postService.get(postId);
+        model.addAttribute("user",authenticated);
+        model.addAttribute("post", postResponse);
+        return "post";
     }
 
     @GetMapping("/section/{sectionId}/{courseId}/addPost")
