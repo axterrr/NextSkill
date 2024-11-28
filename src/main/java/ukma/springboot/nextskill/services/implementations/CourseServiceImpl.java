@@ -4,15 +4,19 @@ import lombok.AllArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ukma.springboot.nextskill.exceptions.NoAccessException;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
 import ukma.springboot.nextskill.models.entities.CourseEntity;
 import ukma.springboot.nextskill.models.entities.UserEntity;
+import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.mappers.CourseMapper;
 import ukma.springboot.nextskill.models.responses.CourseResponse;
+import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.CourseView;
 import ukma.springboot.nextskill.repositories.CourseRepository;
 import ukma.springboot.nextskill.repositories.UserRepository;
 import ukma.springboot.nextskill.services.CourseService;
+import ukma.springboot.nextskill.services.UserService;
 import ukma.springboot.nextskill.validation.CourseValidator;
 
 import java.util.List;
@@ -25,6 +29,7 @@ public class CourseServiceImpl implements CourseService {
     private static final String COURSE = "Course";
     private CourseRepository courseRepository;
     private UserRepository userRepository;
+    private UserService userService;
     private CourseValidator courseValidator;
 
     @Override
@@ -56,20 +61,15 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void delete(UUID id) {
-        if (courseRepository.findById(id).isEmpty()) {
-            throw new ResourceNotFoundException(COURSE, id);
-        }
-        courseRepository.deleteById(id);
-    }
+        UserResponse currentUser = userService.getAuthenticatedUser();
+        CourseEntity courseEntity = courseRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(COURSE, id));
 
-    @Override
-    @Transactional
-    public List<CourseResponse> getCoursesWhereStudent(UUID studentId) {
-        List<CourseEntity> courses = courseRepository.findByStudentsUuid(studentId);
-        courses.forEach(course -> Hibernate.initialize(course.getStudents()));
-        return courses.stream()
-                .map(CourseMapper::toCourseResponse)
-                .toList();
+        if (currentUser.getRole() != UserRole.ADMIN && !courseEntity.getTeacher().getUuid().equals(currentUser.getUuid())) {
+            throw new NoAccessException("You do not have permission to delete this course.");
+        }
+
+        courseRepository.delete(courseEntity);
     }
 
     @Override
@@ -82,17 +82,6 @@ public class CourseServiceImpl implements CourseService {
         courseEntity.getStudents().add(userEntity);
         courseRepository.save(courseEntity);
     }
-
-    @Transactional
-    @Override
-    public List<CourseResponse> getCoursesWhereTeacher(UUID teacherId) {
-        List<CourseEntity> courses = courseRepository.findByTeacherUuid(teacherId);
-        courses.forEach(course -> Hibernate.initialize(course.getStudents()));
-        return courses.stream()
-                .map(CourseMapper::toCourseResponse)
-                .toList();
-    }
-
 
     @Override
     @Transactional

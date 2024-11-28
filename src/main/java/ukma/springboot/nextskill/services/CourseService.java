@@ -7,12 +7,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CourseService extends GenericService<CourseView, CourseResponse> {
-    List<CourseResponse> getCoursesWhereStudent(UUID studentId);
-    List<CourseResponse> getCoursesWhereTeacher(UUID teacherId);
     void enrollStudent(UUID courseId, UUID studentId);
     CourseResponse getWithSectionsWithPostsAndTests(UUID id);
     CourseResponse getWithUsers(UUID id);
     List<CourseResponse> getAllWithUsers();
-
     Object isEnrolled(UUID courseUuid, UUID studentUuid);
 }

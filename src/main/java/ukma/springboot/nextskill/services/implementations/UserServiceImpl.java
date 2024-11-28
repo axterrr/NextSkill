@@ -6,7 +6,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
 import ukma.springboot.nextskill.models.entities.UserEntity;
+import ukma.springboot.nextskill.models.mappers.CourseMapper;
 import ukma.springboot.nextskill.models.mappers.UserMapper;
+import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.UserView;
 import ukma.springboot.nextskill.repositories.UserRepository;
@@ -66,7 +68,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<CourseResponse> getCourses(UUID studentId) {
+        UserEntity userEntity = userRepository.findById(studentId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", studentId));
+        return userEntity.getCourses().stream().map(CourseMapper::toCourseResponse).toList();
+    }
+
+    @Override
+    public List<CourseResponse> getOwnCourses(UUID teacherId) {
+        UserEntity userEntity = userRepository.findById(teacherId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", teacherId));
+        return userEntity.getOwnCourses().stream().map(CourseMapper::toCourseResponse).toList();
+    }
+
+    @Override
     public UserEntity getUserByUsername(String username) {
-        return userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("User", UUID.randomUUID()));
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User", UUID.randomUUID()));
     }
 }
