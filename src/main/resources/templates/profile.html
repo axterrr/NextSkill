@@ -157,7 +157,8 @@
             </div>
         </div>
     </div>
-</div> <!-- Modal for editing E-mail -->
+</div>
+<!-- Modal for editing E-mail -->
 <div class="modal fade" id="editEmailModal" tabindex="-1" aria-labelledby="editEmailModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -177,7 +178,8 @@
             </div>
         </div>
     </div>
-</div> <!-- Modal for editing Phone -->
+</div>
+<!-- Modal for editing Phone -->
 <div class="modal fade" id="editPhoneModal" tabindex="-1" aria-labelledby="editPhoneModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -186,10 +188,10 @@
             </div>
             <div class="modal-body">
                 <form th:action="@{/user/{uuid}/edit-phone(uuid=${user.uuid})}" method="post">
-                    <div class="mb-3"><label for="phone" class="form-label">Phone</label> <input type="tel"
-                                                                                                 class="form-control"
-                                                                                                 id="phone" name="phone"
-                                                                                                 th:value="${user.phone}">
+                    <input type="hidden" name="_method" value="put">
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone</label>
+                        <input type="tel" class="form-control" id="phone" name="phone" th:value="${user.phone}">
                     </div>
                     <button type="submit" class="btn btn-primary">Save changes</button>
                 </form>
