@@ -34,6 +34,13 @@
                 The test has been successfully deleted.
             </div>
 
+            <div th:if="${param.enrolled}" class="alert alert-info">
+                You have been successfully enrolled to this course.
+            </div>
+            <div th:if="${param.unrolled}" class="alert alert-info">
+                You have been successfully unrolled from this course.
+            </div>
+
             <!-- Inner container -->
             <div class="container-fluid d-flex flex-column justify-content-center">
                 <!-- Image div -->

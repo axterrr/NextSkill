@@ -73,27 +73,6 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<CourseResponse> getCoursesWhereStudent(UUID studentId) {
-        return null;
-    }
-
-    @Override
-    public List<CourseResponse> getCoursesWhereTeacher(UUID teacherId) {
-        return null;
-    }
-
-    @Override
-    @Transactional
-    public void enrollStudent(UUID courseId, UUID studentId) {
-        CourseEntity courseEntity = courseRepository.findById(courseId)
-                .orElseThrow(() -> new ResourceNotFoundException(COURSE, courseId));
-        UserEntity userEntity = userRepository.findById(studentId)
-                .orElseThrow(() -> new ResourceNotFoundException("User", studentId));
-        courseEntity.getStudents().add(userEntity);
-        courseRepository.save(courseEntity);
-    }
-
-    @Override
     public CourseResponse getWithUsers(UUID id) {
         CourseEntity courseEntity = courseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(COURSE, id));
@@ -140,6 +119,20 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional
+    public void enrollStudent(UUID courseId, UUID studentId) {
+        CourseEntity courseEntity = courseRepository.findById(courseId)
+                .orElseThrow(() -> new ResourceNotFoundException(COURSE, courseId));
+        UserEntity userEntity = userRepository.findById(studentId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", studentId));
+        if (!isEnrolled(courseId, studentId)) {
+            courseEntity.getStudents().add(userEntity);
+        }
+        else throw new IllegalArgumentException("User is already enrolled to course");
+        courseRepository.save(courseEntity);
+    }
+
+    @Override
     public void unrollStudent(UUID courseUuid, UUID studentUuid) {
         CourseEntity courseEntity = courseRepository.findById(courseUuid)
                 .orElseThrow(() -> new ResourceNotFoundException(COURSE, courseUuid));
@@ -150,6 +143,4 @@ public class CourseServiceImpl implements CourseService {
         else throw new IllegalArgumentException("User is not enrolled to course");
         courseRepository.save(courseEntity);
     }
-
-
 }
