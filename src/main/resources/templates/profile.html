@@ -11,10 +11,13 @@
 
 <div class="container-fluid bg-secondary-subtle min-vh-100">
     <div class="row justify-content-center">
-        <div class="col-12 col-lg-8 min-vh-100 bg-body"> <!-- Heading -->
-            <div class="row mt-3 justify-content-end">
-                <div th:insert="~{fragments/heading.html}" th:with="user=${currentUser}" class="row mt-3"></div>
-            </div>
+        <div class="col-12 col-lg-8 min-vh-100 bg-body">
+            <!-- Heading -->
+
+            <div th:insert="~{fragments/heading.html}" th:with="user=${user}" class="row mt-3"></div>
+
+            <hr>
+
             <div class="container">
                 <section class="section about-section gray-bg" id="about">
                     <div class="container profile-container">
