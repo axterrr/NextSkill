@@ -11,46 +11,111 @@
 <div class="container-fluid bg-secondary-subtle min-vh-100">
     <div class="row justify-content-center">
         <div class="col-12 col-lg-8 min-vh-100 bg-body">
+
+            <!-- Heading -->
+            <div th:insert="~{fragments/heading.html}" th:with="user=${user}" class="row mt-3"></div>
+
+            <hr>
+
             <!-- Inner container -->
-            <div class="container-fluid">
-                <h2 class="display-6 text-start mb-4" th:text="${course.name}"></h2>
-                <button class="btn"></button>
-                <div th:if="${user.role.toString() == 'ADMIN' || user.role.toString() == 'TEACHER'}">
-                    <button th:if="${user.role.toString() == 'TEACHER'}" class="btn btn-danger">Edit</button>
-                    <form th:action="@{'/course/' + ${course.uuid} + '/delete'}" method="POST" style="display: inline;">
-                        <button class="btn btn-danger">Delete</button>
-                    </form>
-                </div>
-                <div th:if="${user.role.toString() == 'STUDENT'}">
-                    <button th:unless="${isEnrolled}" class="btn btn-danger">Enroll</button>
-                    <button th:if="${isEnrolled}" class="btn btn-danger">Unroll</button>
+            <div class="container-fluid d-flex flex-column justify-content-center">
+                <!-- Image div -->
+                <div class="mb-3 d-flex justify-content-center" style="height: 300px; overflow: hidden;">
+                    <img class="card-img-top w-100" style="object-fit: cover; height: 100%;" src="https://minfin.com.ua/img/2024/131540542/efca88826f28e64a4ea3c4b334109920.jpeg" alt="Default Course Image">
                 </div>
 
-                <h3 th:text="${course.description}"></h3>
-                <a class="display-6 text-start mb-4" th:text="${course.teacher.username}" th:href="@{'/user/' + ${course.teacher.uuid}}"></a>
-                <p class="display-6 text-start mb-4">
-                    <span th:if="${user.role.toString() == 'ADMIN'}" th:text="${#temporals.format(course.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
-                    <span th:unless="${user.role.toString() == 'ADMIN'}" th:text="${#temporals.format(course.createdAt, 'dd-MM-yyyy')}"></span>
-                </p>
-                <a class="display-6 text-start mb-4" th:href="@{'/course/' + ${course.uuid} + '/enrolledStudents'}">Enrolled Students</a>
-
-                <div id="sections-container" class="row">
-                    <div class="course-section" th:each="section : ${course.sections}">
-                        <div class="section-name" style="cursor: pointer;" onclick="toggleContent(this)">
-                            <h3 class="display-6 text-start mb-4" th:text="${section.name}"></h3>
+                <!-- Info section -->
+                <div class="p-4 rounded">
+                    <div class="rounded d-flex justify-content-between align-items-top flex-wrap">
+                        <h2 class="display-6 fw-semibold text-start mb-4" th:text="${course.name}"></h2>
+                        <div class="d-flex flex-column justify-content-start gap-3" th:if="${isAdmin || isOwner}">
+                            <div class="d-flex justify-content-end">
+                                <button class="btn btn-secondary" onclick="toggleSettings()">Settings <i class="fa-solid fa-gear" style="font-size: 1.2rem;" aria-hidden="true"></i></button>
+                            </div>
+                            <div id="settings-buttons" class="gap-2" th:if="${isAdmin || isOwner}" style="display:none;">
+                                <button class="btn btn-success" onclick="window.location.href='/course/' + [[${course.uuid}]] + '/enrolledStudents'">Enrolled Students</button>
+                                <button class="btn btn-primary">Edit Course</button>
+                                <button class="btn btn-danger">Delete Course</button>
+                            </div>
                         </div>
-                        <div class="section-content" style="display: none">
-                            <p class="display-6 text-start mb-4" th:text="${section.description}"></p>
-                            <div class="row" th:each="post : ${course.sections}">
-                                <hr>
-                                <h4 class="display-6 text-start mb-4" th:unless="${isEnrolled}" th:text="${post.name}"></h4>
-                                <a class="display-6 text-start mb-4" th:if="${isEnrolled}" th:text="${post.name}" th:href="@{'/post/' + ${post.uuid}}"></a>
+                        <div class="d-flex flex-column justify-content-start" th:if="${isStudent}">
+                            <button th:unless="${isEnrolled}" class="btn btn-success">Enroll</button>
+                            <button th:if="${isEnrolled}" class="btn btn-danger">Unroll</button>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="fs-3 fw-semibold text-start me-2">Owner:</label>
+                        <a style="cursor: pointer; text-decoration: none; color: cornflowerblue" th:href="@{'/user/' + ${course.teacher.uuid}}">
+                            <span th:text="${course.teacher.username}" class="fs-3 fw-normal link-primary text-start"></span>
+                        </a>
+                    </div>
+                    <div class="mb-4">
+                        <label class="fs-4 fw-semibold text-start me-2">Created:</label>
+                        <label class="fs-4 fw-normal text-start" th:if="${isAdmin}" th:text="${#temporals.format(course.createdAt, 'yyyy-MM-dd HH:mm')}"></label>
+                        <label class="fs-4 fw-normal text-start" th:unless="${isAdmin}" th:text="${#temporals.format(course.createdAt, 'dd-MM-yyyy')}"></label>
+                    </div>
+                    <div>
+                        <label class="fs-4 fw-semibold text-start mb-2">About Course:</label>
+                        <p class="fs-4 fw-normal text-start d-block mb-0" th:text="${course.description}"></p>
+                    </div>
+                </div>
+
+                <div class="rounded p-4">
+                    <div>
+                        <label class="fs-2 fw-semibold text-start mb-4">Course Content:</label>
+                    </div>
+                    <div id="sections-container" class="d-flex flex-column gap-4">
+                        <div class="course-section rounded border" th:each="section : ${course.sections}">
+                            <div class="section-name rounded align-content-center p-3" style="cursor: pointer;background: #e5ebf8; min-height: fit-content;" onclick="toggleContent(this)">
+                                <h3 class="fs-4 fw-normal text-start m-0" th:text="${section.name}"></h3>
                             </div>
-                            <div class="row" th:each="post : ${course.sections}">
-                                <hr>
-                                <h4 class="display-6 text-start mb-4" th:unless="${isEnrolled}" th:text="${post.name}"></h4>
-                                <a class="display-6 text-start mb-4" th:if="${isEnrolled}" th:text="${post.name}" th:href="@{'/post/' + ${post.uuid}}"></a>
+                            <div class="section-content p-4" style="display: none">
+                                <p class="fs-5 text-start mb-3 mt-3" th:if="${section.description != null}" th:text="${section.description}"></p>
+                                <div class="align-content-center" th:each="post : ${section.posts}">
+                                    <div class="d-flex justify-content-between">
+                                        <h4 class="fs-4 text-start" th:unless="${isEnrolled || isAdmin || isOwner}" th:text="${post.name}"></h4>
+                                        <a class="fs-4 text-start" style="cursor: pointer; text-decoration: none;" th:if="${isEnrolled || isOwner || isAdmin}" th:text="${post.name}" th:href="@{'/post/' + ${post.uuid}}"></a>
+                                        <div class="d-flex justify-content-end gap-2" th:if="${isAdmin || isOwner}">
+                                            <div class="justify-content-end gap-1" style="display: none">
+                                                <button class="btn btn-primary">Edit</button>
+                                                <button class="btn btn-danger">Delete</button>
+                                            </div>
+                                            <button class="btn btn-secondary" onclick="toggleSectionSettings(this)">Settings <i class="fa-solid fa-gear" style="font-size: 1.2rem;" aria-hidden="true"></i></button>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </div>
+                                <div class="align-content-center" th:each="test : ${section.tests}">
+                                    <div class="d-flex justify-content-between">
+                                        <h4 class="fs-4 text-start" th:unless="${isEnrolled || isAdmin || isOwner}" th:text="${test.name}"></h4>
+                                        <a class="fs-4 text-start" style="cursor: pointer; text-decoration: none;" th:if="${isEnrolled || isOwner || isAdmin}" th:text="${test.name}" th:href="@{'/test/' + ${test.uuid}}"></a>
+                                        <div class="d-flex justify-content-end gap-2" th:if="${isAdmin || isOwner}">
+                                            <div class="justify-content-end gap-1" style="display: none">
+                                                <button class="btn btn-primary">Edit</button>
+                                                <button class="btn btn-danger">Delete</button>
+                                            </div>
+                                            <button class="btn btn-secondary" onclick="toggleSectionSettings(this)">Settings <i class="fa-solid fa-gear" style="font-size: 1.2rem;" aria-hidden="true"></i></button>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                                    <div class="d-flex gap-2 align-content-center" th:if="${isOwner}">
+                                        <button class="btn btn-success ms-4">Add New Post</button>
+                                        <button class="btn btn-success">Add New Test</button>
+                                    </div>
+                                    <div class="d-flex justify-content-end gap-2" th:if="${isAdmin || isOwner}">
+                                        <div class="justify-content-end gap-1" style="display: none">
+                                            <button class="btn btn-primary">Edit Section</button>
+                                            <button class="btn btn-danger">Delete Section</button>
+                                        </div>
+                                        <button class="btn btn-secondary" onclick="toggleSectionSettings(this)">Settings <i class="fa-solid fa-gear" style="font-size: 1.2rem;" aria-hidden="true"></i></button>
+                                    </div>
+                                </div>
                             </div>
+                        </div>
+                        <div th:if="${isOwner}">
+                            <button class="btn btn-success">Add New Section</button>
                         </div>
                     </div>
                 </div>
