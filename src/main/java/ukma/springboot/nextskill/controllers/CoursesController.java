@@ -1,6 +1,7 @@
 package ukma.springboot.nextskill.controllers;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import ukma.springboot.nextskill.services.CourseService;
 import ukma.springboot.nextskill.services.SectionService;
 import ukma.springboot.nextskill.services.UserService;
 
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -166,5 +168,16 @@ public class CoursesController {
 
         courseService.create(courseView);
         return "redirect:/home?course&added";
+    }
+
+    @GetMapping("/api/courses-for-user")
+    public ResponseEntity<List<CourseResponse>> getCoursesForUser() {
+        UserResponse user = userService.getAuthenticatedUser();
+        return ResponseEntity.ok(userService.getCourses(user.getUuid()));
+    }
+
+    @GetMapping("/api/all-courses")
+    public ResponseEntity<List<CourseResponse>> getAllCourses() {
+        return ResponseEntity.ok(courseService.getAllWithUsers());
     }
 }
