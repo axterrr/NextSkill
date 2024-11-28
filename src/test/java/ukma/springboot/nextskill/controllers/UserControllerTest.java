@@ -1,4 +1,4 @@
-package controllers;
+package ukma.springboot.nextskill.controllers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -6,7 +6,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
-import ukma.springboot.nextskill.controllers.UserController;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.UserView;
 import ukma.springboot.nextskill.services.UserService;
