@@ -1,6 +1,7 @@
 package ukma.springboot.nextskill.controllers;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +9,7 @@ import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.responses.PostResponse;
 import ukma.springboot.nextskill.models.responses.SectionResponse;
 import ukma.springboot.nextskill.models.responses.TestResponse;
+import ukma.springboot.nextskill.models.responses.PostResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.PostView;
 import ukma.springboot.nextskill.models.views.TestView;
@@ -65,6 +67,15 @@ public class PostController {
 
         return "redirect:/post/" + res.getUuid();
     }
+    @GetMapping("/post/{postId}")
+    public String getPostById(@PathVariable UUID postId, Model model) {
+        UserResponse authenticated = userService.getAuthenticatedUser();
+        PostResponse postResponse = postService.get(postId);
+        model.addAttribute("user",authenticated);
+        model.addAttribute("post", postResponse);
+        return "post";
+    }
+
 
     @GetMapping("/post/{postUuid}/edit")
     public String getPostEditView(
@@ -86,7 +97,6 @@ public class PostController {
 
         return "edit-post";
     }
-
     @PostMapping("/post/{postUuid}/edit")
     public String addPostToSection(
             @PathVariable(name="postUuid") UUID postId,
