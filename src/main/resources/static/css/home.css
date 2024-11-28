@@ -4,5 +4,6 @@
     flex-direction: column;
 }
 .card-body {
+    height: 170px;
     max-height: 180px
 }

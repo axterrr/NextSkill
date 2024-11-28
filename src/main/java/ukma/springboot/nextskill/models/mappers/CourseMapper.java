@@ -1,6 +1,7 @@
 package ukma.springboot.nextskill.models.mappers;
 
 import ukma.springboot.nextskill.models.entities.CourseEntity;
+import ukma.springboot.nextskill.models.entities.SectionEntity;
 import ukma.springboot.nextskill.models.entities.UserEntity;
 import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.views.CourseView;
@@ -54,6 +55,20 @@ public class CourseMapper {
                 .createdAt(courseEntity.getCreatedAt())
                 .students(mapIfInitialized(courseEntity.getStudents(), UserMapper::toUserResponse))
                 .sections(mapIfInitialized(courseEntity.getSections(), SectionMapper::toSectionResponseWithoutCourse))
+                .build();
+    }
+    public static CourseEntity toCourseEntity(CourseResponse courseResponse) {
+        return CourseEntity.builder()
+                .uuid(courseResponse.getUuid())
+                .name(courseResponse.getName())
+                .description(courseResponse.getDescription())
+                .teacher(UserEntity.builder().uuid(courseResponse.getTeacher().getUuid()).build())
+                .students(courseResponse.getStudents().stream()
+                        .map(student -> UserEntity.builder().uuid(student.getUuid()).build())
+                        .toList())
+                .sections(courseResponse.getSections().stream()
+                        .map(section -> SectionEntity.builder().uuid(section.getUuid()).build())
+                        .toList())
                 .build();
     }
 }

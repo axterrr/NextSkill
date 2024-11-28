@@ -14,7 +14,7 @@
             <!-- Inner container -->
             <div class="container-fluid">
                 <h2 class="display-6 text-start mb-4" th:text="${course.name}"></h2>
-                <button class="btn"
+                <button class="btn"></button>
                 <div th:if="${user.role.toString() == 'ADMIN' || user.role.toString() == 'TEACHER'}">
                     <button th:if="${user.role.toString() == 'TEACHER'}" class="btn btn-danger">Edit</button>
                     <button class="btn btn-danger">Delete</button>
