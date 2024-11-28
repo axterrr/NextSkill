@@ -89,13 +89,13 @@ function truncateText(text, limit) {
 
 function getFilteredCourses() {
     const searchTerm = document.getElementById('search').value.toLowerCase();
-    const dateFilter = document.getElementById('filter-date').value;
-    const popularityFilter = document.getElementById('filter-popularity').value;
+    /*const dateFilter = document.getElementById('filter-date').value;
+    const popularityFilter = document.getElementById('filter-popularity').value;*/
     let filteredCourses = allCourses.filter(course => {
         return course.name.toLowerCase().includes(searchTerm);
     });
 
-    // Apply date filter
+    /*// Apply date filter
     if (dateFilter) {
         filteredCourses.sort((a, b) => {
             if (dateFilter === 'newest') {
@@ -118,6 +118,25 @@ function getFilteredCourses() {
                 return a.students.length - b.students.length;
             }
         });
+    }*/
+    const sortOption = document.getElementById('filter-sort').value;
+
+    switch (sortOption) {
+        case 'newest':
+            filteredCourses.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            break;
+        case 'oldest':
+            filteredCourses.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+            break;
+        case 'most-popular':
+            filteredCourses.sort((a, b) => b.students.length - a.students.length);
+            break;
+        case 'least-popular':
+            filteredCourses.sort((a, b) => a.students.length - b.students.length);
+            break;
+        case 'by-name':
+            filteredCourses.sort((a, b) => a.name.localeCompare(b.name));
+            break;
     }
 
     return filteredCourses;
@@ -155,14 +174,14 @@ document.getElementById('search').addEventListener('input', () => {
     displayPagination();
 });
 
-document.getElementById('filter-date').addEventListener('change', () => {
+document.getElementById('filter-sort').addEventListener('change', () => {
     currentPage = 0;
     displayCourses();
     displayPagination();
 });
 
-document.getElementById('filter-popularity').addEventListener('change', () => {
+/*document.getElementById('filter-popularity').addEventListener('change', () => {
     currentPage = 0;
     displayCourses();
     displayPagination();
-});
+});*/
