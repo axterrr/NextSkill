@@ -4,14 +4,13 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.CourseView;
 import ukma.springboot.nextskill.models.views.SectionView;
+import ukma.springboot.nextskill.models.views.TestView;
 import ukma.springboot.nextskill.services.CourseService;
 import ukma.springboot.nextskill.services.SectionService;
 import ukma.springboot.nextskill.services.UserService;
@@ -90,7 +89,7 @@ public class CoursesController {
         courseService.delete(courseUuid);
         return "redirect:/home?course&deleted";
     }
-
+/*
     @GetMapping("course/{courseUuid}/edit")
     public String editCourse(@PathVariable UUID courseUuid, Model model) {
         //courseService.update(courseUuid);
@@ -114,10 +113,46 @@ public class CoursesController {
         courseService.create(courseView);
         courseService.update(courseView);
         return ResponseEntity.ok("Course added successfully!");
+    }*/
+@GetMapping("/course/{courseUuid}/edit")
+public String editCourse(
+        @PathVariable(name = "courseUuid") String courseUuid,
+        Model model
+) {
+    UUID courseId = UUID.fromString(courseUuid);
+
+    UserResponse authenticated = userService.getAuthenticatedUser();
+    boolean isOwner = courseService.hasOwnerRights(authenticated.getUuid(), courseId);
+    if(!isOwner && userService.isAdmin(authenticated.getUuid()))
+        return "redirect:/course/" + courseUuid;
+
+    model.addAttribute("course", courseService.get(courseId));
+    model.addAttribute("user", authenticated);
+
+    return "edit-course";
+}
+
+    @PostMapping("/course/{courseUuid}/edit")
+    public String editCourse(
+            @PathVariable(name = "courseUuid") String courseUuid,
+            @ModelAttribute CourseView courseView
+    ) {
+        UUID courseId = UUID.fromString(courseUuid);
+
+        UserResponse authenticated = userService.getAuthenticatedUser();
+        boolean isOwner = courseService.hasOwnerRights(authenticated.getUuid(), courseId);
+        if(!isOwner && userService.isAdmin(authenticated.getUuid()))
+            return "redirect:/course/" + courseId;
+
+        courseView.setUuid(courseId);
+        courseService.update(courseView);
+
+        return "redirect:/course/" + courseId;
     }
 
     @GetMapping("course/{courseUuid}/addSection")
-    public String addSection(@PathVariable UUID courseUuid) {
+    public String addSection(@PathVariable UUID courseUuid, Model model) {
+        model.addAttribute(COURSE, courseService.get(courseUuid));
         return "add-section";
     }
 
@@ -126,7 +161,6 @@ public class CoursesController {
             @RequestParam String name,
             @RequestParam(required = false) String description)
     {
-
         SectionView sectionView = SectionView.builder()
                 .name(name)
                 .description(description)
@@ -135,8 +169,46 @@ public class CoursesController {
 
         sectionService.create(sectionView);
 
-        return ResponseEntity.ok("Course added successfully!");
+        return ResponseEntity.ok("Section added successfully!");
     }
+
+    @GetMapping("/course/{courseUuid}/edit")
+    public String editCourseSection(
+            @PathVariable(name = "courseUuid") String courseUuid,
+            Model model
+    ) {
+        UUID courseId = UUID.fromString(courseUuid);
+
+        UserResponse authenticated = userService.getAuthenticatedUser();
+        boolean isOwner = courseService.hasOwnerRights(authenticated.getUuid(), courseId);
+        if(!isOwner && !userService.isAdmin(authenticated.getUuid()))
+            return "redirect:/course/" + courseUuid;
+
+        model.addAttribute("course", courseService.get(courseId));
+        model.addAttribute("user", authenticated);
+
+        return "edit-course";
+    }
+
+    @PostMapping("/course/{courseUuid}/edit")
+    public String editCourseSection(
+            @PathVariable(name = "courseUuid") String courseUuid,
+            @ModelAttribute TestView testView
+    ) {
+        UUID courseId = UUID.fromString(courseUuid);
+
+        UserResponse authenticated = userService.getAuthenticatedUser();
+        boolean isOwner = courseService.hasOwnerRights(authenticated.getUuid(), courseId);
+        if (!isOwner && !userService.isAdmin(authenticated.getUuid()))
+            return "redirect:/course/"  + courseUuid;
+
+//        sectionService.set(courseId));
+//        courseService.update(ciu);
+
+        return "redirect:/course/" + courseUuid;
+    }
+
+
 
 
     @GetMapping("courses/add")
