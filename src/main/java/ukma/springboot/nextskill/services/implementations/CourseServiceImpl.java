@@ -73,6 +73,16 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public List<CourseResponse> getCoursesWhereStudent(UUID studentId) {
+        return null;
+    }
+
+    @Override
+    public List<CourseResponse> getCoursesWhereTeacher(UUID teacherId) {
+        return null;
+    }
+
+    @Override
     @Transactional
     public void enrollStudent(UUID courseId, UUID studentId) {
         CourseEntity courseEntity = courseRepository.findById(courseId)
@@ -115,7 +125,14 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Object isEnrolled(UUID courseUuid, UUID studentUuid) {
+    public boolean hasOwnerRights(UUID userUuid, UUID courseUuid) {
+        CourseEntity course = courseRepository.findById(courseUuid).orElseThrow(() -> new ResourceNotFoundException("Course", courseUuid));
+        UUID courseOwner = course.getTeacher().getUuid();
+        return courseOwner.equals(userUuid);
+    }
+
+    @Override
+    public boolean isEnrolled(UUID courseUuid, UUID studentUuid) {
         CourseEntity courseEntity = courseRepository.findById(courseUuid)
                 .orElseThrow(() -> new ResourceNotFoundException(COURSE, courseUuid));
         Hibernate.initialize(courseEntity.getStudents());

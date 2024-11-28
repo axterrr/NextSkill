@@ -9,6 +9,12 @@ import java.util.List;
 import java.util.UUID;
 
 public interface UserService extends GenericService<UserView, UserResponse> {
+    boolean isAdmin(UUID uuid);
+
+    boolean isTeacher(UUID uuid);
+
+    boolean isStudent(UUID uuid);
+
     UserEntity getUserByUsername(String username);
     UserResponse getAuthenticatedUser();
     List<CourseResponse> getCourses(UUID studentId);

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
 import ukma.springboot.nextskill.models.entities.UserEntity;
 import ukma.springboot.nextskill.models.mappers.CourseMapper;
+import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.mappers.UserMapper;
 import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
@@ -79,6 +80,24 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = userRepository.findById(teacherId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", teacherId));
         return userEntity.getOwnCourses().stream().map(CourseMapper::toCourseResponse).toList();
+    }
+
+    @Override
+    public boolean isAdmin(UUID uuid) {
+        UserEntity userEntity = userRepository.findById(uuid).orElseThrow(() -> new ResourceNotFoundException("User", uuid));
+        return userEntity.getRole() == (UserRole.ADMIN);
+    }
+
+    @Override
+    public boolean isTeacher(UUID uuid) {
+        UserEntity userEntity = userRepository.findById(uuid).orElseThrow(() -> new ResourceNotFoundException("User", uuid));
+        return userEntity.getRole() == (UserRole.STUDENT);
+    }
+
+    @Override
+    public boolean isStudent(UUID uuid) {
+        UserEntity userEntity = userRepository.findById(uuid).orElseThrow(() -> new ResourceNotFoundException("User", uuid));
+        return userEntity.getRole() == (UserRole.STUDENT);
     }
 
     @Override
