@@ -17,7 +17,9 @@
                 <button class="btn"></button>
                 <div th:if="${user.role.toString() == 'ADMIN' || user.role.toString() == 'TEACHER'}">
                     <button th:if="${user.role.toString() == 'TEACHER'}" class="btn btn-danger">Edit</button>
-                    <button class="btn btn-danger">Delete</button>
+                    <form th:action="@{'/course/' + ${course.uuid}}" method="POST" style="display: inline;">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
                 </div>
                 <div th:if="${user.role.toString() == 'STUDENT'}">
                     <button th:unless="${isEnrolled}" class="btn btn-danger">Enroll</button>
