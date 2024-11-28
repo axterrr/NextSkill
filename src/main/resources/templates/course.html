@@ -121,7 +121,6 @@
                                         <a class="fs-4 text-start" style="cursor: pointer; text-decoration: none;" th:if="${isEnrolled || isOwner || isAdmin}" th:text="${test.name}" th:href="@{'/test/' + ${test.uuid}}"></a>
                                         <div class="d-flex justify-content-end gap-2" th:if="${isAdmin || isOwner}">
                                             <div class="justify-content-end gap-1" style="display: none">
-                                                <a class="btn btn-primary" th:href="@{'/test/' + ${test.uuid} + '/edit'}">Edit</a>
                                                 <form th:action="'/test/' + ${test.uuid} + '/delete'" method="POST" style="display: inline;">
                                                     <button class="btn btn-danger">Delete</button>
                                                 </form>
@@ -134,7 +133,7 @@
                                 <div class="d-flex justify-content-between  align-items-center flex-wrap gap-3">
                                     <div class="d-flex gap-2 align-content-center" th:if="${isOwner}">
                                         <a class="btn btn-success" th:href="@{'/section/' + ${section.uuid} + '/addPost'}">Add New Post</a>
-                                        <a class="btn btn-success" th:href="@{'/section/' + ${section.uuid} + '/addTest'}">Add New Test</a>
+                                        <a class="btn btn-success" th:href="@{'/section/' + ${section.uuid} + '/create-test'}">Add New Test</a>
                                     </div>
                                     <div class="d-flex justify-content-end gap-2" th:if="${isAdmin || isOwner}">
                                         <div class="justify-content-end gap-1" style="display: none">
