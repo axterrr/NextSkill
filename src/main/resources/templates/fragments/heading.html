@@ -2,9 +2,9 @@
   <div class="fs-5 fw-bold">Welcome back, <span th:text="${user.name}">user</span></div>
 </div>
 <div class="col-auto justify-content-evenly d-flex">
-  <button class="btn">
-    <i class="fa-solid fa-gear" style="font-size: 1.2rem;"></i>
-  </button>
+  <a class="btn" href="/profile">
+    <i class="fa-solid fa-user" style="font-size: 1.2rem;"></i>
+  </a>
   <form action="/logout" method="GET" style="display: inline;">
     <button class="btn">
       <i class="fa-solid fa-right-from-bracket" style="font-size: 1.2rem;"></i>
