@@ -10,4 +10,6 @@ public interface TestService extends GenericService<TestView, TestResponse> {
     boolean hasOwnerRights(UUID userId, UUID testId);
     void checkTestAccess(UUID testUuid, UserResponse user);
     TestResponse getTestByAttempt(UUID attemptId);
+    void unhide(UUID testId);
+    void hide(UUID testId);
 }

@@ -71,7 +71,9 @@ public class TestServiceImpl implements TestService {
         TestEntity test = testRepository.findById(testUuid).orElseThrow(() -> new ResourceNotFoundException("Test", testUuid));
         CourseEntity course = test.getSection().getCourse();
 
-        if (course.getStudents().stream().noneMatch(stud -> stud.getUuid().equals(userId))) {
+        boolean isOwner = course.getTeacher().getUuid().equals(userId);
+
+        if (!isOwner && course.getStudents().stream().noneMatch(stud -> stud.getUuid().equals(userId))) {
             throw new NoAccessException("This user has no access to this test");
         }
     }
@@ -83,5 +85,21 @@ public class TestServiceImpl implements TestService {
         test.getQuestions().size();
         test.getQuestions().size();
         return TestMapper.toTestResponse(test);
+    }
+
+    @Override
+    public void hide(UUID testId) {
+        TestEntity test = testRepository.findById(testId)
+                .orElseThrow(() -> new ResourceNotFoundException("Test", testId));
+        test.setHidden(true);
+        testRepository.save(test);
+    }
+
+    @Override
+    public void unhide(UUID testId) {
+        TestEntity test = testRepository.findById(testId)
+                .orElseThrow(() -> new ResourceNotFoundException("Test", testId));
+        test.setHidden(false);
+        testRepository.save(test);
     }
 }

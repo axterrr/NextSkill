@@ -58,7 +58,7 @@ public class UserEntity {
     @Column(name = "password", nullable = false)
     private String passwordHash;
 
-    @OneToMany(mappedBy = "teacher")
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
     private List<CourseEntity> ownCourses;
 
     @ManyToMany
