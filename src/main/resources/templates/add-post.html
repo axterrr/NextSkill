@@ -21,7 +21,7 @@
 
       <div class="container-fluid">
         <!-- The form action now includes the sectionId -->
-        <form th:action="@{/section/{sectionId}/addPost(sectionId=${sectionId})}" method="post">
+        <form th:action="@{/post/add}" method="post">
           <div class="form-floating mb-3">
             <input type="text" id="name" class="form-control" name="name" required placeholder="Enter Post Name">
             <label for="name" class="form-label">Post Name:</label>
@@ -32,16 +32,9 @@
             <label for="content" class="form-label">Post Content:</label>
           </div>
 
-          <div class="form-check mb-3">
-            <label class="form-check-label" for="isHidden">
-              Hide Post
-            </label>
-            <input class="form-check-input" type="checkbox" id="isHidden" name="isHidden">
-          </div>
+          <input type="hidden" name="isHidden" value="false">
 
-          <!-- Hidden fields for sectionId and courseId -->
-          <input type="hidden" name="sectionId" th:value="${sectionId}" />
-          <input type="hidden" name="courseId" th:value="${courseId}" />
+          <input type="hidden" name="sectionId" th:value="${section.uuid}" />
 
           <button type="submit" class="btn btn-primary mt-3 w-100">Add Post</button>
         </form>
