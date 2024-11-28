@@ -30,7 +30,9 @@ public class TestController {
     @GetMapping("/test/{uuid}")
     public String testInfo(@PathVariable String uuid, Model model) {
         UserResponse authenticatedUser = userService.getAuthenticatedUser();
-        testService.checkTestAccess(UUID.fromString(uuid), authenticatedUser);
+        if (authenticatedUser.getRole() != UserRole.ADMIN){
+            testService.checkTestAccess(UUID.fromString(uuid), authenticatedUser);
+        }
 
         TestResponse test = testService.get(UUID.fromString(uuid));
         model.addAttribute("test", test);
@@ -166,8 +168,10 @@ public class TestController {
 
         UserResponse authenticated = userService.getAuthenticatedUser();
         boolean isOwner = testService.hasOwnerRights(authenticated.getUuid(), test.getUuid());
-        if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
-            return REDIRECT_TO_TEST + test.getUuid();
+        if (!attempt.getCompletedBy().getUuid().equals(authenticated.getUuid())) {
+            if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
+                return REDIRECT_TO_TEST + test.getUuid();
+        }
 
         List<UUID> answeredQuestions = attempt.getAnswers().stream()
                 .map(answer -> answer.getQuestion().getId()).toList();
@@ -190,6 +194,34 @@ public class TestController {
         model.addAttribute("attemptData", attempt);
 
         return "attempt-view";
+    }
+
+    @GetMapping("test/{testId}/all-attempts")
+    public String getAllAttempts(
+            @PathVariable(name = "testId") UUID testId,
+            Model model
+    ) {
+        UserResponse authenticated = userService.getAuthenticatedUser();
+        TestResponse testResponse = testService.get(testId);
+
+        if ( authenticated.getRole() != UserRole.ADMIN &&
+                !testResponse.getSection().getCourse().getTeacher().getUuid().equals(authenticated.getUuid())
+        ) {
+            return "redirect:/home";
+        }
+
+        model.addAttribute("attempts", testResponse.getAttempts());
+
+        return "all-attempts";
+    }
+
+    @PostMapping("/attempt/{attemptId}/delete")
+    public String deleteAttempt(
+            @PathVariable(name = "attemptId") UUID attemptId
+    ) {
+        TestResponse test = testService.getTestByAttempt(attemptId);
+        attemptService.delete(attemptId);
+        return "redirect:/test/" + test.getUuid() + "/all-attempts";
     }
 
     @PostMapping("test/create")

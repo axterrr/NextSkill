@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>All Attempts</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+<div class="container-fluid bg-secondary-subtle min-vh-100">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-8 min-vh-100 bg-body">
+
+      <!-- Heading -->
+      <div th:insert="~{fragments/heading.html}" th:with="user=${user}" class="row mt-3"></div>
+
+      <hr>
+
+      <!-- Inner container -->
+      <div class="container-fluid">
+
+        <div class="card mb-3">
+          <div class="card-body">
+            <div>
+              <span class="fs-4 bold me-1">My Attempts</span>
+              <span class="text-body-secondary fs-6" th:text="${#lists.size(myAttempts)}">not a lot</span>
+            </div>
+            <hr>
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>#</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="attempt, iterStat : ${attempts}">
+                <td th:text="${iterStat.count}">1</td>
+                <td th:text="${#temporals.format(attempt.startTime, 'dd MMM yyyy HH:mm')}">01 Jan 2023 10:00</td>
+                <td th:text="${#temporals.format(attempt.endTime, 'dd MMM yyyy HH:mm')}" th:if="${attempt.endTime != null}">
+                  01 Jan 2023 11:00
+                </td>
+                <td th:if="${attempt.endTime == null}">
+                  In Progress
+                </td>
+                <td th:text="${attempt.submitted ? 'Submitted' : 'Not Submitted'}"></td>
+                <td>
+                  <button
+                          class="btn btn-primary btn-sm"
+                          th:disabled="${!attempt.submitted}"
+                          th:attr="data-url='/attempts/' + ${attempt.uuid} + '/view'"
+                          onclick="visitLink(this)">
+                    View
+                  </button>
+
+                  <form th:action="@{'/attempt/' + ${attempt.uuid} + '/delete'}" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this attempt? This action cannot be undone.');">
+                    <button
+                            type="submit"
+                            class="btn btn-danger btn-sm ms-2">
+                      Delete
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://kit.fontawesome.com/2fd05f79b4.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+<script src="/scripts/test-info.js"></script>
+</body>
+</html>
