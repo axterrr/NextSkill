@@ -119,10 +119,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form th:action="@{/user/{uuid}/edit-description(uuid=${user.uuid})}" method="post">
-                    <div class="mb-3"><label for="description" class="form-label">Description</label> <textarea
-                            class="form-control" id="description" name="description"
-                            th:text="${user.description}"></textarea></div>
+                <form th:action="@{'/user/' + ${user.uuid} + '/update'}" method="post">
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" th:field="${user.description}"></textarea>
+                    </div>
                     <button type="submit" class="btn btn-primary">Save changes</button>
                 </form>
             </div>
@@ -137,17 +138,17 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form th:action="@{/user/{uuid}/edit-name(uuid=${user.uuid})}" method="post">
+                <form th:action="@{'/user/' + ${user.uuid} + '/update'}" method="post">
                     <div class="mb-3"><label for="name" class="form-label">Name</label> <input type="text"
                                                                                                class="form-control"
                                                                                                id="name" name="name"
-                                                                                               th:value="${user.name}">
+                                                                                               th:field="${user.name}">
                     </div>
                     <div class="mb-3"><label for="surname" class="form-label">Surname</label> <input type="text"
                                                                                                      class="form-control"
                                                                                                      id="surname"
                                                                                                      name="surname"
-                                                                                                     th:value="${user.surname}">
+                                                                                                     th:field="${user.surname}">
                     </div>
                     <button type="submit" class="btn btn-primary">Save changes</button>
                 </form>
@@ -163,12 +164,12 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form th:action="@{/user/{uuid}/edit-email(uuid=${user.uuid})}" method="post">
+                <form th:action="@{'/user/' + ${user.uuid} + '/update'}" method="post">
                     <div class="mb-3"><label for="email" class="form-label">E-mail</label> <input type="email"
                                                                                                   class="form-control"
                                                                                                   id="email"
                                                                                                   name="email"
-                                                                                                  th:value="${user.email}">
+                                                                                                  th:field="${user.email}">
                     </div>
                     <button type="submit" class="btn btn-primary">Save changes</button>
                 </form>
@@ -184,11 +185,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form th:action="@{/user/{uuid}/edit-phone(uuid=${user.uuid})}" method="post">
+                <form th:action="@{'/user/' + ${user.uuid} + '/update'}" method="post">
                     <input type="hidden" name="_method" value="put">
                     <div class="mb-3">
                         <label for="phone" class="form-label">Phone</label>
-                        <input type="tel" class="form-control" id="phone" name="phone" th:value="${user.phone}">
+                        <input type="tel" class="form-control" id="phone" name="phone" th:field="${user.phone}">
                     </div>
                     <button type="submit" class="btn btn-primary">Save changes</button>
                 </form>
