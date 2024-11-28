@@ -16,4 +16,6 @@ public interface TestAttemptService extends GenericService<TestAttemptView, Test
     void checkAttemptAccess(UUID attemptId, UserResponse authenticated);
 
     void submitAttempt(UUID attemptId);
+
+    void removeAllWithTest(UUID uuid);
 }

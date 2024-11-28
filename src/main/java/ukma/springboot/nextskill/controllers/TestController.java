@@ -18,7 +18,7 @@ import java.util.*;
 @AllArgsConstructor
 public class TestController {
 
-    private static final String REDIRECT_TO_TEST = "redirect:/test/";
+    public static final String REDIRECT_TO_TEST = "redirect:/test/";
     private QuestionAnswerService questionAnswerService;
     private TestService testService;
     private UserService userService;
@@ -269,5 +269,27 @@ public class TestController {
         testService.update(testView);
 
         return REDIRECT_TO_TEST + testId;
+    }
+
+    @GetMapping("/test/{testUuid}/manage-questions")
+    public String getQuestionsManageView(
+            @PathVariable(name = "testUuid") String testUuid,
+            Model model
+    ) {
+        UUID testId = UUID.fromString(testUuid);
+
+        UserResponse authenticated = userService.getAuthenticatedUser();
+        boolean isOwner = testService.hasOwnerRights(authenticated.getUuid(), testId);
+        if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
+            return REDIRECT_TO_TEST + testId;
+
+        TestResponse test = testService.get(testId);
+        List<QuestionResponse> questionResponses = test.getQuestions();
+
+        model.addAttribute("test", test);
+        model.addAttribute("questions", questionResponses);
+        model.addAttribute("user", authenticated);
+
+        return "manage-questions";
     }
 }

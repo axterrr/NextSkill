@@ -139,4 +139,9 @@ public class TestAttemptServiceImpl implements TestAttemptService {
 
         testAttemptRepository.save(attempt);
     }
+
+    @Override
+    public void removeAllWithTest(UUID uuid) {
+        testAttemptRepository.deleteAllByTestUuid(uuid);
+    }
 }

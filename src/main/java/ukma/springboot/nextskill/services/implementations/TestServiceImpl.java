@@ -96,6 +96,13 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
+    public TestResponse getTestByQuestion(UUID questionId) {
+        TestEntity test = testRepository.findByQuestionsId(questionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Test with question", questionId));
+        return TestMapper.toTestResponse(test);
+    }
+
+    @Override
     public void unhide(UUID testId) {
         TestEntity test = testRepository.findById(testId)
                 .orElseThrow(() -> new ResourceNotFoundException("Test", testId));

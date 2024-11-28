@@ -33,6 +33,7 @@ public class QuestionServiceImpl implements QuestionService {
     public QuestionResponse get(UUID id) {
         QuestionEntity questionEntity = questionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(QUESTION, id));
+        questionEntity.getQuestionOptions().size();
         return QuestionMapper.toQuestionResponse(questionEntity);
     }
 
@@ -71,5 +72,12 @@ public class QuestionServiceImpl implements QuestionService {
                     return QuestionMapper.toQuestionResponse(question);
                 })
                 .toList();
+    }
+
+    @Override
+    public QuestionResponse getQuestionByOption(UUID optionId) {
+        QuestionEntity questionEntity = questionRepository.findQuestionEntityByQuestionOptionsId(optionId)
+                .orElseThrow(() -> new ResourceNotFoundException(QUESTION, optionId));
+        return QuestionMapper.toQuestionResponse(questionEntity);
     }
 }

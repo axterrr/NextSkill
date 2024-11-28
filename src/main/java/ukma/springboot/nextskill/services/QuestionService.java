@@ -8,4 +8,6 @@ import java.util.UUID;
 
 public interface QuestionService extends GenericService<QuestionView, QuestionResponse> {
     List<QuestionResponse> getTestQuestions(UUID testId);
+
+    QuestionResponse getQuestionByOption(UUID optionId);
 }

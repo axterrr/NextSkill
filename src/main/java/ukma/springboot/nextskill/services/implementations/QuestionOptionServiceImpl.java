@@ -60,4 +60,21 @@ public class QuestionOptionServiceImpl implements QuestionOptionService {
         }
         questionOptionRepository.deleteById(id);
     }
+
+    @Override
+    public void setNewCorrect(UUID questionId, UUID optionId) {
+        QuestionOptionEntity questionOptionEntity = questionOptionRepository.findById(optionId)
+                .orElseThrow(() -> new ResourceNotFoundException(QUESTION_OPTION, optionId));
+
+        List<QuestionOptionEntity> allQuestionOptions =
+                questionOptionRepository.getQuestionOptionEntitiesByQuestionId(questionId);
+
+        for (QuestionOptionEntity option : allQuestionOptions) {
+            option.setCorrect(false);
+            questionOptionRepository.save(option);
+        }
+
+        questionOptionEntity.setCorrect(true);
+        questionOptionRepository.save(questionOptionEntity);
+    }
 }

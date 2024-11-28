@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Questions</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+<div class="container-fluid bg-secondary-subtle min-vh-100">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8 min-vh-100 bg-body">
+
+            <!-- Heading -->
+            <div th:insert="~{fragments/heading.html}" th:with="user=${user}" class="row mt-3"></div>
+
+            <hr>
+
+            <!-- Inner container -->
+            <div class="container-fluid">
+                <h2 class="display-6 text-center mb-4">Manage Test Questions</h2>
+
+                <!-- Test Title -->
+                <div class="row mb-4">
+                    <div class="col text-center">
+                        <h4 th:text="${test.name}"></h4>
+                    </div>
+                </div>
+
+                <!-- Questions Table -->
+                <div class="row">
+                    <div class="col">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Question Text</th>
+                                <th>Options</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="question, iterStat : ${questions}">
+                                <td th:text="${iterStat.index + 1}"></td>
+                                <td th:text="${question.questionText}"></td>
+                                <td>
+                                    <button class="btn"
+                                            th:attr="data-url='/question/' + ${question.id} + '/manage-options'"
+                                            onclick="visitLink(this)"
+                                    >Manage</button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" th:attr="data-bs-target='#editQuestionModal'+${question.id}">Edit</button>
+                                    <form th:action="@{/question/{question_id}/delete(question_id=${question.id})}" method="post">
+                                        <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                                    </form>
+                                    <div class="modal fade" th:id="editQuestionModal+${question.id}" tabindex="-1" aria-labelledby="editQuestionModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <form th:action="@{/question/{question_id}/edit(question_id=${question.id})}" method="post" th:object="${question}">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="editQuestionModalLabel">Edit Question</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <input type="hidden" name="id" th:value="*{id}">
+                                                        <div class="mb-3">
+                                                            <label for="questionText" class="form-label">Question Text</label>
+                                                            <input type="text" class="form-control" id="questionText" name="questionText" th:value="*{questionText}" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col text-center">
+                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addQuestionModal">Add Question</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Add Question Modal -->
+<div class="modal fade" id="addQuestionModal" tabindex="-1" aria-labelledby="addQuestionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form th:action="@{/question/add}" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addQuestionModalLabel">Add Question</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="testId" th:value="*{test.uuid}">
+                    <div class="mb-3">
+                        <label for="newQuestionText" class="form-label">Question Text</label>
+                        <input type="text" class="form-control" id="newQuestionText" name="questionText" placeholder="Enter question text" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success">Add Question</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://kit.fontawesome.com/2fd05f79b4.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="/scripts/test-info.js"></script>
+</body>
+</html>

@@ -8,4 +8,5 @@ import java.util.UUID;
 
 public interface TestRepository extends JpaRepository<TestEntity, UUID> {
     Optional<TestEntity> findTestEntityByAttemptsUuid(UUID attemptUuid);
+    Optional<TestEntity> findByQuestionsId(UUID questionsId);
 }

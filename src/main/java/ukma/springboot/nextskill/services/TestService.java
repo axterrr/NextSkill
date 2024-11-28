@@ -12,4 +12,5 @@ public interface TestService extends GenericService<TestView, TestResponse> {
     TestResponse getTestByAttempt(UUID attemptId);
     void unhide(UUID testId);
     void hide(UUID testId);
+    TestResponse getTestByQuestion(UUID questionId);
 }
