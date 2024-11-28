@@ -67,6 +67,7 @@ public class PostController {
 
         return "redirect:/post/" + res.getUuid();
     }
+
     @GetMapping("/post/{postId}")
     public String getPostById(@PathVariable UUID postId, Model model) {
         UserResponse authenticated = userService.getAuthenticatedUser();
@@ -75,7 +76,6 @@ public class PostController {
         model.addAttribute("post", postResponse);
         return "post";
     }
-
 
     @GetMapping("/post/{postUuid}/edit")
     public String getPostEditView(
@@ -97,6 +97,7 @@ public class PostController {
 
         return "edit-post";
     }
+
     @PostMapping("/post/{postUuid}/edit")
     public String addPostToSection(
             @PathVariable(name="postUuid") UUID postId,
