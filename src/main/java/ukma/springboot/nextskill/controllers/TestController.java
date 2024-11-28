@@ -24,6 +24,7 @@ public class TestController {
     private UserService userService;
     private TestAttemptService attemptService;
     private QuestionService questionService;
+    private SectionService sectionService;
 
     @GetMapping("/test/{uuid}")
     public String testInfo(@PathVariable String uuid, Model model) {
@@ -159,6 +160,14 @@ public class TestController {
         TestAttemptResponse attempt = attemptService.get(attemptId);
         if(!attempt.isSubmitted()) return "redirect:/home";
 
+        TestResponse test = testService.getTestByAttempt(attempt.getUuid());
+        List<QuestionResponse> questions = questionService.getTestQuestions(test.getUuid());
+
+        UserResponse authenticated = userService.getAuthenticatedUser();
+        boolean isOwner = testService.hasOwnerRights(authenticated.getUuid(), test.getUuid());
+        if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
+            return REDIRECT_TO_TEST + test.getUuid();
+
         List<UUID> answeredQuestions = attempt.getAnswers().stream()
                 .map(answer -> answer.getQuestion().getId()).toList();
         Map<UUID, QuestionOptionResponse> questionAnswerMap = new HashMap<>();
@@ -166,11 +175,6 @@ public class TestController {
         for (QuestionAnswerResponse answer : attempt.getAnswers()) {
             questionAnswerMap.put(answer.getQuestion().getId(), answer.getAnswerOption());
         }
-
-        TestResponse test = testService.getTestByAttempt(attempt.getUuid());
-        List<QuestionResponse> questions = questionService.getTestQuestions(test.getUuid());
-
-        UserResponse authenticated = userService.getAuthenticatedUser();
 
         model.addAttribute("answeredQuestions", answeredQuestions); //ids of questions that were answered
         model.addAttribute("questionAnswerMap", questionAnswerMap); //map question_id -> answered option
@@ -185,6 +189,31 @@ public class TestController {
         model.addAttribute("attemptData", attempt);
 
         return "attempt-view";
+    }
+
+    @PostMapping("test/create")
+    public String createTest(
+            @ModelAttribute TestView testView
+    ) {
+        SectionResponse associatedSection = sectionService.get(testView.getSectionId());
+        UserResponse authenticated = userService.getAuthenticatedUser();
+
+        if ( authenticated.getRole() != UserRole.ADMIN &&
+                !associatedSection.getCourse().getTeacher().getUuid().equals(authenticated.getUuid())
+        ) {
+            return "redirect:/home";
+        }
+
+        TestView view = TestView.builder()
+                .sectionId(testView.getSectionId())
+                .description(testView.getDescription())
+                .name(testView.getName())
+                .isHidden(testView.isHidden())
+                .build();
+
+        TestResponse res = testService.create(view);
+
+        return "redirect:/test/" + res.getUuid();
     }
 
     @PostMapping("/test/{testUuid}/delete")

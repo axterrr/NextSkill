@@ -57,4 +57,11 @@ public class SectionController {
         sectionService.delete(sectionUuid);
         return "redirect:/course/" + section.getCourse().getUuid() + "?section&deleted";
     }
+
+    @GetMapping("section/{sectionUuid}/create-test")
+    public String createTestInSection(@PathVariable UUID sectionUuid, Model model) {
+        model.addAttribute("user", userService.getAuthenticatedUser());
+        model.addAttribute("section", sectionService.get(sectionUuid));
+        return "add-test";
+    }
 }
