@@ -48,7 +48,7 @@ public class CoursesController {
         return "allCourses";
     }
 
-    @PostMapping("course/{courseUuid}")
+    @PostMapping("course/{courseUuid}/delete")
     public String deleteCourse(@PathVariable UUID courseUuid) {
         courseService.delete(courseUuid);
         return "redirect:/home?course&deleted";
