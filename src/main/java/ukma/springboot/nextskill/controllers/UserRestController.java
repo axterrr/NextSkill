@@ -30,15 +30,15 @@ public class UserRestController {
         UserEntity user = userService.getUserByUsername(username);
 
         if (user.getRole() == UserRole.TEACHER) {
-            List<CourseResponse> ownCourses = courseService.getCoursesWhereTeacher(user.getUuid());
+            List<CourseResponse> ownCourses = userService.getOwnCourses(user.getUuid());;
             List<CourseEntity> courseEntities = ownCourses.stream()
-                    .map(courseResponse -> CourseMapper.toCourseEntity(courseResponse)) // Мапінг CourseResponse -> CourseEntity
+                    .map(courseResponse -> CourseMapper.toCourseEntity(courseResponse))
                     .toList();
             user.setOwnCourses(courseEntities);
         } else if (user.getRole() == UserRole.STUDENT) {
-            List<CourseResponse> courses = courseService.getCoursesWhereStudent(user.getUuid());
+            List<CourseResponse> courses = userService.getCourses(user.getUuid());
             List<CourseEntity> courseEntities = courses.stream()
-                    .map(courseResponse -> CourseMapper.toCourseEntity(courseResponse)) // Мапінг CourseResponse -> CourseEntity
+                    .map(courseResponse -> CourseMapper.toCourseEntity(courseResponse))
                     .toList();
             user.setCourses(courseEntities);
         }
