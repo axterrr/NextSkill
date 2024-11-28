@@ -31,7 +31,7 @@
 
             <div class="container-fluid">
                 <h1 class="mb-4" th:text="'Edit Section ' + ${section.name}"></h1>
-                <form th:action="@{/course/{courseUuid}/edit(sectionUuid=${section.uuid})}" th:object="${section}" method="post">
+                <form th:action="@{'/section/' + ${section.uuid} + '\edit'}" th:object="${section}" method="post">
                     <div class="mb-4">
                         <button type="button" class="toggle me-3" onclick="toggleField(this, 'name')"><i class="fa-solid fa-pen"></i></button>
                         <label for="name" class="form-label">Section Name</label>
