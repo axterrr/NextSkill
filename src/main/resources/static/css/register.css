@@ -3,7 +3,7 @@ body {
     background-size: cover;
 }
 .container {
-    height: 100vh;
+    margin-top: 20px ;
 }
 .blurred-background {
     position: fixed;

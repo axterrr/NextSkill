@@ -1,5 +1,6 @@
 package ukma.springboot.nextskill.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class AuthController {
-
+    @Autowired
     private UserService userService;
 
     @GetMapping("login")
@@ -26,17 +27,17 @@ public class AuthController {
         return "login";
     }
 
+    @PostMapping("/register")
+    public String registerUser(@ModelAttribute UserView userView) {
+        userService.create(userView);
+        return "redirect:/home";
+    }
 
-//        @PostMapping("/register")
-//        public ResponseEntity<UserResponse> registerUser (@RequestBody UserView userView){
-//            UserResponse newUser = userService.create(userView);
-//            return ResponseEntity.status(201).body(newUser);
-//        }
 
-        @GetMapping("register")
-        public String register() {
+    @GetMapping("register")
+    public String register() {
 
-            return "register";
-        }
+        return "register";
+    }
 
 }
