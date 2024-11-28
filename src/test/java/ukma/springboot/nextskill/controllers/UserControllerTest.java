@@ -2,95 +2,93 @@ package ukma.springboot.nextskill.controllers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import ukma.springboot.nextskill.dto.UserDto;
-import ukma.springboot.nextskill.model.mappers.UserMapper;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.ui.Model;
+import ukma.springboot.nextskill.models.responses.UserResponse;
+import ukma.springboot.nextskill.models.views.UserView;
 import ukma.springboot.nextskill.services.UserService;
 
-import java.util.Collections;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.times;
-
-
-@SpringBootTest
-@AutoConfigureMockMvc
 class UserControllerTest {
 
-    @Autowired
-    private UserController userController;
-
-    @MockBean
+    @Mock
     private UserService userService;
 
-    private MockMvc mockMvc;
+    @Mock
+    private Model model;
+
+    @InjectMocks
+    private UserController userController;
+
+    private UserResponse mockUser;
+    private UUID mockUserId;
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
+        MockitoAnnotations.openMocks(this);
+        mockUserId = UUID.randomUUID();
+        mockUser = UserResponse.builder()
+                .uuid(mockUserId)
+                .name("Test User")
+                .email("test@example.com")
+                .build();
     }
 
     @Test
-    @WithMockUser(username = "test_user", roles = "ADMIN")
-    void getAllUsers_shouldReturnAllUsers() throws Exception {
-        UserDto testUser = new UserDto();
-        testUser.setUuid(UUID.randomUUID());
-        testUser.setUsername("test_user");
-        testUser.setName("Test");
-        testUser.setSurname("User");
-        testUser.setEmail("test@gmail.com");
-        testUser.setDescription("Test Description");
+    void testProfile() {
+        when(userService.getAuthenticatedUser()).thenReturn(mockUser);
+        when(userService.getWithCourses(mockUserId)).thenReturn(mockUser);
 
-        when(userService.getAllUsers()).thenReturn(Collections.singletonList(UserMapper.toUser(testUser)));
+        String viewName = userController.profile(model);
 
-        mockMvc.perform(get("/api/user/all"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].username").value("test_user"))
-                .andExpect(jsonPath("$[0].name").value("Test"))
-                .andExpect(jsonPath("$[0].surname").value("User"));
-
-        verify(userService, times(1)).getAllUsers();
+        verify(userService).getAuthenticatedUser();
+        verify(userService).getWithCourses(mockUserId);
+        verify(model).addAttribute("currentUser", mockUser);
+        verify(model).addAttribute("user", mockUser);
+        assertEquals("profile", viewName, "The returned view name should be 'profile'");
     }
 
+    @Test
+    void testGetUser() {
+        when(userService.get(mockUserId)).thenReturn(mockUser);
+        when(userService.getAuthenticatedUser()).thenReturn(mockUser);
+        when(userService.getWithCourses(mockUserId)).thenReturn(mockUser);
+
+        String viewName = userController.getUser(mockUserId, model);
+
+        verify(userService).get(mockUserId);
+        verify(userService).getAuthenticatedUser();
+        verify(userService).getWithCourses(mockUserId);
+        verify(model).addAttribute("currentUser", mockUser);
+        verify(model).addAttribute("user", mockUser);
+        assertEquals("profile", viewName, "The returned view name should be 'profile'");
+    }
 
     @Test
-    @WithMockUser(username = "test_user", roles = "ADMIN")
-    void addUser_shouldCreateUser() {
-        UserDto testUser = new UserDto();
-        testUser.setUuid(UUID.randomUUID());
-        testUser.setUsername("test_user");
-        testUser.setName("Test");
-        testUser.setSurname("User");
-        testUser.setEmail("test@gmail.com");
-        testUser.setDescription("Test Description");
+    void testUpdateUser() {
+        UserView userView = UserView.builder()
+                .uuid(mockUserId)
+                .name("Updated User")
+                .email("updated@example.com")
+                .build();
 
-        when(userService.createUser(any())).thenReturn(UserMapper.toUser(testUser));
+        String viewName = userController.updateUser(mockUserId, userView);
 
-        ResponseEntity<UserDto> response = userController.addUser(testUser);
+        verify(userService).update(userView);
+        assertEquals("redirect:/profile", viewName, "The returned view name should redirect to '/profile'");
+    }
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getUsername()).isEqualTo("test_user");
-        assertThat(response.getBody().getName()).isEqualTo("Test");
-        assertThat(response.getBody().getSurname()).isEqualTo("User");
+    @Test
+    void testDeleteUser() {
+        String viewName = userController.deleteUser(mockUserId);
 
-        verify(userService, times(1)).createUser(any());
+        verify(userService).delete(mockUserId);
+        assertEquals("redirect:/home?user&deleted", viewName, "The returned view name should redirect to '/home?user&deleted'");
     }
 }

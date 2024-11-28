@@ -2,8 +2,6 @@ plugins {
     java
     id("org.springframework.boot") version "3.3.3"
     id("io.spring.dependency-management") version "1.1.6"
-    id("org.springdoc.openapi-gradle-plugin") version "1.9.0"
-    id("maven-publish")
 }
 
 group = "ukma.springboot"
@@ -17,55 +15,29 @@ java {
 
 repositories {
     mavenCentral()
-    maven {
-        url = uri("https://maven.pkg.github.com/r-rin/spring-boot-nextskill-aws-s3-starter")
-        credentials {
-            username = System.getenv("STARTER_TOKEN")
-            password = ""
-        }
-    }
 }
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-    implementation("org.springframework.boot:spring-boot-devtools")
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
-    //implementation("com.github.r-rin.nextskill.s3starter:spring-boot-nextskill-aws-s3-starter:1.0.1")
-    implementation("org.springframework.boot:spring-boot-starter-security:3.3.4")
-    implementation("org.springframework.security:spring-security-config:6.3.3")
-    implementation("io.jsonwebtoken:jjwt-api:0.12.6")
-    implementation("io.jsonwebtoken:jjwt-impl:0.12.6")
-    implementation("org.apache.logging.log4j:log4j-core")
-    implementation("org.apache.logging.log4j:log4j-api")
-    implementation("org.springframework.boot:spring-boot-starter-log4j2:3.3.4")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+
+    //Security
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("com.auth0:java-jwt:4.4.0")
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
-    implementation("org.springframework.boot:spring-boot-starter-cache:3.3.5")
-
-    compileOnly("org.projectlombok:lombok:1.18.34")
-    annotationProcessor("org.projectlombok:lombok:1.18.34")
-    annotationProcessor("org.apache.logging.log4j:log4j-core:2.20.0")
-
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework:spring-test")
-    testImplementation ("com.jayway.jsonpath:json-path")
-    testImplementation ("org.mockito:mockito-core")
-    testImplementation ("org.mockito:mockito-junit-jupiter")
-    testImplementation ("org.springframework.security:spring-security-test")
-
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     runtimeOnly("com.h2database:h2")
-    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
+    compileOnly("org.projectlombok:lombok:1.18.34")
+    annotationProcessor("org.projectlombok:lombok:1.18.34")
 
-    modules {
-        module("org.springframework.boot:spring-boot-starter-logging") {
-            replacedBy("org.springframework.boot:spring-boot-starter-log4j2", "Use Log4j2 instead of Logback")
-        }
-    }
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    // Hot reload
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
 }
 
 tasks.withType<Test> {

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+<div class="container-fluid bg-secondary-subtle min-vh-100">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8 min-vh-100 bg-body">
+
+            <!-- Heading -->
+
+            <div th:insert="~{fragments/heading.html}" th:with="user=${user}" class="row mt-3"></div>
+
+            <hr>
+
+            <div th:if="${param.course} and ${param.deleted}" class="alert alert-info">
+                The course has been successfully deleted.
+            </div>
+            <div th:if="${param.user} and ${param.deleted}" class="alert alert-info">
+                The user has been successfully deleted.
+            </div>
+            <div th:if="${param.course} and ${param.added}" class="alert alert-info">
+                The course has been successfully created.
+            </div>
+
+            <!-- Inner container -->
+            <div class="container-fluid">
+                <h2 class="display-6 text-center mb-4">My Courses</h2>
+
+                <!-- Filters -->
+                <div class="row g-3 mb-3">
+                    <div class="col-12 col-md-4">
+                        <input type="text" id="search" class="form-control" placeholder="Search by course name">
+                    </div>
+                    <!--<div class="col-12 col-md-4">
+                        <select id="filter-date" class="form-select">
+                            <option value="">All Dates</option>
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <select id="filter-popularity" class="form-select">
+                            <option value="">All Popularities</option>
+                            <option value="most">Most Popular</option>
+                            <option value="least">Least Popular</option>
+                        </select>
+                    </div>-->
+                    <div class="col-12 col-md-4">
+                        <select id="filter-sort" class="form-select">
+                            <option value="newest" selected>Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                            <option value="most-popular">Most Popular</option>
+                            <option value="least-popular">Least Popular</option>
+                            <option value="by-name">By Name</option>
+                        </select>
+                    </div>
+                    <div th:if="${user.role.toString()=='TEACHER'}" class="col12 col-md-4">
+                        <a class="btn btn-success w-100" th:href="@{'/course/add'}">Add New Course</a>
+                    </div>
+                </div>
+
+                <!-- Courses -->
+                <div id="courses-container" class="row row-cols-3 g-3 mb-3"></div>
+
+                <!-- Pagination -->
+                <nav>
+                    <ul id="pagination" class="pagination justify-content-center"></ul>
+                </nav>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="https://kit.fontawesome.com/2fd05f79b4.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="/scripts/home.js"></script>
+</body>
+</html>

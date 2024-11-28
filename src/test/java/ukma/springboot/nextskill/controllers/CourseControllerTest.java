@@ -1,136 +1,99 @@
 package ukma.springboot.nextskill.controllers;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import ukma.springboot.nextskill.dto.CourseDto;
-
-import ukma.springboot.nextskill.dto.UserDto;
-import ukma.springboot.nextskill.model.Course;
-import ukma.springboot.nextskill.model.User;
-import ukma.springboot.nextskill.model.mappers.CourseMapper;
-import ukma.springboot.nextskill.model.mappers.UserMapper;
-import ukma.springboot.nextskill.security.JwtAuthFilter;
-import ukma.springboot.nextskill.security.JwtService;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.ui.Model;
+import ukma.springboot.nextskill.models.responses.CourseResponse;
+import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.services.CourseService;
+import ukma.springboot.nextskill.services.SectionService;
+import ukma.springboot.nextskill.services.UserService;
 
-import java.util.Collections;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
-@AutoConfigureMockMvc(addFilters = false)
-@WebMvcTest(CourseController.class)
-public class CourseControllerTest {
+class CourseControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Mock
+    private UserService userService;
 
-    @MockBean
+    @Mock
     private CourseService courseService;
 
-    @MockBean
-    private JwtService jwtService;
+    @Mock
+    private SectionService sectionService;
 
-    @MockBean
-    private JwtAuthFilter jwtAuthFilter;
+    @Mock
+    private Model model;
 
-    @Test
-    public void testGetAllCourses() throws Exception {
-        when(courseService.getAllCourses()).thenReturn(Collections.emptyList());
+    @InjectMocks
+    private CoursesController coursesController;
 
-        mockMvc.perform(get("/api/course/all"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$").isEmpty());
+    private UserResponse mockUser;
+    private CourseResponse mockCourse;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+
+        // Setup mock data
+        mockUser = UserResponse.builder()
+                .uuid(UUID.randomUUID())
+                .username("test_user")
+                .build();
+
+        mockCourse = CourseResponse.builder()
+                .uuid(UUID.randomUUID())
+                .name("Test Course")
+                .description("Test Description")
+                .createdAt(LocalDateTime.now())
+                .teacher(mockUser)
+                .students(List.of(mockUser))
+                .build();
     }
 
     @Test
-    public void testGetCourseById() throws Exception {
-        UUID courseId = UUID.randomUUID();
+    void testHome() {
+        when(userService.getAuthenticatedUser()).thenReturn(mockUser);
 
-        CourseDto courseDto = new CourseDto();
-        courseDto.setUuid(courseId);
-        courseDto.setName("Test Course");
+        String viewName = coursesController.home(model);
 
-        when(courseService.getCourse(courseId)).thenReturn(CourseMapper.toCourse(courseDto));
+        verify(userService).getAuthenticatedUser();
+        verify(model).addAttribute("user", mockUser);
 
-        mockMvc.perform(get("/api/course/{id}", courseId))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.uuid").value(courseId.toString()))
-                .andExpect(jsonPath("$.name").value("Test Course"));
+        assertEquals("home", viewName, "The returned view name should be 'home'");
     }
 
     @Test
-    public void testCreateCourse() throws Exception {
-        UserDto teacherDto = new UserDto();
-        teacherDto.setUuid(UUID.randomUUID());
-        teacherDto.setName("Teacher Name");
+    void testEnroll() {
+        UUID courseUuid = mockCourse.getUuid();
+        when(userService.getAuthenticatedUser()).thenReturn(mockUser);
 
-        User teacher = UserMapper.toUser(teacherDto);
+        String viewName = coursesController.enroll(courseUuid, model);
 
-        Course course = new Course();
-        course.setUuid(UUID.randomUUID());
-        course.setName("New Course");
-        course.setDescription("Description of course");
-        course.setTeacher(teacher);
+        verify(userService).getAuthenticatedUser();
+        verify(courseService).enrollStudent(courseUuid, mockUser.getUuid());
 
-        when(courseService.createCourse(any(Course.class))).thenReturn(course);
-
-        String jsonContent = "{ " +
-                "\"name\":\"New Course\", " +
-                "\"description\":\"Description of course\", " +
-                "\"teacher\":{\"uuid\":\"" + teacher.getUuid() + "\", \"name\":\"" + teacher.getName() + "\"}" +
-                "}";
-
-        mockMvc.perform(post("/api/course/create")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonContent))
-                .andExpect(status().isCreated());
+        assertEquals("redirect:/course/" + courseUuid + "?enrolled", viewName, "The returned view should redirect to the course page with enrolled query.");
     }
 
     @Test
-    public void testUpdateCourse() throws Exception {
-        UUID courseId = UUID.randomUUID();
+    void testUnroll() {
+        UUID courseUuid = mockCourse.getUuid();
+        when(userService.getAuthenticatedUser()).thenReturn(mockUser);
 
-        CourseDto updatedCourse = new CourseDto();
-        updatedCourse.setUuid(courseId);
-        updatedCourse.setName("Updated Course");
-        updatedCourse.setDescription("Updated course description");
-        updatedCourse.setTeacher(new UserDto());
+        String viewName = coursesController.unroll(courseUuid, model);
 
-        when(courseService.updateCourse(eq(courseId), any(Course.class))).thenReturn(CourseMapper.toCourse(updatedCourse));
+        verify(userService).getAuthenticatedUser();
+        verify(courseService).unrollStudent(courseUuid, mockUser.getUuid());
 
-        mockMvc.perform(put("/api/course/{id}", courseId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Updated Course\", \"description\":\"Updated course description\", \"teacher\":{\"uuid\":\"" + updatedCourse.getTeacher().getUuid() + "\"}}"))
-                .andExpect(status().isNoContent());
-    }
-
-    @Test
-    public void testDeleteCourse() throws Exception {
-        UUID courseId = UUID.randomUUID();
-
-        mockMvc.perform(delete("/api/course/{id}", courseId))
-                .andExpect(status().isNoContent());
-    }
-
-    @Test
-    public void testEnrollUserToCourse() throws Exception {
-        UUID courseId = UUID.randomUUID();
-        UUID userId = UUID.randomUUID();
-
-        mockMvc.perform(post("/api/course/{courseId}/enroll/{userId}", courseId, userId))
-                .andExpect(status().isOk());
+        assertEquals("redirect:/course/" + courseUuid + "?unrolled", viewName, "The returned view should redirect to the course page with unrolled query.");
     }
 }

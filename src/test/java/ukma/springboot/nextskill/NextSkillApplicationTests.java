@@ -8,6 +8,7 @@ class NextSkillApplicationTests {
 
     @Test
     void contextLoads() {
+        // Checks
     }
 
 }

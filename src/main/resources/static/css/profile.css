@@ -1,0 +1,18 @@
+.profile-header {
+    margin-top: 20px;
+}
+
+.profile-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.media {
+    display: flex;
+    align-items: center;
+}
+
+.media a {
+    height: 30px;
+    max-height: 35px;
+}

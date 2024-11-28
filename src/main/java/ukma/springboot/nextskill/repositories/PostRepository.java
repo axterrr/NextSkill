@@ -1,14 +1,12 @@
 package ukma.springboot.nextskill.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ukma.springboot.nextskill.entities.PostEntity;
+import org.springframework.stereotype.Repository;
+import ukma.springboot.nextskill.models.entities.PostEntity;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public interface PostRepository extends JpaRepository<PostEntity, UUID> {
-    List<PostEntity> findByTitle(String title);
 
-    List<PostEntity> findAll();
 }

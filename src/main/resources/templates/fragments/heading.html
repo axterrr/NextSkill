@@ -1,0 +1,20 @@
+<div class="d-flex justify-content-between align-self-center">
+  <div class="col align-content-center ps-4 d-flex gap-2 align-items-center">
+    <div class="fs-5 fw-bold me-3">NextSkill</div>
+    <div>
+      <a class="btn" href="/all-courses">All Courses</a>
+      <a th:if="${user.role.toString() == 'TEACHER' || user.role.toString() == 'STUDENT'}" class="btn" href="/home">Home</a>
+    </div>
+  </div>
+  <div class="col-auto justify-content-evenly d-flex align-items-center">
+    <div class="fs-5 fw-bold align-self-center">Logged in as <span th:text="${user.username}">user</span></div>
+    <a class="btn" href="/profile">
+      <i class="fa-solid fa-user" style="font-size: 1.2rem;"></i>
+    </a>
+    <form action="/logout" method="GET" style="display: inline;">
+      <button class="btn">
+        <i class="fa-solid fa-right-from-bracket" style="font-size: 1.2rem;"></i>
+      </button>
+    </form>
+  </div>
+</div>

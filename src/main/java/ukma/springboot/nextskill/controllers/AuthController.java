@@ -1,46 +1,44 @@
 package ukma.springboot.nextskill.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import ukma.springboot.nextskill.services.UserService;
+import ukma.springboot.nextskill.models.views.UserView;
 import org.springframework.web.bind.annotation.*;
-import ukma.springboot.nextskill.dto.LoginUserDto;
-import ukma.springboot.nextskill.dto.RegisterUserDto;
-import ukma.springboot.nextskill.entities.UserEntity;
-import ukma.springboot.nextskill.model.User;
-import ukma.springboot.nextskill.model.mappers.UserMapper;
-import ukma.springboot.nextskill.services.AuthService;
 
-@RestController
-@RequestMapping("/auth")
+@Controller
+@AllArgsConstructor
 public class AuthController {
 
-    private AuthService authService;
+    private UserService userService;
 
-    @Autowired
-    public AuthController(AuthService authenticationService) {
-        this.authService = authenticationService;
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginUserDto loginUserDto) {
-        return authService.authenticateUser(loginUserDto);
-    }
-
-    @GetMapping("/me")
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<User> authenticatedUser() {
+    @GetMapping("login")
+    public String login() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        User currentUser = UserMapper.toUser((UserEntity) authentication.getPrincipal());
-
-        return ResponseEntity.ok(currentUser);
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            return "redirect:/home";
+        }
+        return "login";
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterUserDto registerUserDto) {
-        return authService.registerUser(registerUserDto);
+    public String registerUser(@ModelAttribute UserView userView) {
+        userService.create(userView);
+        return "redirect:/login";
     }
+
+    @GetMapping("register")
+    public String register() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            return "redirect:/home";
+        }
+        return "register";
+    }
+
 }
