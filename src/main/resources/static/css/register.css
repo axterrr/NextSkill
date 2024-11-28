@@ -15,14 +15,8 @@ body {
     backdrop-filter: blur(10px);
     z-index: -1;
 }
-.register-container {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+
 .register-card {
-    padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     background-color: #ffffffee;

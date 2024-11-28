@@ -172,41 +172,24 @@ public String editCourse(
         return ResponseEntity.ok("Section added successfully!");
     }
 
-    @GetMapping("/course/{courseUuid}/edit")
-    public String editCourseSection(
-            @PathVariable(name = "courseUuid") String courseUuid,
-            Model model
-    ) {
-        UUID courseId = UUID.fromString(courseUuid);
 
-        UserResponse authenticated = userService.getAuthenticatedUser();
-        boolean isOwner = courseService.hasOwnerRights(authenticated.getUuid(), courseId);
-        if(!isOwner && !userService.isAdmin(authenticated.getUuid()))
-            return "redirect:/course/" + courseUuid;
-
-        model.addAttribute("course", courseService.get(courseId));
-        model.addAttribute("user", authenticated);
-
-        return "edit-course";
-    }
-
-    @PostMapping("/course/{courseUuid}/edit")
-    public String editCourseSection(
-            @PathVariable(name = "courseUuid") String courseUuid,
-            @ModelAttribute TestView testView
-    ) {
-        UUID courseId = UUID.fromString(courseUuid);
-
-        UserResponse authenticated = userService.getAuthenticatedUser();
-        boolean isOwner = courseService.hasOwnerRights(authenticated.getUuid(), courseId);
-        if (!isOwner && !userService.isAdmin(authenticated.getUuid()))
-            return "redirect:/course/"  + courseUuid;
-
-//        sectionService.set(courseId));
-//        courseService.update(ciu);
-
-        return "redirect:/course/" + courseUuid;
-    }
+//    @PostMapping("/course/{courseUuid}/edit")
+//    public String editCourseSection(
+//            @PathVariable(name = "courseUuid") String courseUuid,
+//            @ModelAttribute TestView testView
+//    ) {
+//        UUID courseId = UUID.fromString(courseUuid);
+//
+//        UserResponse authenticated = userService.getAuthenticatedUser();
+//        boolean isOwner = courseService.hasOwnerRights(authenticated.getUuid(), courseId);
+//        if (!isOwner && !userService.isAdmin(authenticated.getUuid()))
+//            return "redirect:/course/"  + courseUuid;
+//
+////        sectionService.set(courseId));
+////        courseService.update(ciu);
+//
+//        return "redirect:/course/" + courseUuid;
+//    }
 
 
 
