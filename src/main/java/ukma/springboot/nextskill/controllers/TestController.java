@@ -198,9 +198,10 @@ public class TestController {
         if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
             return REDIRECT_TO_TEST + testId;
 
+        UUID courseId = testService.get(testId).getSection().getCourse().getUuid();
         testService.delete(testId);
 
-        return "redirect:/home";
+        return "redirect:/course/" + courseId + "?test&deleted";
     }
 
     @PostMapping("/test/{testUuid}/hide")

@@ -17,6 +17,23 @@
 
             <hr>
 
+            <div th:if="${param.section} and ${param.added}" class="alert alert-info">
+                The section has been successfully created.
+            </div>
+            <div th:if="${param.section} and ${param.deleted}" class="alert alert-info">
+                The section has been successfully deleted.
+            </div>
+            <div th:if="${param.section} and ${param.updated}" class="alert alert-info">
+                The section has been successfully updated.
+            </div>
+
+            <div th:if="${param.post} and ${param.deleted}" class="alert alert-info">
+                The post has been successfully deleted.
+            </div>
+            <div th:if="${param.test} and ${param.deleted}" class="alert alert-info">
+                The test has been successfully deleted.
+            </div>
+
             <!-- Inner container -->
             <div class="container-fluid d-flex flex-column justify-content-center">
                 <!-- Image div -->
@@ -37,7 +54,9 @@
                             <div id="settings-buttons" class="w-100 flex-wrap gap-2 justify-content-end" th:if="${isAdmin || isOwner}" style="display:none;">
                                 <a class="btn btn-success" th:href="@{'/course/' + ${course.uuid} + '/enrolledStudents'}">Enrolled Students</a>
                                 <a class="btn btn-primary" th:href="@{'/course/' + ${course.uuid} + '/edit'}">Edit Course</a>
-                                <button class="btn btn-danger" th:href="@{'/course/' + ${course.uuid} + '/delete'}">Delete Course</button>
+                                <form th:action="'/course/' + ${course.uuid} + '/delete'" method="POST" style="display: inline;">
+                                    <button class="btn btn-danger">Delete Course</button>
+                                </form>
                             </div>
                         </div>
                         <div class="d-flex flex-column justify-content-start" th:if="${isStudent}">
@@ -80,7 +99,9 @@
                                         <div class="d-flex justify-content-end gap-2" th:if="${isAdmin || isOwner}">
                                             <div class="justify-content-end gap-1" style="display: none">
                                                 <a class="btn btn-primary" th:href="@{'/post/' + ${post.uuid} + '/edit'}">Edit</a>
-                                                <a class="btn btn-danger" th:href="@{'/post/' + ${post.uuid} + '/delete'}">Delete</a>
+                                                <form th:action="'/post/' + ${post.uuid} + '/delete'" method="POST" style="display: inline;">
+                                                    <button class="btn btn-danger">Delete</button>
+                                                </form>
                                             </div>
                                             <button class="btn btn-secondary" onclick="toggleSectionSettings(this)">Settings <i class="fa-solid fa-gear" style="font-size: 1.2rem;" aria-hidden="true"></i></button>
                                         </div>
@@ -94,7 +115,9 @@
                                         <div class="d-flex justify-content-end gap-2" th:if="${isAdmin || isOwner}">
                                             <div class="justify-content-end gap-1" style="display: none">
                                                 <a class="btn btn-primary" th:href="@{'/test/' + ${test.uuid} + '/edit'}">Edit</a>
-                                                <a class="btn btn-danger" th:href="@{'/test/' + ${test.uuid} + '/delete'}">Delete</a>
+                                                <form th:action="'/test/' + ${test.uuid} + '/delete'" method="POST" style="display: inline;">
+                                                    <button class="btn btn-danger">Delete</button>
+                                                </form>
                                             </div>
                                             <button class="btn btn-secondary" onclick="toggleSectionSettings(this)">Settings <i class="fa-solid fa-gear" style="font-size: 1.2rem;" aria-hidden="true"></i></button>
                                         </div>
@@ -109,7 +132,9 @@
                                     <div class="d-flex justify-content-end gap-2" th:if="${isAdmin || isOwner}">
                                         <div class="justify-content-end gap-1" style="display: none">
                                             <a class="btn btn-primary" th:href="@{'/section/' + ${section.uuid} + '/edit'}">Edit Section</a>
-                                            <a class="btn btn-danger" th:href="@{'/section/' + ${section.uuid} + '/delete'}">Delete Section</a>
+                                            <form th:action="'/section/' + ${section.uuid} + '/delete'" method="POST" style="display: inline;">
+                                                <button class="btn btn-danger">Delete Section</button>
+                                            </form>
                                         </div>
                                         <button class="btn btn-secondary" onclick="toggleSectionSettings(this)">Settings <i class="fa-solid fa-gear" style="font-size: 1.2rem;" aria-hidden="true"></i></button>
                                     </div>

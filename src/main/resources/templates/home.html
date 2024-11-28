@@ -20,6 +20,12 @@
             <div th:if="${param.course} and ${param.deleted}" class="alert alert-info">
                 The course has been successfully deleted.
             </div>
+            <div th:if="${param.user} and ${param.deleted}" class="alert alert-info">
+                The user has been successfully deleted.
+            </div>
+            <div th:if="${param.course} and ${param.added}" class="alert alert-info">
+                The course has been successfully created.
+            </div>
 
             <!-- Inner container -->
             <div class="container-fluid">
@@ -30,7 +36,7 @@
                     <div class="col-12 col-md-4">
                         <input type="text" id="search" class="form-control" placeholder="Search by course name">
                     </div>
-                    <div class="col-12 col-md-4">
+                    <!--<div class="col-12 col-md-4">
                         <select id="filter-date" class="form-select">
                             <option value="">All Dates</option>
                             <option value="newest">Newest First</option>
@@ -42,6 +48,15 @@
                             <option value="">All Popularities</option>
                             <option value="most">Most Popular</option>
                             <option value="least">Least Popular</option>
+                        </select>
+                    </div>-->
+                    <div class="col-12 col-md-4">
+                        <select id="filter-sort" class="form-select">
+                            <option value="newest" selected>Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                            <option value="most-popular">Most Popular</option>
+                            <option value="least-popular">Least Popular</option>
+                            <option value="by-name">By Name</option>
                         </select>
                     </div>
                 </div>

@@ -94,7 +94,6 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    @Transactional
     public CourseResponse getWithUsers(UUID id) {
         CourseEntity courseEntity = courseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(COURSE, id));
@@ -103,7 +102,6 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    @Transactional
     public CourseResponse getWithSectionsWithPostsAndTests(UUID id) {
         CourseEntity courseEntity = courseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(COURSE, id));
@@ -115,7 +113,6 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    @Transactional
     public List<CourseResponse> getAllWithUsers() {
         List<CourseEntity> courses = courseRepository.findAll();
         courses.forEach(course -> Hibernate.initialize(course.getStudents()));
@@ -126,7 +123,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public boolean hasOwnerRights(UUID userUuid, UUID courseUuid) {
-        CourseEntity course = courseRepository.findById(courseUuid).orElseThrow(() -> new ResourceNotFoundException("Course", courseUuid));
+        CourseEntity course = courseRepository.findById(courseUuid)
+                .orElseThrow(() -> new ResourceNotFoundException(COURSE, courseUuid));
         UUID courseOwner = course.getTeacher().getUuid();
         return courseOwner.equals(userUuid);
     }
