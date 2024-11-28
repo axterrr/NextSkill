@@ -5,12 +5,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ukma.springboot.nextskill.exceptions.MaxAttemptsException;
+import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.responses.*;
+import ukma.springboot.nextskill.models.views.TestView;
 import ukma.springboot.nextskill.services.*;
 
 import java.util.*;
@@ -186,5 +185,89 @@ public class TestController {
         model.addAttribute("attemptData", attempt);
 
         return "attempt-view";
+    }
+
+    @PostMapping("/test/{testUuid}/delete")
+    public String deleteTest(
+            @PathVariable(name = "testUuid") String testUuid
+    ) {
+        UUID testId = UUID.fromString(testUuid);
+
+        UserResponse authenticated = userService.getAuthenticatedUser();
+        boolean isOwner = testService.hasOwnerRights(authenticated.getUuid(), testId);
+        if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
+            return REDIRECT_TO_TEST + testId;
+
+        testService.delete(testId);
+
+        return "redirect:/home";
+    }
+
+    @PostMapping("/test/{testUuid}/hide")
+    public String hideTest(
+            @PathVariable(name = "testUuid") String testUuid
+    ) {
+        UUID testId = UUID.fromString(testUuid);
+
+        UserResponse authenticated = userService.getAuthenticatedUser();
+        boolean isOwner = testService.hasOwnerRights(authenticated.getUuid(), testId);
+        if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
+            return REDIRECT_TO_TEST + testId;
+
+        testService.hide(testId);
+
+        return REDIRECT_TO_TEST + testId;
+    }
+
+    @PostMapping("/test/{testUuid}/unhide")
+    public String unhideTest(
+            @PathVariable(name = "testUuid") String testUuid
+    ) {
+        UUID testId = UUID.fromString(testUuid);
+
+        UserResponse authenticated = userService.getAuthenticatedUser();
+        boolean isOwner = testService.hasOwnerRights(authenticated.getUuid(), testId);
+        if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
+            return REDIRECT_TO_TEST + testId;
+
+        testService.unhide(testId);
+
+        return REDIRECT_TO_TEST + testId;
+    }
+
+    @GetMapping("/test/{testUuid}/edit")
+    public String getEditTest(
+            @PathVariable(name = "testUuid") String testUuid,
+            Model model
+    ) {
+        UUID testId = UUID.fromString(testUuid);
+
+        UserResponse authenticated = userService.getAuthenticatedUser();
+        boolean isOwner = testService.hasOwnerRights(authenticated.getUuid(), testId);
+        if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
+            return REDIRECT_TO_TEST + testId;
+
+        model.addAttribute("test", testService.get(testId));
+        model.addAttribute("user", authenticated);
+
+        return "edit-test";
+    }
+
+    @PostMapping("/test/{testUuid}/edit")
+    public String postEditTest(
+            @PathVariable(name = "testUuid") String testUuid,
+            @ModelAttribute TestView testView
+    ) {
+        UUID testId = UUID.fromString(testUuid);
+
+        UserResponse authenticated = userService.getAuthenticatedUser();
+        boolean isOwner = testService.hasOwnerRights(authenticated.getUuid(), testId);
+        if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
+            return REDIRECT_TO_TEST + testId;
+
+        testView.setUuid(testId);
+        testService.update(testView);
+
+        return REDIRECT_TO_TEST + testId;
     }
 }

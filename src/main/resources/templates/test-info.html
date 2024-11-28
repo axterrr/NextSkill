@@ -33,7 +33,7 @@
                             <button type="submit" class="btn btn-secondary mx-1" th:if="${test.isHidden}"><i class="fa-solid fa-eye-slash"></i></button>
                         </form>
 
-                        <button th:attr="data-url='/test/' + ${test.uuid} + '/manage'"
+                        <button th:attr="data-url='/test/' + ${test.uuid} + '/edit'"
                                 onclick="visitLink(this)"
                                 class="btn btn-primary mx-1"
                         ><i class="fa-solid fa-pen"></i></button>
