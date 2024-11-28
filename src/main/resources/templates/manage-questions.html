@@ -43,7 +43,7 @@
                                 <td th:text="${iterStat.index + 1}"></td>
                                 <td th:text="${question.questionText}"></td>
                                 <td>
-                                    <button class="btn"
+                                    <button class="btn btn-primary"
                                             th:attr="data-url='/question/' + ${question.id} + '/manage-options'"
                                             onclick="visitLink(this)"
                                     >Manage</button>
