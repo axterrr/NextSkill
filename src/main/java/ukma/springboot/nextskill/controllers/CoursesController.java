@@ -61,6 +61,19 @@ public class CoursesController {
         return "enrolledStudents";
     }
 
+    @GetMapping("course/{courseUuid}/unroll/{studentUuid}")
+    public String unroll(@PathVariable UUID courseUuid, @PathVariable UUID studentUuid, Model model) {
+        UserResponse authenticated = userService.getAuthenticatedUser();
+        boolean isOwner = courseService.hasOwnerRights(authenticated.getUuid(), courseUuid);
+        if(!isOwner && userService.isAdmin(authenticated.getUuid()))
+            return "redirect:/course/" + courseUuid;
+
+        courseService.unrollStudent(courseUuid, studentUuid);
+        model.addAttribute(COURSE, courseService.getWithUsers(courseUuid));
+        model.addAttribute("user", authenticated);
+        return "redirect:/course/" + courseUuid + "/enrolledStudents?unrolled";
+    }
+
     @GetMapping("course/{courseUuid}/enroll")
     public String enroll(@PathVariable UUID courseUuid, Model model) {
         UserResponse user = userService.getAuthenticatedUser();
