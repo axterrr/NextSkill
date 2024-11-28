@@ -17,6 +17,10 @@
 
             <hr>
 
+            <div th:if="${param.section} and ${param.added}" class="alert alert-info">
+                The section has been successfully created.
+            </div>
+
             <!-- Inner container -->
             <div class="container-fluid d-flex flex-column justify-content-center">
                 <!-- Image div -->
