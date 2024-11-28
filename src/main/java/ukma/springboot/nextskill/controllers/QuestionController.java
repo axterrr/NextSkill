@@ -20,7 +20,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class QuestionController {
 
-    private static final String MANAGE_QUESTION = "/manage-question";
+    private static final String MANAGE_QUESTION = "/manage-questions";
     private TestService testService;
     private UserService userService;
     private QuestionService questionService;
