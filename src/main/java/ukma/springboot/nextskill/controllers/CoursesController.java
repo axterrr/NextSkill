@@ -61,20 +61,35 @@ public class CoursesController {
         return "enrolledStudents";
     }
 
+    @GetMapping("course/{courseUuid}/unroll/{studentUuid}")
+    public String unroll(@PathVariable UUID courseUuid, @PathVariable UUID studentUuid, Model model) {
+        UserResponse authenticated = userService.getAuthenticatedUser();
+        boolean isOwner = courseService.hasOwnerRights(authenticated.getUuid(), courseUuid);
+        if(!isOwner && userService.isAdmin(authenticated.getUuid()))
+            return "redirect:/course/" + courseUuid;
+
+        courseService.unrollStudent(courseUuid, studentUuid);
+        model.addAttribute(COURSE, courseService.getWithUsers(courseUuid));
+        model.addAttribute("user", authenticated);
+        return "redirect:/course/" + courseUuid + "/enrolledStudents?unrolled";
+    }
+
     @GetMapping("course/{courseUuid}/enroll")
     public String enroll(@PathVariable UUID courseUuid, Model model) {
+        UserResponse user = userService.getAuthenticatedUser();
+        courseService.enrollStudent(courseUuid, user.getUuid());
         model.addAttribute(COURSE, courseService.getWithUsers(courseUuid));
-        courseService.enrollStudent(courseUuid, userService.getAuthenticatedUser().getUuid());
-        model.addAttribute("user", userService.getAuthenticatedUser());
-        return "redirect:/course?enrolled";
+        model.addAttribute("user", user);
+        return "redirect:/course/" + courseUuid + "?enrolled";
     }
 
     @GetMapping("course/{courseUuid}/unroll")
     public String unroll(@PathVariable UUID courseUuid, Model model) {
+        UserResponse user = userService.getAuthenticatedUser();
+        courseService.unrollStudent(courseUuid, user.getUuid());
         model.addAttribute(COURSE, courseService.getWithUsers(courseUuid));
-        courseService.unrollStudent(courseUuid, userService.getAuthenticatedUser().getUuid());
-        model.addAttribute("user", userService.getAuthenticatedUser());
-        return "redirect:/course?unrolled";
+        model.addAttribute("user", user);
+        return "redirect:/course/" + courseUuid + "?unrolled";
     }
 
     @GetMapping("/all-courses")

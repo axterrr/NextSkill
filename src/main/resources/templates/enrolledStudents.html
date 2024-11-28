@@ -17,6 +17,10 @@
 
             <hr>
 
+            <div th:if="${param.unrolled}" class="alert alert-info">
+                Student has been successfully unrolled from this course.
+            </div>
+
             <!-- Inner container -->
             <div class="container-fluid">
                 <h2 class="display-6 text-center mb-4">Enrolled Students</h2>
@@ -49,7 +53,7 @@
                                 <td th:text="${student.email}">Email</td>
                                 <td th:text="${student.email}">Phone</td>
                                 <td th:if="${user.role.toString() == 'ADMIN' || user.role.toString() == 'TEACHER'}">
-                                    <button class="btn btn-danger">Delete</button>
+                                    <a class="btn btn-danger" th:href="@{'/course/'+${course.uuid}+'/unroll/'+${student.uuid}}">Delete</a>
                                 </td>
                             </tr>
                         </tbody>
