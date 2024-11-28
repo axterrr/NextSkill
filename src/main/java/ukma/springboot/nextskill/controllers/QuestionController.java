@@ -20,6 +20,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class QuestionController {
 
+    private static final String MANAGE_QUESTION = "/manage-question";
     private TestService testService;
     private UserService userService;
     private QuestionService questionService;
@@ -39,7 +40,7 @@ public class QuestionController {
         attemptService.removeAllWithTest(associatedTest.getUuid());
         questionService.delete(questionId);
 
-        return TestController.REDIRECT_TO_TEST + associatedTest.getUuid() + "/manage-questions";
+        return TestController.REDIRECT_TO_TEST + associatedTest.getUuid() + MANAGE_QUESTION;
     }
 
     @PostMapping("/question/{questionUuid}/edit")
@@ -57,7 +58,7 @@ public class QuestionController {
 
         questionService.update(questionView);
 
-        return TestController.REDIRECT_TO_TEST + associatedTest.getUuid() + "/manage-questions";
+        return TestController.REDIRECT_TO_TEST + associatedTest.getUuid() + MANAGE_QUESTION;
     }
 
     @PostMapping("/question/add")
@@ -78,7 +79,7 @@ public class QuestionController {
 
         questionService.create(view);
 
-        return TestController.REDIRECT_TO_TEST + associatedTest.getUuid() + "/manage-questions";
+        return TestController.REDIRECT_TO_TEST + associatedTest.getUuid() + MANAGE_QUESTION;
     }
 
     @GetMapping("/question/{questionUuid}/manage-options")

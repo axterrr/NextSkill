@@ -113,7 +113,7 @@ public class NextSkillApplication implements CommandLineRunner {
         CourseResponse createdCourse1 = courseService.create(course1);
         CourseResponse createdCourse2 = courseService.create(course2);
         CourseResponse createdCourse3 = courseService.create(course3);
-        CourseResponse createdCourse4 = courseService.create(course4);
+        courseService.create(course4);
 
         courseService.enrollStudent(createdCourse1.getUuid(), createdStudent.getUuid());
         courseService.enrollStudent(createdCourse1.getUuid(), createdAdmin.getUuid());
@@ -227,8 +227,5 @@ public class NextSkillApplication implements CommandLineRunner {
         postService.create(post1);
         postService.create(post2);
         postService.create(post3);
-
-        // для дебагу щоб поставити брейкпойнт
-        System.out.println();
     }
 }
