@@ -33,7 +33,7 @@ public class QuestionServiceImpl implements QuestionService {
     public QuestionResponse get(UUID id) {
         QuestionEntity questionEntity = questionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(QUESTION, id));
-        questionEntity.getQuestionOptions().size();
+        Hibernate.initialize(questionEntity.getQuestionOptions());
         return QuestionMapper.toQuestionResponse(questionEntity);
     }
 

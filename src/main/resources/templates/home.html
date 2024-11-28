@@ -59,6 +59,9 @@
                             <option value="by-name">By Name</option>
                         </select>
                     </div>
+                    <div th:if="${user.role.toString()=='TEACHER'}" class="col12 col-md-4">
+                        <a class="btn btn-success w-100" th:href="@{'/course/add'}">Add New Course</a>
+                    </div>
                 </div>
 
                 <!-- Courses -->

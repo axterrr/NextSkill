@@ -19,6 +19,7 @@ import java.util.*;
 public class TestController {
 
     public static final String REDIRECT_TO_TEST = "redirect:/test/";
+    private static final String QUESTIONS = "questions";
     private QuestionAnswerService questionAnswerService;
     private TestService testService;
     private UserService userService;
@@ -97,7 +98,7 @@ public class TestController {
 
         model.addAttribute("user", authenticated);
         model.addAttribute("answers", answeredOptions);
-        model.addAttribute("questions", questions);
+        model.addAttribute(QUESTIONS, questions);
         model.addAttribute("testUuid", testUuid);
         model.addAttribute("attemptId", attemptUuid);
 
@@ -178,7 +179,7 @@ public class TestController {
 
         model.addAttribute("answeredQuestions", answeredQuestions); //ids of questions that were answered
         model.addAttribute("questionAnswerMap", questionAnswerMap); //map question_id -> answered option
-        model.addAttribute("questions", questions); //Just questions.
+        model.addAttribute(QUESTIONS, questions); //Just questions.
         model.addAttribute("user", authenticated);
 
         StringBuilder score = new StringBuilder()
@@ -213,7 +214,7 @@ public class TestController {
 
         TestResponse res = testService.create(view);
 
-        return "redirect:/test/" + res.getUuid();
+        return REDIRECT_TO_TEST + res.getUuid();
     }
 
     @PostMapping("/test/{testUuid}/delete")
@@ -317,7 +318,7 @@ public class TestController {
         List<QuestionResponse> questionResponses = test.getQuestions();
 
         model.addAttribute("test", test);
-        model.addAttribute("questions", questionResponses);
+        model.addAttribute(QUESTIONS, questionResponses);
         model.addAttribute("user", authenticated);
 
         return "manage-questions";

@@ -20,6 +20,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class OptionController {
 
+    private static final String REDIRECT_TO_QUESTION = "redirect:/question/";
+    private static final String MANAGE_OPTIONS = "/manage-options";
     private QuestionService questionService;
     private QuestionOptionService optionService;
     private UserService userService;
@@ -57,12 +59,12 @@ public class OptionController {
         UserResponse authenticated = userService.getAuthenticatedUser();
         boolean isOwner = testService.hasOwnerRights(authenticated.getUuid(), associatedTest.getUuid());
         if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
-            return "redirect:/question/"+ associatedQuestion.getId() + "/manage-options";
+            return REDIRECT_TO_QUESTION+ associatedQuestion.getId() + MANAGE_OPTIONS;
 
         attemptService.removeAllWithTest(associatedTest.getUuid());
         optionService.delete(optionId);
 
-        return "redirect:/question/"+ associatedQuestion.getId() + "/manage-options";
+        return REDIRECT_TO_QUESTION+ associatedQuestion.getId() + MANAGE_OPTIONS;
     }
 
     @PostMapping("/option/{optionUuid}/edit")
@@ -78,14 +80,14 @@ public class OptionController {
         UserResponse authenticated = userService.getAuthenticatedUser();
         boolean isOwner = testService.hasOwnerRights(authenticated.getUuid(), associatedTest.getUuid());
         if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
-            return "redirect:/question/"+ associatedQuestion.getId() + "/manage-options";
+            return REDIRECT_TO_QUESTION+ associatedQuestion.getId() + MANAGE_OPTIONS;
 
         QuestionOptionResponse res = optionService.update(optionView);
         if (optionView.isCorrect()) {
             optionService.setNewCorrect(associatedQuestion.getId(), res.getId());
         }
 
-        return "redirect:/question/"+ associatedQuestion.getId() + "/manage-options";
+        return REDIRECT_TO_QUESTION+ associatedQuestion.getId() + MANAGE_OPTIONS;
     }
 
     @PostMapping("/option/add")
@@ -97,7 +99,7 @@ public class OptionController {
         UserResponse authenticated = userService.getAuthenticatedUser();
         boolean isOwner = testService.hasOwnerRights(authenticated.getUuid(), associatedTest.getUuid());
         if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
-            return "redirect:/question/"+ optionView.getQuestionId() + "/manage-options";
+            return REDIRECT_TO_QUESTION+ optionView.getQuestionId() + MANAGE_OPTIONS;
 
         QuestionOptionView view = QuestionOptionView.builder()
                 .questionId(optionView.getQuestionId())
@@ -110,6 +112,6 @@ public class OptionController {
             optionService.setNewCorrect(optionView.getQuestionId(), res.getId());
         }
 
-        return "redirect:/question/"+ optionView.getQuestionId() + "/manage-options";
+        return REDIRECT_TO_QUESTION+ optionView.getQuestionId() + MANAGE_OPTIONS;
     }
 }
