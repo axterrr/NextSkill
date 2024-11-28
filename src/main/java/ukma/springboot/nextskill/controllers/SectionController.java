@@ -21,6 +21,7 @@ import java.util.UUID;
 public class SectionController {
 
     private static final String REDIRECT_TO_COURSE = "redirect:/course/";
+    private static final String SECTION = "section";
     private SectionService sectionService;
     private UserService userService;
     private CourseService courseService;
@@ -28,7 +29,7 @@ public class SectionController {
     @GetMapping("section/{sectionUuid}/edit")
     public String editSection(@PathVariable UUID sectionUuid, Model model) {
         model.addAttribute("user", userService.getAuthenticatedUser());
-        model.addAttribute("section", sectionService.get(sectionUuid));
+        model.addAttribute(SECTION, sectionService.get(sectionUuid));
         return "edit-section";
     }
 
@@ -62,14 +63,14 @@ public class SectionController {
     @GetMapping("section/{sectionUuid}/create-test")
     public String createTestInSection(@PathVariable UUID sectionUuid, Model model) {
         model.addAttribute("user", userService.getAuthenticatedUser());
-        model.addAttribute("section", sectionService.get(sectionUuid));
+        model.addAttribute(SECTION, sectionService.get(sectionUuid));
         return "add-test";
     }
 
     @GetMapping("section/{sectionUuid}/create-post")
     public String createPostInSection(@PathVariable UUID sectionUuid, Model model) {
         model.addAttribute("user", userService.getAuthenticatedUser());
-        model.addAttribute("section", sectionService.get(sectionUuid));
+        model.addAttribute(SECTION, sectionService.get(sectionUuid));
         return "add-post";
     }
 }

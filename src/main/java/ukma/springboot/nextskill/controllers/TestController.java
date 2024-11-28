@@ -19,6 +19,7 @@ import java.util.*;
 public class TestController {
 
     public static final String REDIRECT_TO_TEST = "redirect:/test/";
+    private static final String REDIRECT_TO_HOME = "redirect:/home";
     private static final String QUESTIONS = "questions";
     private QuestionAnswerService questionAnswerService;
     private TestService testService;
@@ -161,15 +162,15 @@ public class TestController {
     ) {
         UUID attemptId = UUID.fromString(attemptUuid);
         TestAttemptResponse attempt = attemptService.get(attemptId);
-        if(!attempt.isSubmitted()) return "redirect:/home";
+        if(!attempt.isSubmitted()) return REDIRECT_TO_HOME;
 
         TestResponse test = testService.getTestByAttempt(attempt.getUuid());
         List<QuestionResponse> questions = questionService.getTestQuestions(test.getUuid());
 
         UserResponse authenticated = userService.getAuthenticatedUser();
         boolean isOwner = testService.hasOwnerRights(authenticated.getUuid(), test.getUuid());
-        if (!attempt.getCompletedBy().getUuid().equals(authenticated.getUuid())) {
-            if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
+        if (!attempt.getCompletedBy().getUuid().equals(authenticated.getUuid())
+            && !isOwner && authenticated.getRole() != UserRole.ADMIN) {
                 return REDIRECT_TO_TEST + test.getUuid();
         }
 
@@ -207,7 +208,7 @@ public class TestController {
         if ( authenticated.getRole() != UserRole.ADMIN &&
                 !testResponse.getSection().getCourse().getTeacher().getUuid().equals(authenticated.getUuid())
         ) {
-            return "redirect:/home";
+            return REDIRECT_TO_HOME;
         }
 
         model.addAttribute("user", authenticated);
@@ -222,7 +223,7 @@ public class TestController {
     ) {
         TestResponse test = testService.getTestByAttempt(attemptId);
         attemptService.delete(attemptId);
-        return "redirect:/test/" + test.getUuid() + "/all-attempts";
+        return REDIRECT_TO_TEST + test.getUuid() + "/all-attempts";
     }
 
     @PostMapping("test/create")
@@ -235,7 +236,7 @@ public class TestController {
         if ( authenticated.getRole() != UserRole.ADMIN &&
                 !associatedSection.getCourse().getTeacher().getUuid().equals(authenticated.getUuid())
         ) {
-            return "redirect:/home";
+            return REDIRECT_TO_HOME;
         }
 
         TestView view = TestView.builder()
