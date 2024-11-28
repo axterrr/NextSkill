@@ -141,5 +141,17 @@ public class CourseServiceImpl implements CourseService {
         return (courseEntity.getStudents().contains(userEntity));
     }
 
+    @Override
+    public void unrollStudent(UUID courseUuid, UUID studentUuid) {
+        CourseEntity courseEntity = courseRepository.findById(courseUuid)
+                .orElseThrow(() -> new ResourceNotFoundException(COURSE, courseUuid));
+        UserEntity userEntity = userRepository.findById(studentUuid)
+                .orElseThrow(() -> new ResourceNotFoundException("User", studentUuid));
+        if (isEnrolled(courseUuid, studentUuid))
+            courseEntity.getStudents().remove(userEntity);
+        else throw new IllegalArgumentException("User is not enrolled to course");
+        courseRepository.save(courseEntity);
+    }
+
 
 }

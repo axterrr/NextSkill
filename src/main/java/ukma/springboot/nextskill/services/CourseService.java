@@ -17,4 +17,6 @@ public interface CourseService extends GenericService<CourseView, CourseResponse
 
 
     boolean isEnrolled(UUID courseUuid, UUID studentUuid);
+
+    void unrollStudent(UUID courseUuid, UUID studentUuid);
 }

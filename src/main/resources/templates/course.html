@@ -25,22 +25,24 @@
                 </div>
 
                 <!-- Info section -->
-                <div class="p-4 rounded">
+                <div class="p-4 rounded position-relative">
                     <div class="rounded d-flex justify-content-between align-items-top flex-wrap">
-                        <h2 class="display-6 fw-semibold text-start mb-4" th:text="${course.name}"></h2>
-                        <div class="d-flex flex-column justify-content-start gap-3" th:if="${isAdmin || isOwner}">
-                            <div class="d-flex justify-content-end">
+                        <div class="m-0 p-0">
+                            <h2 class="display-6 fw-semibold text-start mb-4" th:text="${course.name}"></h2>
+                        </div>
+                        <div class="w-100 d-flex flex-column justify-content-start gap-3 mb-4" th:if="${isAdmin || isOwner}">
+                            <div class="d-flex justify-content-end position-absolute top-0 end-0 m-2 p-4">
                                 <button class="btn btn-secondary" onclick="toggleSettings()">Settings <i class="fa-solid fa-gear" style="font-size: 1.2rem;" aria-hidden="true"></i></button>
                             </div>
-                            <div id="settings-buttons" class="gap-2" th:if="${isAdmin || isOwner}" style="display:none;">
-                                <button class="btn btn-success" onclick="window.location.href='/course/' + [[${course.uuid}]] + '/enrolledStudents'">Enrolled Students</button>
-                                <button class="btn btn-primary">Edit Course</button>
-                                <button class="btn btn-danger">Delete Course</button>
+                            <div id="settings-buttons" class="w-100 flex-wrap gap-2 justify-content-end" th:if="${isAdmin || isOwner}" style="display:none;">
+                                <a class="btn btn-success" th:href="@{'/course/' + ${course.uuid} + '/enrolledStudents'}">Enrolled Students</a>
+                                <a class="btn btn-primary" th:href="@{'/course/' + ${course.uuid} + '/edit'}">Edit Course</a>
+                                <button class="btn btn-danger" th:href="@{'/course/' + ${course.uuid} + '/delete'}">Delete Course</button>
                             </div>
                         </div>
                         <div class="d-flex flex-column justify-content-start" th:if="${isStudent}">
-                            <button th:unless="${isEnrolled}" class="btn btn-success">Enroll</button>
-                            <button th:if="${isEnrolled}" class="btn btn-danger">Unroll</button>
+                            <a th:unless="${isEnrolled}" class="btn btn-success" th:href="@{'/course/' + ${course.uuid} + '/enroll'}">Enroll</a>
+                            <a th:if="${isEnrolled}" class="btn btn-danger" th:href="@{'/course/' + ${course.uuid} + '/unroll'}">Unroll</a>
                         </div>
                     </div>
                     <div class="mb-3">
@@ -77,8 +79,8 @@
                                         <a class="fs-4 text-start" style="cursor: pointer; text-decoration: none;" th:if="${isEnrolled || isOwner || isAdmin}" th:text="${post.name}" th:href="@{'/post/' + ${post.uuid}}"></a>
                                         <div class="d-flex justify-content-end gap-2" th:if="${isAdmin || isOwner}">
                                             <div class="justify-content-end gap-1" style="display: none">
-                                                <button class="btn btn-primary">Edit</button>
-                                                <button class="btn btn-danger">Delete</button>
+                                                <a class="btn btn-primary" th:href="@{'/post/' + ${post.uuid} + '/edit'}">Edit</a>
+                                                <a class="btn btn-danger" th:href="@{'/post/' + ${post.uuid} + '/delete'}">Delete</a>
                                             </div>
                                             <button class="btn btn-secondary" onclick="toggleSectionSettings(this)">Settings <i class="fa-solid fa-gear" style="font-size: 1.2rem;" aria-hidden="true"></i></button>
                                         </div>
@@ -91,23 +93,23 @@
                                         <a class="fs-4 text-start" style="cursor: pointer; text-decoration: none;" th:if="${isEnrolled || isOwner || isAdmin}" th:text="${test.name}" th:href="@{'/test/' + ${test.uuid}}"></a>
                                         <div class="d-flex justify-content-end gap-2" th:if="${isAdmin || isOwner}">
                                             <div class="justify-content-end gap-1" style="display: none">
-                                                <button class="btn btn-primary">Edit</button>
-                                                <button class="btn btn-danger">Delete</button>
+                                                <a class="btn btn-primary" th:href="@{'/test/' + ${test.uuid} + '/edit'}">Edit</a>
+                                                <a class="btn btn-danger" th:href="@{'/test/' + ${test.uuid} + '/delete'}">Delete</a>
                                             </div>
                                             <button class="btn btn-secondary" onclick="toggleSectionSettings(this)">Settings <i class="fa-solid fa-gear" style="font-size: 1.2rem;" aria-hidden="true"></i></button>
                                         </div>
                                     </div>
                                     <hr>
                                 </div>
-                                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                                <div class="d-flex justify-content-between  align-items-center flex-wrap gap-3">
                                     <div class="d-flex gap-2 align-content-center" th:if="${isOwner}">
-                                        <button class="btn btn-success ms-4">Add New Post</button>
-                                        <button class="btn btn-success">Add New Test</button>
+                                        <a class="btn btn-success" th:href="@{'/section/' + ${section.uuid} + '/addPost'}">Add New Post</a>
+                                        <a class="btn btn-success" th:href="@{'/section/' + ${section.uuid} + '/addTest'}">Add New Test</a>
                                     </div>
                                     <div class="d-flex justify-content-end gap-2" th:if="${isAdmin || isOwner}">
                                         <div class="justify-content-end gap-1" style="display: none">
-                                            <button class="btn btn-primary">Edit Section</button>
-                                            <button class="btn btn-danger">Delete Section</button>
+                                            <a class="btn btn-primary" th:href="@{'/section/' + ${section.uuid} + '/edit'}">Edit Section</a>
+                                            <a class="btn btn-danger" th:href="@{'/section/' + ${section.uuid} + '/delete'}">Delete Section</a>
                                         </div>
                                         <button class="btn btn-secondary" onclick="toggleSectionSettings(this)">Settings <i class="fa-solid fa-gear" style="font-size: 1.2rem;" aria-hidden="true"></i></button>
                                     </div>
@@ -115,7 +117,7 @@
                             </div>
                         </div>
                         <div th:if="${isOwner}">
-                            <button class="btn btn-success">Add New Section</button>
+                            <a class="btn btn-success" th:href="@{'/course/' + ${course.uuid} + '/addSection'}">Add New Section</a>
                         </div>
                     </div>
                 </div>

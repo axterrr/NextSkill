@@ -104,9 +104,16 @@ public class NextSkillApplication implements CommandLineRunner {
                 .teacherId(createdNewTeacher.getUuid())
                 .build();
 
+        CourseView course4 = CourseView.builder()
+                .name("Introduction")
+                .description("Learn the basics of Artificial Intelligence and its applications.")
+                .teacherId(createdNewTeacher.getUuid())
+                .build();
+
         CourseResponse createdCourse1 = courseService.create(course1);
         CourseResponse createdCourse2 = courseService.create(course2);
         CourseResponse createdCourse3 = courseService.create(course3);
+        CourseResponse createdCourse4 = courseService.create(course4);
 
         courseService.enrollStudent(createdCourse1.getUuid(), createdStudent.getUuid());
         courseService.enrollStudent(createdCourse1.getUuid(), createdAdmin.getUuid());

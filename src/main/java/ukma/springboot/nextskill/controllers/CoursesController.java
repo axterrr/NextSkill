@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.services.CourseService;
 import ukma.springboot.nextskill.services.UserService;
@@ -30,8 +31,22 @@ public class CoursesController {
     public String course(@PathVariable UUID courseUuid, Model model) {
         UserResponse user = userService.getAuthenticatedUser();
         model.addAttribute(COURSE, courseService.getWithSectionsWithPostsAndTests(courseUuid));
+
+        CourseResponse course = courseService.getWithSectionsWithPostsAndTests(courseUuid);
+
+        boolean hasOwnerRights = courseService.hasOwnerRights(user.getUuid(), courseUuid);
+        boolean isEnrolled = courseService.isEnrolled(courseUuid, user.getUuid());
+        boolean isAdmin = userService.isAdmin(user.getUuid());
+        boolean isStudent = userService.isStudent(user.getUuid());
+
+        model.addAttribute("isOwner", hasOwnerRights);
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("isStudent", isStudent);
+        model.addAttribute("isEnrolled", isEnrolled);
+
+        model.addAttribute("course", course);
         model.addAttribute("user", user);
-        model.addAttribute("isEnrolled", courseService.isEnrolled(courseUuid, user.getUuid()));
+
         return COURSE;
     }
 
@@ -40,6 +55,22 @@ public class CoursesController {
         model.addAttribute(COURSE, courseService.getWithUsers(courseUuid));
         model.addAttribute("user", userService.getAuthenticatedUser());
         return "enrolledStudents";
+    }
+
+    @GetMapping("course/{courseUuid}/enroll")
+    public String enroll(@PathVariable UUID courseUuid, Model model) {
+        model.addAttribute(COURSE, courseService.getWithUsers(courseUuid));
+        courseService.enrollStudent(courseUuid, userService.getAuthenticatedUser().getUuid());
+        model.addAttribute("user", userService.getAuthenticatedUser());
+        return "redirect:/course?enrolled";
+    }
+
+    @GetMapping("course/{courseUuid}/unroll")
+    public String unroll(@PathVariable UUID courseUuid, Model model) {
+        model.addAttribute(COURSE, courseService.getWithUsers(courseUuid));
+        courseService.unrollStudent(courseUuid, userService.getAuthenticatedUser().getUuid());
+        model.addAttribute("user", userService.getAuthenticatedUser());
+        return "redirect:/course?unrolled";
     }
 
     @GetMapping("/all-courses")
@@ -52,5 +83,11 @@ public class CoursesController {
     public String deleteCourse(@PathVariable UUID courseUuid) {
         courseService.delete(courseUuid);
         return "redirect:/home?course&deleted";
+    }
+
+    @PostMapping("course/{courseUuid}/edit")
+    public String editCourse(@PathVariable UUID courseUuid) {
+        //courseService.update(courseUuid);
+        return "redirect:/course?course&updated";
     }
 }
