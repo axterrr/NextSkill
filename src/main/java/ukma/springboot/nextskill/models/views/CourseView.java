@@ -1,4 +1,4 @@
-package ukma.springboot.nextskill.course.data;
+package ukma.springboot.nextskill.models.views;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

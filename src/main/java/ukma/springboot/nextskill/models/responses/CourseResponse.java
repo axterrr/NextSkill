@@ -1,11 +1,9 @@
-package ukma.springboot.nextskill.course.data;
+package ukma.springboot.nextskill.models.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ukma.springboot.nextskill.models.responses.SectionResponse;
-import ukma.springboot.nextskill.models.responses.UserResponse;
 
 import java.time.LocalDateTime;
 import java.util.List;

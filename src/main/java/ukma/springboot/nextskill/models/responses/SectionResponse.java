@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ukma.springboot.nextskill.course.data.CourseResponse;
 
 import java.util.List;
 import java.util.UUID;

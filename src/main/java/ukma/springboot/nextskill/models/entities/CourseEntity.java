@@ -1,4 +1,4 @@
-package ukma.springboot.nextskill.course.data;
+package ukma.springboot.nextskill.models.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import ukma.springboot.nextskill.models.entities.SectionEntity;
-import ukma.springboot.nextskill.models.entities.UserEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;

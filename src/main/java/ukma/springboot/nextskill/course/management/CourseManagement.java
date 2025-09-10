@@ -9,13 +9,13 @@ import ukma.springboot.nextskill.course.CourseInternalAPI;
 import ukma.springboot.nextskill.course.repository.CourseRepository;
 import ukma.springboot.nextskill.exceptions.NoAccessException;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
-import ukma.springboot.nextskill.course.data.CourseEntity;
+import ukma.springboot.nextskill.models.entities.CourseEntity;
 import ukma.springboot.nextskill.models.entities.UserEntity;
 import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.course.mapper.CourseMapper;
-import ukma.springboot.nextskill.course.data.CourseResponse;
+import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
-import ukma.springboot.nextskill.course.data.CourseView;
+import ukma.springboot.nextskill.models.views.CourseView;
 import ukma.springboot.nextskill.repositories.UserRepository;
 import ukma.springboot.nextskill.services.UserService;
 import ukma.springboot.nextskill.course.validation.CourseValidator;
@@ -28,6 +28,9 @@ import java.util.UUID;
 public class CourseManagement implements CourseInternalAPI, CourseExternalAPI {
 
     private static final String COURSE = "Course";
+    /*
+        TODO: Course can use ONLY its own repo and should access other classes data via API
+     */
     private CourseRepository courseRepository;
     private UserRepository userRepository;
     private UserService userService;

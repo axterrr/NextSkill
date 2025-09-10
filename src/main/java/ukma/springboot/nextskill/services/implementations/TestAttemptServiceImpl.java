@@ -5,7 +5,7 @@ import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import ukma.springboot.nextskill.exceptions.NoAccessException;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
-import ukma.springboot.nextskill.course.data.CourseEntity;
+import ukma.springboot.nextskill.models.entities.CourseEntity;
 import ukma.springboot.nextskill.models.entities.TestAttemptEntity;
 import ukma.springboot.nextskill.models.entities.TestEntity;
 import ukma.springboot.nextskill.models.entities.UserEntity;

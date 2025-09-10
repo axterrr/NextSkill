@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
 import ukma.springboot.nextskill.course.CourseExternalAPI;
-import ukma.springboot.nextskill.course.data.CourseResponse;
+import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.services.SectionService;
 import ukma.springboot.nextskill.services.UserService;

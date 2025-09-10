@@ -1,7 +1,7 @@
 package ukma.springboot.nextskill.services;
 
 import ukma.springboot.nextskill.models.entities.UserEntity;
-import ukma.springboot.nextskill.course.data.CourseResponse;
+import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.UserView;
 
