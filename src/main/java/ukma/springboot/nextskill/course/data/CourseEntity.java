@@ -1,4 +1,4 @@
-package ukma.springboot.nextskill.course;
+package ukma.springboot.nextskill.course.data;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

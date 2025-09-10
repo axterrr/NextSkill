@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import ukma.springboot.nextskill.course.CourseExternalAPI;
 import ukma.springboot.nextskill.course.data.CourseResponse;
 import ukma.springboot.nextskill.course.data.CourseView;
 import ukma.springboot.nextskill.models.enums.UserRole;
@@ -16,7 +17,7 @@ import ukma.springboot.nextskill.services.*;
 public class NextSkillApplication implements CommandLineRunner {
 
     private UserService userService;
-    private ICourseManagement ICourseManagement;
+    private CourseExternalAPI courseExternalAPI;
     private SectionService sectionService;
     private PostService postService;
     private TestService testService;
@@ -112,16 +113,16 @@ public class NextSkillApplication implements CommandLineRunner {
                 .teacherId(createdNewTeacher.getUuid())
                 .build();
 
-        CourseResponse createdCourse1 = ICourseManagement.create(course1);
-        CourseResponse createdCourse2 = ICourseManagement.create(course2);
-        CourseResponse createdCourse3 = ICourseManagement.create(course3);
-        ICourseManagement.create(course4);
+        CourseResponse createdCourse1 = courseExternalAPI.create(course1);
+        CourseResponse createdCourse2 = courseExternalAPI.create(course2);
+        CourseResponse createdCourse3 = courseExternalAPI.create(course3);
+        courseExternalAPI.create(course4);
 
-        ICourseManagement.enrollStudent(createdCourse1.getUuid(), createdStudent.getUuid());
-        ICourseManagement.enrollStudent(createdCourse1.getUuid(), createdAdmin.getUuid());
-        ICourseManagement.enrollStudent(createdCourse1.getUuid(), createdStudent2.getUuid());
-        ICourseManagement.enrollStudent(createdCourse2.getUuid(), createdStudent.getUuid());
-        ICourseManagement.enrollStudent(createdCourse3.getUuid(), createdStudent.getUuid());
+        courseExternalAPI.enrollStudent(createdCourse1.getUuid(), createdStudent.getUuid());
+        courseExternalAPI.enrollStudent(createdCourse1.getUuid(), createdAdmin.getUuid());
+        courseExternalAPI.enrollStudent(createdCourse1.getUuid(), createdStudent2.getUuid());
+        courseExternalAPI.enrollStudent(createdCourse2.getUuid(), createdStudent.getUuid());
+        courseExternalAPI.enrollStudent(createdCourse3.getUuid(), createdStudent.getUuid());
 
         SectionView section1 = SectionView.builder()
                 .name("name")

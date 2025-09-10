@@ -5,7 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ukma.springboot.nextskill.course.CourseExternalAPI;
 import ukma.springboot.nextskill.course.data.CourseResponse;
+import ukma.springboot.nextskill.course.management.CourseManagement;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.course.data.CourseView;
 import ukma.springboot.nextskill.models.views.SectionView;
@@ -22,7 +24,7 @@ public class CoursesController {
     private static final String REDIRECT_TO_COURSE = "redirect:/course/";
     private static final String COURSE = "course";
     private UserService userService;
-    private ICourseManagement ICourseManagement;
+    private CourseExternalAPI courseExternalAPI;
     private SectionService sectionService;
 
     @GetMapping("home")
@@ -34,12 +36,12 @@ public class CoursesController {
     @GetMapping("course/{courseUuid}")
     public String course(@PathVariable UUID courseUuid, Model model) {
         UserResponse user = userService.getAuthenticatedUser();
-        model.addAttribute(COURSE, ICourseManagement.getWithSectionsWithPostsAndTests(courseUuid));
+        model.addAttribute(COURSE, courseExternalAPI.getWithSectionsWithPostsAndTests(courseUuid));
 
-        CourseResponse course = ICourseManagement.getWithSectionsWithPostsAndTests(courseUuid);
+        CourseResponse course = courseExternalAPI.getWithSectionsWithPostsAndTests(courseUuid);
 
-        boolean hasOwnerRights = ICourseManagement.hasOwnerRights(user.getUuid(), courseUuid);
-        boolean isEnrolled = ICourseManagement.isEnrolled(courseUuid, user.getUuid());
+        boolean hasOwnerRights = courseExternalAPI.hasOwnerRights(user.getUuid(), courseUuid);
+        boolean isEnrolled = courseExternalAPI.isEnrolled(courseUuid, user.getUuid());
         boolean isAdmin = userService.isAdmin(user.getUuid());
         boolean isStudent = userService.isStudent(user.getUuid());
 
@@ -56,7 +58,7 @@ public class CoursesController {
 
     @GetMapping("course/{courseUuid}/enrolledStudents")
     public String enrolledStudents(@PathVariable UUID courseUuid, Model model) {
-        model.addAttribute(COURSE, ICourseManagement.getWithUsers(courseUuid));
+        model.addAttribute(COURSE, courseExternalAPI.getWithUsers(courseUuid));
         model.addAttribute("user", userService.getAuthenticatedUser());
         return "enrolledStudents";
     }
@@ -64,12 +66,12 @@ public class CoursesController {
     @GetMapping("course/{courseUuid}/unroll/{studentUuid}")
     public String unroll(@PathVariable UUID courseUuid, @PathVariable UUID studentUuid, Model model) {
         UserResponse authenticated = userService.getAuthenticatedUser();
-        boolean isOwner = ICourseManagement.hasOwnerRights(authenticated.getUuid(), courseUuid);
+        boolean isOwner = courseExternalAPI.hasOwnerRights(authenticated.getUuid(), courseUuid);
         if(!isOwner && userService.isAdmin(authenticated.getUuid()))
             return REDIRECT_TO_COURSE + courseUuid;
 
-        ICourseManagement.unrollStudent(courseUuid, studentUuid);
-        model.addAttribute(COURSE, ICourseManagement.getWithUsers(courseUuid));
+        courseExternalAPI.unrollStudent(courseUuid, studentUuid);
+        model.addAttribute(COURSE, courseExternalAPI.getWithUsers(courseUuid));
         model.addAttribute("user", authenticated);
         return REDIRECT_TO_COURSE + courseUuid + "/enrolledStudents?unrolled";
     }
@@ -77,8 +79,8 @@ public class CoursesController {
     @GetMapping("course/{courseUuid}/enroll")
     public String enroll(@PathVariable UUID courseUuid, Model model) {
         UserResponse user = userService.getAuthenticatedUser();
-        ICourseManagement.enrollStudent(courseUuid, user.getUuid());
-        model.addAttribute(COURSE, ICourseManagement.getWithUsers(courseUuid));
+        courseExternalAPI.enrollStudent(courseUuid, user.getUuid());
+        model.addAttribute(COURSE, courseExternalAPI.getWithUsers(courseUuid));
         model.addAttribute("user", user);
         return REDIRECT_TO_COURSE + courseUuid + "?enrolled";
     }
@@ -86,8 +88,8 @@ public class CoursesController {
     @GetMapping("course/{courseUuid}/unroll")
     public String unroll(@PathVariable UUID courseUuid, Model model) {
         UserResponse user = userService.getAuthenticatedUser();
-        ICourseManagement.unrollStudent(courseUuid, user.getUuid());
-        model.addAttribute(COURSE, ICourseManagement.getWithUsers(courseUuid));
+        courseExternalAPI.unrollStudent(courseUuid, user.getUuid());
+        model.addAttribute(COURSE, courseExternalAPI.getWithUsers(courseUuid));
         model.addAttribute("user", user);
         return REDIRECT_TO_COURSE + courseUuid + "?unrolled";
     }
@@ -100,7 +102,7 @@ public class CoursesController {
 
     @PostMapping("course/{courseUuid}/delete")
     public String deleteCourse(@PathVariable UUID courseUuid) {
-        ICourseManagement.delete(courseUuid);
+        courseExternalAPI.delete(courseUuid);
         return "redirect:/home?course&deleted";
     }
 
@@ -112,11 +114,11 @@ public class CoursesController {
         UUID courseId = UUID.fromString(courseUuid);
 
         UserResponse authenticated = userService.getAuthenticatedUser();
-        boolean isOwner = ICourseManagement.hasOwnerRights(authenticated.getUuid(), courseId);
+        boolean isOwner = courseExternalAPI.hasOwnerRights(authenticated.getUuid(), courseId);
         if(!isOwner && userService.isAdmin(authenticated.getUuid()))
             return REDIRECT_TO_COURSE + courseUuid;
 
-        model.addAttribute(COURSE, ICourseManagement.get(courseId));
+        model.addAttribute(COURSE, courseExternalAPI.get(courseId));
         model.addAttribute("user", authenticated);
 
         return "edit-course";
@@ -130,12 +132,12 @@ public class CoursesController {
         UUID courseId = UUID.fromString(courseUuid);
 
         UserResponse authenticated = userService.getAuthenticatedUser();
-        boolean isOwner = ICourseManagement.hasOwnerRights(authenticated.getUuid(), courseId);
+        boolean isOwner = courseExternalAPI.hasOwnerRights(authenticated.getUuid(), courseId);
         if(!isOwner && userService.isAdmin(authenticated.getUuid()))
             return REDIRECT_TO_COURSE + courseId;
 
         courseView.setUuid(courseId);
-        ICourseManagement.update(courseView);
+        courseExternalAPI.update(courseView);
 
         return REDIRECT_TO_COURSE + courseId;
     }
@@ -143,7 +145,7 @@ public class CoursesController {
     @GetMapping("course/{courseUuid}/addSection")
     public String addSection(@PathVariable UUID courseUuid, Model model) {
         model.addAttribute("user", userService.getAuthenticatedUser());
-        model.addAttribute(COURSE, ICourseManagement.get(courseUuid));
+        model.addAttribute(COURSE, courseExternalAPI.get(courseUuid));
         return "add-section";
     }
 
@@ -181,7 +183,7 @@ public class CoursesController {
                 .teacherId(userService.getAuthenticatedUser().getUuid())
                 .build();
 
-        ICourseManagement.create(courseView);
+        courseExternalAPI.create(courseView);
         return "redirect:/home?course&added";
     }
 
@@ -193,6 +195,6 @@ public class CoursesController {
 
     @GetMapping("/api/all-courses")
     public ResponseEntity<List<CourseResponse>> getAllCourses() {
-        return ResponseEntity.ok(ICourseManagement.getAllWithUsers());
+        return ResponseEntity.ok(courseExternalAPI.getAllWithUsers());
     }
 }

@@ -1,6 +1,6 @@
 package ukma.springboot.nextskill.course.mapper;
 
-import ukma.springboot.nextskill.course.CourseEntity;
+import ukma.springboot.nextskill.course.data.CourseEntity;
 import ukma.springboot.nextskill.models.entities.SectionEntity;
 import ukma.springboot.nextskill.models.entities.UserEntity;
 import ukma.springboot.nextskill.models.mappers.SectionMapper;

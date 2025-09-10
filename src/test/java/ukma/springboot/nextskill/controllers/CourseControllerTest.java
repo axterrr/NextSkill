@@ -6,6 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
+import ukma.springboot.nextskill.course.CourseExternalAPI;
 import ukma.springboot.nextskill.course.data.CourseResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.services.SectionService;
@@ -24,7 +25,7 @@ class CourseControllerTest {
     private UserService userService;
 
     @Mock
-    private ICourseManagement ICourseManagement;
+    private CourseExternalAPI courseExternalAPI;
 
     @Mock
     private SectionService sectionService;
@@ -78,7 +79,7 @@ class CourseControllerTest {
         String viewName = coursesController.enroll(courseUuid, model);
 
         verify(userService).getAuthenticatedUser();
-        verify(ICourseManagement).enrollStudent(courseUuid, mockUser.getUuid());
+        verify(courseExternalAPI).enrollStudent(courseUuid, mockUser.getUuid());
 
         assertEquals("redirect:/course/" + courseUuid + "?enrolled", viewName, "The returned view should redirect to the course page with enrolled query.");
     }
@@ -91,7 +92,7 @@ class CourseControllerTest {
         String viewName = coursesController.unroll(courseUuid, model);
 
         verify(userService).getAuthenticatedUser();
-        verify(ICourseManagement).unrollStudent(courseUuid, mockUser.getUuid());
+        verify(courseExternalAPI).unrollStudent(courseUuid, mockUser.getUuid());
 
         assertEquals("redirect:/course/" + courseUuid + "?unrolled", viewName, "The returned view should redirect to the course page with unrolled query.");
     }

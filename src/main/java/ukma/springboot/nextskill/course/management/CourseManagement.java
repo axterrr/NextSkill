@@ -9,7 +9,7 @@ import ukma.springboot.nextskill.course.CourseInternalAPI;
 import ukma.springboot.nextskill.course.repository.CourseRepository;
 import ukma.springboot.nextskill.exceptions.NoAccessException;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
-import ukma.springboot.nextskill.course.CourseEntity;
+import ukma.springboot.nextskill.course.data.CourseEntity;
 import ukma.springboot.nextskill.models.entities.UserEntity;
 import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.course.mapper.CourseMapper;
