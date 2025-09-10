@@ -1,30 +1,31 @@
-package ukma.springboot.nextskill.services.implementations;
+package ukma.springboot.nextskill.course.management;
 
 import lombok.AllArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ukma.springboot.nextskill.course.CourseExternalAPI;
+import ukma.springboot.nextskill.course.CourseInternalAPI;
+import ukma.springboot.nextskill.course.repository.CourseRepository;
 import ukma.springboot.nextskill.exceptions.NoAccessException;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
-import ukma.springboot.nextskill.models.entities.CourseEntity;
+import ukma.springboot.nextskill.course.CourseEntity;
 import ukma.springboot.nextskill.models.entities.UserEntity;
 import ukma.springboot.nextskill.models.enums.UserRole;
-import ukma.springboot.nextskill.models.mappers.CourseMapper;
-import ukma.springboot.nextskill.models.responses.CourseResponse;
+import ukma.springboot.nextskill.course.mapper.CourseMapper;
+import ukma.springboot.nextskill.course.data.CourseResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
-import ukma.springboot.nextskill.models.views.CourseView;
-import ukma.springboot.nextskill.repositories.CourseRepository;
+import ukma.springboot.nextskill.course.data.CourseView;
 import ukma.springboot.nextskill.repositories.UserRepository;
-import ukma.springboot.nextskill.services.CourseService;
 import ukma.springboot.nextskill.services.UserService;
-import ukma.springboot.nextskill.validation.CourseValidator;
+import ukma.springboot.nextskill.course.validation.CourseValidator;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class CourseServiceImpl implements CourseService {
+public class CourseManagement implements CourseInternalAPI, CourseExternalAPI {
 
     private static final String COURSE = "Course";
     private CourseRepository courseRepository;

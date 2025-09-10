@@ -1,10 +1,12 @@
-package ukma.springboot.nextskill.models.mappers;
+package ukma.springboot.nextskill.course.mapper;
 
-import ukma.springboot.nextskill.models.entities.CourseEntity;
+import ukma.springboot.nextskill.course.CourseEntity;
 import ukma.springboot.nextskill.models.entities.SectionEntity;
 import ukma.springboot.nextskill.models.entities.UserEntity;
-import ukma.springboot.nextskill.models.responses.CourseResponse;
-import ukma.springboot.nextskill.models.views.CourseView;
+import ukma.springboot.nextskill.models.mappers.SectionMapper;
+import ukma.springboot.nextskill.models.mappers.UserMapper;
+import ukma.springboot.nextskill.course.data.CourseResponse;
+import ukma.springboot.nextskill.course.data.CourseView;
 
 import static ukma.springboot.nextskill.models.mappers.MapperUtility.mapIfInitialized;
 import static ukma.springboot.nextskill.models.mappers.MapperUtility.orElse;

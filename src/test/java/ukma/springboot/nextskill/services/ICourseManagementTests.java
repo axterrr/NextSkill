@@ -7,14 +7,13 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import ukma.springboot.nextskill.exceptions.NoAccessException;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
-import ukma.springboot.nextskill.models.entities.CourseEntity;
+import ukma.springboot.nextskill.course.CourseEntity;
 import ukma.springboot.nextskill.models.enums.UserRole;
-import ukma.springboot.nextskill.models.responses.CourseResponse;
+import ukma.springboot.nextskill.course.data.CourseResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
-import ukma.springboot.nextskill.models.views.CourseView;
-import ukma.springboot.nextskill.repositories.CourseRepository;
-import ukma.springboot.nextskill.services.implementations.CourseServiceImpl;
-import ukma.springboot.nextskill.validation.CourseValidator;
+import ukma.springboot.nextskill.course.data.CourseView;
+import ukma.springboot.nextskill.course.management.ICourseManagement;
+import ukma.springboot.nextskill.course.validation.CourseValidator;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -22,7 +21,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class CourseServiceTests {
+class ICourseManagementTests {
     @Mock
     private CourseRepository courseRepository;
 
@@ -33,7 +32,7 @@ class CourseServiceTests {
     private CourseValidator courseValidator;
 
     @InjectMocks
-    private CourseServiceImpl courseService;
+    private ICourseManagement courseService;
 
     private UUID courseId;
     private CourseEntity courseEntity;

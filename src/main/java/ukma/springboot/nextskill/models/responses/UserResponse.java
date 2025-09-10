@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ukma.springboot.nextskill.course.data.CourseResponse;
 import ukma.springboot.nextskill.models.enums.UserRole;
 
 import java.time.LocalDateTime;

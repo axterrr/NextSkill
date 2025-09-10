@@ -9,7 +9,6 @@ import ukma.springboot.nextskill.models.responses.PostResponse;
 import ukma.springboot.nextskill.models.responses.SectionResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.PostView;
-import ukma.springboot.nextskill.services.CourseService;
 import ukma.springboot.nextskill.services.PostService;
 import ukma.springboot.nextskill.services.SectionService;
 import ukma.springboot.nextskill.services.UserService;
@@ -22,7 +21,7 @@ public class PostController {
 
     private static final String REDIRECT_TO_COURSE = "redirect:/course";
     private PostService postService;
-    private CourseService courseService;
+    private ICourseManagement ICourseManagement;
     private UserService userService;
     private SectionService sectionService;
 
@@ -32,7 +31,7 @@ public class PostController {
         UUID courseId = postService.get(postId).getSection().getCourse().getUuid();
 
         UserResponse authenticated = userService.getAuthenticatedUser();
-        boolean isOwner = courseService.hasOwnerRights(authenticated.getUuid(), courseId);
+        boolean isOwner = ICourseManagement.hasOwnerRights(authenticated.getUuid(), courseId);
         if (!isOwner && authenticated.getRole() != UserRole.ADMIN)
             return REDIRECT_TO_COURSE + courseId;
 

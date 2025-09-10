@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import ukma.springboot.nextskill.models.responses.SectionResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.SectionView;
-import ukma.springboot.nextskill.services.CourseService;
 import ukma.springboot.nextskill.services.SectionService;
 import ukma.springboot.nextskill.services.UserService;
 
@@ -24,7 +23,7 @@ public class SectionController {
     private static final String SECTION = "section";
     private SectionService sectionService;
     private UserService userService;
-    private CourseService courseService;
+    private ICourseManagement ICourseManagement;
 
     @GetMapping("section/{sectionUuid}/edit")
     public String editSection(@PathVariable UUID sectionUuid, Model model) {
@@ -43,7 +42,7 @@ public class SectionController {
         UUID courseId = sectionResponse.getCourse().getUuid();
 
         UserResponse authenticated = userService.getAuthenticatedUser();
-        boolean isOwner = courseService.hasOwnerRights(authenticated.getUuid(), courseId);
+        boolean isOwner = ICourseManagement.hasOwnerRights(authenticated.getUuid(), courseId);
         if (!isOwner && !userService.isAdmin(authenticated.getUuid()))
             return REDIRECT_TO_COURSE + courseId;
 
