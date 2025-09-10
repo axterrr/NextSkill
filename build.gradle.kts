@@ -38,6 +38,10 @@ dependencies {
 
     // Hot reload
     developmentOnly("org.springframework.boot:spring-boot-devtools")
+
+    // Modulith
+    // https://mvnrepository.com/artifact/org.springframework.modulith/spring-modulith-starter-core
+    implementation("org.springframework.modulith:spring-modulith-starter-core:2.0.0-M2")
 }
 
 tasks.withType<Test> {
