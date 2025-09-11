@@ -16,7 +16,7 @@ import ukma.springboot.nextskill.models.responses.TestAttemptResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.TestAttemptView;
 import ukma.springboot.nextskill.attempt.repository.AttemptRepository;
-import ukma.springboot.nextskill.test.repository.TestRepository;
+import ukma.springboot.nextskill.test.TestInternalAPI;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,7 +29,7 @@ public class AttemptManagement implements AttemptExternalAPI, AttemptInternalAPI
 
     private static final String TEST_ATTEMPT = "TestAttempt";
     private final AttemptRepository attemptRepository;
-    private final TestRepository testRepository;
+    private final TestInternalAPI testInternalAPI;
 
     @Override
     public List<TestAttemptResponse> getAll() {
@@ -90,9 +90,7 @@ public class AttemptManagement implements AttemptExternalAPI, AttemptInternalAPI
 
     @Override
     public TestAttemptResponse createNewAttempt(UUID testId, UUID userId) {
-        TestEntity test = testRepository.findById(testId)
-                .orElseThrow(() -> new ResourceNotFoundException("Test", testId));
-
+        TestEntity test = testInternalAPI.get(testId);
         CourseEntity courseEntity = test.getSection().getCourse();
 
         if (test.isHidden() && !(courseEntity.getTeacher().getUuid().equals(userId)))

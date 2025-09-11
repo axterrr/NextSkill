@@ -16,9 +16,9 @@ import ukma.springboot.nextskill.course.mapper.CourseMapper;
 import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.CourseView;
-import ukma.springboot.nextskill.user.repository.UserRepository;
-import ukma.springboot.nextskill.services.UserService;
+import ukma.springboot.nextskill.user.UserExternalAPI;
 import ukma.springboot.nextskill.course.validation.CourseValidator;
+import ukma.springboot.nextskill.user.UserInternalAPI;
 
 import java.util.List;
 import java.util.UUID;
@@ -28,12 +28,9 @@ import java.util.UUID;
 public class CourseManagement implements CourseInternalAPI, CourseExternalAPI {
 
     private static final String COURSE = "Course";
-    /*
-        TODO: Course can use ONLY its own repo and should access other classes data via API
-     */
     private CourseRepository courseRepository;
-    private UserRepository userRepository;
-    private UserService userService;
+    private UserExternalAPI userExternalAPI;
+    private UserInternalAPI userInternalAPI;
     private CourseValidator courseValidator;
 
     @Override
@@ -65,7 +62,7 @@ public class CourseManagement implements CourseInternalAPI, CourseExternalAPI {
 
     @Override
     public void delete(UUID id) {
-        UserResponse currentUser = userService.getAuthenticatedUser();
+        UserResponse currentUser = userExternalAPI.getAuthenticatedUser();
         CourseEntity courseEntity = courseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(COURSE, id));
 
@@ -117,8 +114,7 @@ public class CourseManagement implements CourseInternalAPI, CourseExternalAPI {
         CourseEntity courseEntity = courseRepository.findById(courseUuid)
                 .orElseThrow(() -> new ResourceNotFoundException(COURSE, courseUuid));
         Hibernate.initialize(courseEntity.getStudents());
-        UserEntity userEntity = userRepository.findById(studentUuid)
-                .orElseThrow(() -> new ResourceNotFoundException("User", studentUuid));
+        UserEntity userEntity = userInternalAPI.get(studentUuid);
         return (courseEntity.getStudents().contains(userEntity));
     }
 
@@ -127,8 +123,7 @@ public class CourseManagement implements CourseInternalAPI, CourseExternalAPI {
     public void enrollStudent(UUID courseId, UUID studentId) {
         CourseEntity courseEntity = courseRepository.findById(courseId)
                 .orElseThrow(() -> new ResourceNotFoundException(COURSE, courseId));
-        UserEntity userEntity = userRepository.findById(studentId)
-                .orElseThrow(() -> new ResourceNotFoundException("User", studentId));
+        UserEntity userEntity = userInternalAPI.get(studentId);
         if (!isEnrolled(courseId, studentId)) {
             courseEntity.getStudents().add(userEntity);
         }
@@ -140,8 +135,7 @@ public class CourseManagement implements CourseInternalAPI, CourseExternalAPI {
     public void unrollStudent(UUID courseUuid, UUID studentUuid) {
         CourseEntity courseEntity = courseRepository.findById(courseUuid)
                 .orElseThrow(() -> new ResourceNotFoundException(COURSE, courseUuid));
-        UserEntity userEntity = userRepository.findById(studentUuid)
-                .orElseThrow(() -> new ResourceNotFoundException("User", studentUuid));
+        UserEntity userEntity = userInternalAPI.get(studentUuid);
         if (isEnrolled(courseUuid, studentUuid))
             courseEntity.getStudents().remove(userEntity);
         else throw new IllegalArgumentException("User is not enrolled to course");

@@ -12,6 +12,7 @@ import ukma.springboot.nextskill.option.OptionInternalAPI;
 import ukma.springboot.nextskill.option.repository.OptionRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -22,18 +23,15 @@ public class OptionManagement implements OptionExternalAPI, OptionInternalAPI {
     private final OptionRepository optionRepository;
 
     @Override
-    public List<QuestionOptionResponse> getAll() {
+    public List<QuestionOptionEntity> getAll() {
         return optionRepository.findAll()
                 .stream()
-                .map(QuestionOptionMapper::toQuestionOptionResponse)
                 .toList();
     }
 
     @Override
-    public QuestionOptionResponse get(UUID id) {
-        QuestionOptionEntity questionOptionEntity = optionRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(QUESTION_OPTION, id));
-        return QuestionOptionMapper.toQuestionOptionResponse(questionOptionEntity);
+    public Optional<QuestionOptionEntity> get(UUID id) {
+        return optionRepository.findById(id);
     }
 
     @Override

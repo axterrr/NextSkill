@@ -12,7 +12,6 @@ import ukma.springboot.nextskill.models.responses.TestResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.TestView;
 import ukma.springboot.nextskill.test.repository.TestRepository;
-import ukma.springboot.nextskill.services.TestService;
 import ukma.springboot.nextskill.test.TestExternalAPI;
 import ukma.springboot.nextskill.test.TestInternalAPI;
 
@@ -26,16 +25,16 @@ public class TestManagement implements TestExternalAPI, TestInternalAPI {
     private TestRepository testRepository;
 
     @Override
-    public List<TestResponse> getAll() {
-        return testRepository.findAll().stream().map(TestMapper::toTestResponse).toList();
+    public List<TestEntity> getAll() {
+        return testRepository.findAll().stream().toList();
     }
 
     @Override
-    public TestResponse get(UUID id) {
+    public TestEntity get(UUID id) {
         TestEntity test = testRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Test", id));
         Hibernate.initialize(test.getQuestions());
         Hibernate.initialize(test.getAttempts());
-        return TestMapper.toTestResponse(test);
+        return test;
     }
 
     @Override

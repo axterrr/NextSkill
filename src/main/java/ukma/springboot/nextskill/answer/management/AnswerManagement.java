@@ -8,10 +8,12 @@ import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
 import ukma.springboot.nextskill.models.entities.QuestionAnswerEntity;
 import ukma.springboot.nextskill.models.entities.QuestionOptionEntity;
 import ukma.springboot.nextskill.models.mappers.QuestionAnswerMapper;
+import ukma.springboot.nextskill.models.mappers.QuestionOptionMapper;
 import ukma.springboot.nextskill.models.responses.QuestionAnswerResponse;
+import ukma.springboot.nextskill.models.responses.QuestionOptionResponse;
 import ukma.springboot.nextskill.models.views.QuestionAnswerView;
 import ukma.springboot.nextskill.answer.repository.AnswerRepository;
-import ukma.springboot.nextskill.option.repository.OptionRepository;
+import ukma.springboot.nextskill.option.OptionInternalAPI;
 
 import java.util.List;
 import java.util.Map;
@@ -24,7 +26,7 @@ public class AnswerManagement implements AnswerExternalAPI, AnswerInternalAPI {
 
     private static final String QUESTION_ANSWER = "QuestionAnswer";
     private final AnswerRepository answerRepository;
-    private final OptionRepository optionRepository;
+    private final OptionInternalAPI optionInternalAPI;
 
     @Override
     public List<QuestionAnswerResponse> getAll() {
@@ -82,7 +84,7 @@ public class AnswerManagement implements AnswerExternalAPI, AnswerInternalAPI {
                     .findFirst();
 
             if (existingAnswer.isPresent()) {
-                Optional<QuestionOptionEntity> option = optionRepository.findById(UUID.fromString(optionId));
+                Optional<QuestionOptionEntity> option = optionInternalAPI.get(UUID.fromString(optionId));
 
                 if (option.isPresent()) {
                     QuestionAnswerEntity answerEntity = existingAnswer.get();

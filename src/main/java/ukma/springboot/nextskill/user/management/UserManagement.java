@@ -31,14 +31,13 @@ public class UserManagement implements UserInternalAPI, UserExternalAPI {
     private UserValidator userValidator;
 
     @Override
-    public List<UserResponse> getAll() {
-        return userRepository.findAll().stream().map(UserMapper::toUserResponse).toList();
+    public List<UserEntity> getAll() {
+        return userRepository.findAll().stream().toList();
     }
 
     @Override
-    public UserResponse get(UUID id) {
-        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", id));
-        return UserMapper.toUserResponse(userEntity);
+    public UserEntity get(UUID id) {
+        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", id));
     }
 
     @Override
