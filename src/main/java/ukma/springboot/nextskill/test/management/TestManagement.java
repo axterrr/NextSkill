@@ -11,7 +11,7 @@ import ukma.springboot.nextskill.models.mappers.TestMapper;
 import ukma.springboot.nextskill.models.responses.TestResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.TestView;
-import ukma.springboot.nextskill.repositories.TestRepository;
+import ukma.springboot.nextskill.test.repository.TestRepository;
 import ukma.springboot.nextskill.services.TestService;
 import ukma.springboot.nextskill.test.TestExternalAPI;
 import ukma.springboot.nextskill.test.TestInternalAPI;

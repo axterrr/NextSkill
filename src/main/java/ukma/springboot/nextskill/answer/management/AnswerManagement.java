@@ -10,9 +10,8 @@ import ukma.springboot.nextskill.models.entities.QuestionOptionEntity;
 import ukma.springboot.nextskill.models.mappers.QuestionAnswerMapper;
 import ukma.springboot.nextskill.models.responses.QuestionAnswerResponse;
 import ukma.springboot.nextskill.models.views.QuestionAnswerView;
-import ukma.springboot.nextskill.repositories.QuestionAnswerRepository;
-import ukma.springboot.nextskill.repositories.QuestionOptionRepository;
-import ukma.springboot.nextskill.services.QuestionAnswerService;
+import ukma.springboot.nextskill.answer.repository.AnswerRepository;
+import ukma.springboot.nextskill.option.repository.OptionRepository;
 
 import java.util.List;
 import java.util.Map;
@@ -24,12 +23,12 @@ import java.util.UUID;
 public class AnswerManagement implements AnswerExternalAPI, AnswerInternalAPI {
 
     private static final String QUESTION_ANSWER = "QuestionAnswer";
-    private final QuestionAnswerRepository questionAnswerRepository;
-    private final QuestionOptionRepository questionOptionRepository;
+    private final AnswerRepository answerRepository;
+    private final OptionRepository optionRepository;
 
     @Override
     public List<QuestionAnswerResponse> getAll() {
-        return questionAnswerRepository.findAll()
+        return answerRepository.findAll()
                 .stream()
                 .map(QuestionAnswerMapper::toQuestionAnswerResponse)
                 .toList();
@@ -37,14 +36,14 @@ public class AnswerManagement implements AnswerExternalAPI, AnswerInternalAPI {
 
     @Override
     public QuestionAnswerResponse get(UUID id) {
-        QuestionAnswerEntity questionAnswerEntity = questionAnswerRepository.findById(id)
+        QuestionAnswerEntity questionAnswerEntity = answerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(QUESTION_ANSWER, id));
         return QuestionAnswerMapper.toQuestionAnswerResponse(questionAnswerEntity);
     }
 
     @Override
     public QuestionAnswerResponse create(QuestionAnswerView view) {
-        QuestionAnswerEntity questionAnswerEntity = questionAnswerRepository.save(
+        QuestionAnswerEntity questionAnswerEntity = answerRepository.save(
                 QuestionAnswerMapper.toQuestionAnswerEntity(view)
         );
         return QuestionAnswerMapper.toQuestionAnswerResponse(questionAnswerEntity);
@@ -52,9 +51,9 @@ public class AnswerManagement implements AnswerExternalAPI, AnswerInternalAPI {
 
     @Override
     public QuestionAnswerResponse update(QuestionAnswerView view) {
-        QuestionAnswerEntity existingEntity = questionAnswerRepository.findById(view.getId())
+        QuestionAnswerEntity existingEntity = answerRepository.findById(view.getId())
                 .orElseThrow(() -> new ResourceNotFoundException(QUESTION_ANSWER, view.getId()));
-        QuestionAnswerEntity updatedEntity = questionAnswerRepository.save(
+        QuestionAnswerEntity updatedEntity = answerRepository.save(
                 QuestionAnswerMapper.mergeData(view, existingEntity)
         );
         return QuestionAnswerMapper.toQuestionAnswerResponse(updatedEntity);
@@ -64,15 +63,15 @@ public class AnswerManagement implements AnswerExternalAPI, AnswerInternalAPI {
 
     @Override
     public void delete(UUID id) {
-        if (questionAnswerRepository.findById(id).isEmpty()) {
+        if (answerRepository.findById(id).isEmpty()) {
             throw new ResourceNotFoundException(QUESTION_ANSWER, id);
         }
-        questionAnswerRepository.deleteById(id);
+        answerRepository.deleteById(id);
     }
 
     @Override
     public void updateSavedAnswers(Map<String, String> map, UUID attemptId) {
-        List<QuestionAnswerEntity> answers = questionAnswerRepository.findByTestAttemptUuid(attemptId);
+        List<QuestionAnswerEntity> answers = answerRepository.findByTestAttemptUuid(attemptId);
 
         for (Map.Entry<String, String> entry : map.entrySet()) {
             String questionId = entry.getKey();
@@ -83,13 +82,13 @@ public class AnswerManagement implements AnswerExternalAPI, AnswerInternalAPI {
                     .findFirst();
 
             if (existingAnswer.isPresent()) {
-                Optional<QuestionOptionEntity> option = questionOptionRepository.findById(UUID.fromString(optionId));
+                Optional<QuestionOptionEntity> option = optionRepository.findById(UUID.fromString(optionId));
 
                 if (option.isPresent()) {
                     QuestionAnswerEntity answerEntity = existingAnswer.get();
                     answerEntity.setAnswerOption(option.get());
 
-                    questionAnswerRepository.save(answerEntity);
+                    answerRepository.save(answerEntity);
                 }
             } else {
                 QuestionAnswerView answer = QuestionAnswerView.builder()

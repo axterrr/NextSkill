@@ -1,4 +1,4 @@
-package ukma.springboot.nextskill.repositories;
+package ukma.springboot.nextskill.test.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import ukma.springboot.nextskill.models.entities.TestEntity;

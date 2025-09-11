@@ -15,8 +15,8 @@ import ukma.springboot.nextskill.models.mappers.TestAttemptMapper;
 import ukma.springboot.nextskill.models.responses.TestAttemptResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.TestAttemptView;
-import ukma.springboot.nextskill.repositories.TestAttemptRepository;
-import ukma.springboot.nextskill.repositories.TestRepository;
+import ukma.springboot.nextskill.attempt.repository.AttemptRepository;
+import ukma.springboot.nextskill.test.repository.TestRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,12 +28,12 @@ import java.util.UUID;
 public class AttemptManagement implements AttemptExternalAPI, AttemptInternalAPI {
 
     private static final String TEST_ATTEMPT = "TestAttempt";
-    private final TestAttemptRepository testAttemptRepository;
+    private final AttemptRepository attemptRepository;
     private final TestRepository testRepository;
 
     @Override
     public List<TestAttemptResponse> getAll() {
-        return testAttemptRepository.findAll()
+        return attemptRepository.findAll()
                 .stream()
                 .map(TestAttemptMapper::toTestAttemptResponse)
                 .toList();
@@ -41,7 +41,7 @@ public class AttemptManagement implements AttemptExternalAPI, AttemptInternalAPI
 
     @Override
     public TestAttemptResponse get(UUID id) {
-        TestAttemptEntity testAttemptEntity = testAttemptRepository.findById(id)
+        TestAttemptEntity testAttemptEntity = attemptRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(TEST_ATTEMPT, id));
         Hibernate.initialize(testAttemptEntity.getAnswers());
         return TestAttemptMapper.toTestAttemptResponse(testAttemptEntity);
@@ -49,7 +49,7 @@ public class AttemptManagement implements AttemptExternalAPI, AttemptInternalAPI
 
     @Override
     public TestAttemptResponse create(TestAttemptView view) {
-        TestAttemptEntity testAttemptEntity = testAttemptRepository.save(
+        TestAttemptEntity testAttemptEntity = attemptRepository.save(
                 TestAttemptMapper.toTestAttemptEntity(view)
         );
         return TestAttemptMapper.toTestAttemptResponse(testAttemptEntity);
@@ -57,9 +57,9 @@ public class AttemptManagement implements AttemptExternalAPI, AttemptInternalAPI
 
     @Override
     public TestAttemptResponse update(TestAttemptView view) {
-        TestAttemptEntity existingEntity = testAttemptRepository.findById(view.getUuid())
+        TestAttemptEntity existingEntity = attemptRepository.findById(view.getUuid())
                 .orElseThrow(() -> new ResourceNotFoundException(TEST_ATTEMPT, view.getUuid()));
-        TestAttemptEntity updatedEntity = testAttemptRepository.save(
+        TestAttemptEntity updatedEntity = attemptRepository.save(
                 TestAttemptMapper.mergeData(view, existingEntity)
         );
         return TestAttemptMapper.toTestAttemptResponse(updatedEntity);
@@ -67,22 +67,22 @@ public class AttemptManagement implements AttemptExternalAPI, AttemptInternalAPI
 
     @Override
     public void delete(UUID id) {
-        if (testAttemptRepository.findById(id).isEmpty()) {
+        if (attemptRepository.findById(id).isEmpty()) {
             throw new ResourceNotFoundException(TEST_ATTEMPT, id);
         }
-        testAttemptRepository.deleteById(id);
+        attemptRepository.deleteById(id);
     }
 
     @Override
     public Optional<TestAttemptResponse> getUnfinishedAttempt(UUID testId, UUID userID) {
-        return testAttemptRepository.findTestAttemptEntityByCompletedByUuidAndSubmittedFalseAndTest_Uuid(userID, testId)
+        return attemptRepository.findTestAttemptEntityByCompletedByUuidAndSubmittedFalseAndTest_Uuid(userID, testId)
                 .map(TestAttemptMapper::toTestAttemptResponse);
     }
 
 
     @Override
     public List<TestAttemptResponse> getFinishedAttempts(UUID testId, UUID userId) {
-        return testAttemptRepository.findTestAttemptEntitiesByCompletedByUuidAndSubmittedTrueAndTest_Uuid(userId, testId)
+        return attemptRepository.findTestAttemptEntitiesByCompletedByUuidAndSubmittedTrueAndTest_Uuid(userId, testId)
                 .stream()
                 .map(TestAttemptMapper::toTestAttemptResponse)
                 .toList();
@@ -105,14 +105,14 @@ public class AttemptManagement implements AttemptExternalAPI, AttemptInternalAPI
                 .test(test)
                 .build();
 
-        TestAttemptEntity savedAttempt = testAttemptRepository.save(newAttempt);
+        TestAttemptEntity savedAttempt = attemptRepository.save(newAttempt);
 
         return TestAttemptMapper.toTestAttemptResponse(savedAttempt);
     }
 
     @Override
     public void checkAttemptAccess(UUID attemptId, UserResponse authenticated) {
-        TestAttemptEntity testAttemptEntity = testAttemptRepository.findById(attemptId)
+        TestAttemptEntity testAttemptEntity = attemptRepository.findById(attemptId)
                 .orElseThrow(() -> new ResourceNotFoundException(TEST_ATTEMPT, attemptId));
         UUID userId = authenticated.getUuid();
 
@@ -123,7 +123,7 @@ public class AttemptManagement implements AttemptExternalAPI, AttemptInternalAPI
 
     @Override
     public void submitAttempt(UUID attemptId) {
-        Optional<TestAttemptEntity> attemptOptional = testAttemptRepository.findById(attemptId);
+        Optional<TestAttemptEntity> attemptOptional = attemptRepository.findById(attemptId);
 
         if (attemptOptional.isEmpty()) {
             throw new ResourceNotFoundException(TEST_ATTEMPT, attemptId);
@@ -138,11 +138,11 @@ public class AttemptManagement implements AttemptExternalAPI, AttemptInternalAPI
         attempt.setSubmitted(true);
         attempt.setEndTime(LocalDateTime.now());
 
-        testAttemptRepository.save(attempt);
+        attemptRepository.save(attempt);
     }
 
     @Override
     public void removeAllWithTest(UUID uuid) {
-        testAttemptRepository.deleteAllByTestUuid(uuid);
+        attemptRepository.deleteAllByTestUuid(uuid);
     }
 }

@@ -10,7 +10,7 @@ import ukma.springboot.nextskill.models.responses.QuestionResponse;
 import ukma.springboot.nextskill.models.views.QuestionView;
 import ukma.springboot.nextskill.question.QuestionExternalAPI;
 import ukma.springboot.nextskill.question.QuestionInternalAPI;
-import ukma.springboot.nextskill.repositories.QuestionRepository;
+import ukma.springboot.nextskill.question.repository.QuestionRepository;
 
 import java.util.List;
 import java.util.UUID;

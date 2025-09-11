@@ -13,7 +13,7 @@ import ukma.springboot.nextskill.models.mappers.UserMapper;
 import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.UserView;
-import ukma.springboot.nextskill.repositories.UserRepository;
+import ukma.springboot.nextskill.user.repository.UserRepository;
 import ukma.springboot.nextskill.user.UserExternalAPI;
 import ukma.springboot.nextskill.user.UserInternalAPI;
 import ukma.springboot.nextskill.validation.UserValidator;

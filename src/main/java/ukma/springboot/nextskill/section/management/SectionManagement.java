@@ -7,7 +7,7 @@ import ukma.springboot.nextskill.models.entities.SectionEntity;
 import ukma.springboot.nextskill.models.mappers.SectionMapper;
 import ukma.springboot.nextskill.models.responses.SectionResponse;
 import ukma.springboot.nextskill.models.views.SectionView;
-import ukma.springboot.nextskill.repositories.SectionRepository;
+import ukma.springboot.nextskill.section.repository.SectionRepository;
 import ukma.springboot.nextskill.section.SectionExternalAPI;
 import ukma.springboot.nextskill.section.SectionInternalAPI;
 import ukma.springboot.nextskill.validation.SectionValidator;

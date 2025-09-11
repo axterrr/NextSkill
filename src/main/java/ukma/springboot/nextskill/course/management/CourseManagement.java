@@ -16,7 +16,7 @@ import ukma.springboot.nextskill.course.mapper.CourseMapper;
 import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.CourseView;
-import ukma.springboot.nextskill.repositories.UserRepository;
+import ukma.springboot.nextskill.user.repository.UserRepository;
 import ukma.springboot.nextskill.services.UserService;
 import ukma.springboot.nextskill.course.validation.CourseValidator;
 

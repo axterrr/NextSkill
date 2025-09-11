@@ -1,4 +1,4 @@
-package ukma.springboot.nextskill.repositories;
+package ukma.springboot.nextskill.section.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

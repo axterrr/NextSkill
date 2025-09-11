@@ -9,7 +9,7 @@ import ukma.springboot.nextskill.models.responses.QuestionOptionResponse;
 import ukma.springboot.nextskill.models.views.QuestionOptionView;
 import ukma.springboot.nextskill.option.OptionExternalAPI;
 import ukma.springboot.nextskill.option.OptionInternalAPI;
-import ukma.springboot.nextskill.repositories.QuestionOptionRepository;
+import ukma.springboot.nextskill.option.repository.OptionRepository;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,11 +19,11 @@ import java.util.UUID;
 public class OptionManagement implements OptionExternalAPI, OptionInternalAPI {
 
     private static final String QUESTION_OPTION = "QuestionOption";
-    private final QuestionOptionRepository questionOptionRepository;
+    private final OptionRepository optionRepository;
 
     @Override
     public List<QuestionOptionResponse> getAll() {
-        return questionOptionRepository.findAll()
+        return optionRepository.findAll()
                 .stream()
                 .map(QuestionOptionMapper::toQuestionOptionResponse)
                 .toList();
@@ -31,14 +31,14 @@ public class OptionManagement implements OptionExternalAPI, OptionInternalAPI {
 
     @Override
     public QuestionOptionResponse get(UUID id) {
-        QuestionOptionEntity questionOptionEntity = questionOptionRepository.findById(id)
+        QuestionOptionEntity questionOptionEntity = optionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(QUESTION_OPTION, id));
         return QuestionOptionMapper.toQuestionOptionResponse(questionOptionEntity);
     }
 
     @Override
     public QuestionOptionResponse create(QuestionOptionView view) {
-        QuestionOptionEntity questionOptionEntity = questionOptionRepository.save(
+        QuestionOptionEntity questionOptionEntity = optionRepository.save(
                 QuestionOptionMapper.toQuestionOptionEntity(view)
         );
         return QuestionOptionMapper.toQuestionOptionResponse(questionOptionEntity);
@@ -46,9 +46,9 @@ public class OptionManagement implements OptionExternalAPI, OptionInternalAPI {
 
     @Override
     public QuestionOptionResponse update(QuestionOptionView view) {
-        QuestionOptionEntity existingEntity = questionOptionRepository.findById(view.getId())
+        QuestionOptionEntity existingEntity = optionRepository.findById(view.getId())
                 .orElseThrow(() -> new ResourceNotFoundException(QUESTION_OPTION, view.getId()));
-        QuestionOptionEntity updatedEntity = questionOptionRepository.save(
+        QuestionOptionEntity updatedEntity = optionRepository.save(
                 QuestionOptionMapper.mergeData(view, existingEntity)
         );
         return QuestionOptionMapper.toQuestionOptionResponse(updatedEntity);
@@ -56,26 +56,26 @@ public class OptionManagement implements OptionExternalAPI, OptionInternalAPI {
 
     @Override
     public void delete(UUID id) {
-        if (questionOptionRepository.findById(id).isEmpty()) {
+        if (optionRepository.findById(id).isEmpty()) {
             throw new ResourceNotFoundException(QUESTION_OPTION, id);
         }
-        questionOptionRepository.deleteById(id);
+        optionRepository.deleteById(id);
     }
 
     @Override
     public void setNewCorrect(UUID questionId, UUID optionId) {
-        QuestionOptionEntity questionOptionEntity = questionOptionRepository.findById(optionId)
+        QuestionOptionEntity questionOptionEntity = optionRepository.findById(optionId)
                 .orElseThrow(() -> new ResourceNotFoundException(QUESTION_OPTION, optionId));
 
         List<QuestionOptionEntity> allQuestionOptions =
-                questionOptionRepository.getQuestionOptionEntitiesByQuestionId(questionId);
+                optionRepository.getQuestionOptionEntitiesByQuestionId(questionId);
 
         for (QuestionOptionEntity option : allQuestionOptions) {
             option.setCorrect(false);
-            questionOptionRepository.save(option);
+            optionRepository.save(option);
         }
 
         questionOptionEntity.setCorrect(true);
-        questionOptionRepository.save(questionOptionEntity);
+        optionRepository.save(questionOptionEntity);
     }
 }
