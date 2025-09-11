@@ -1,4 +1,4 @@
-package ukma.springboot.nextskill.services.implementations;
+package ukma.springboot.nextskill.user.management;
 
 import lombok.AllArgsConstructor;
 import org.hibernate.Hibernate;
@@ -14,7 +14,8 @@ import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.UserView;
 import ukma.springboot.nextskill.repositories.UserRepository;
-import ukma.springboot.nextskill.services.UserService;
+import ukma.springboot.nextskill.user.UserExternalAPI;
+import ukma.springboot.nextskill.user.UserInternalAPI;
 import ukma.springboot.nextskill.validation.UserValidator;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UserManagement implements UserInternalAPI, UserExternalAPI {
 
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;

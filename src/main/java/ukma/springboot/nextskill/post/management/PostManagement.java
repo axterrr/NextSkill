@@ -1,4 +1,4 @@
-package ukma.springboot.nextskill.services.implementations;
+package ukma.springboot.nextskill.post.management;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -7,8 +7,9 @@ import ukma.springboot.nextskill.models.entities.PostEntity;
 import ukma.springboot.nextskill.models.mappers.PostMapper;
 import ukma.springboot.nextskill.models.responses.PostResponse;
 import ukma.springboot.nextskill.models.views.PostView;
+import ukma.springboot.nextskill.post.PostExternalAPI;
+import ukma.springboot.nextskill.post.PostInternalAPI;
 import ukma.springboot.nextskill.repositories.PostRepository;
-import ukma.springboot.nextskill.services.PostService;
 import ukma.springboot.nextskill.validation.PostValidator;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class PostServiceImpl implements PostService {
+public class PostManagement implements PostInternalAPI, PostExternalAPI {
 
     private PostRepository postRepository;
     private PostValidator postValidator;

@@ -1,4 +1,4 @@
-package ukma.springboot.nextskill.services.implementations;
+package ukma.springboot.nextskill.section.management;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -8,7 +8,8 @@ import ukma.springboot.nextskill.models.mappers.SectionMapper;
 import ukma.springboot.nextskill.models.responses.SectionResponse;
 import ukma.springboot.nextskill.models.views.SectionView;
 import ukma.springboot.nextskill.repositories.SectionRepository;
-import ukma.springboot.nextskill.services.SectionService;
+import ukma.springboot.nextskill.section.SectionExternalAPI;
+import ukma.springboot.nextskill.section.SectionInternalAPI;
 import ukma.springboot.nextskill.validation.SectionValidator;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class SectionServiceImpl implements SectionService {
+public class SectionManagement implements SectionInternalAPI, SectionExternalAPI {
 
     private static final String SECTION = "Section";
     private SectionRepository sectionRepository;

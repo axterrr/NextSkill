@@ -1,8 +1,10 @@
-package ukma.springboot.nextskill.services.implementations;
+package ukma.springboot.nextskill.attempt.management;
 
 import lombok.AllArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
+import ukma.springboot.nextskill.attempt.AttemptExternalAPI;
+import ukma.springboot.nextskill.attempt.AttemptInternalAPI;
 import ukma.springboot.nextskill.exceptions.NoAccessException;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
 import ukma.springboot.nextskill.models.entities.CourseEntity;
@@ -15,7 +17,6 @@ import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.TestAttemptView;
 import ukma.springboot.nextskill.repositories.TestAttemptRepository;
 import ukma.springboot.nextskill.repositories.TestRepository;
-import ukma.springboot.nextskill.services.TestAttemptService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,7 +25,7 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class TestAttemptServiceImpl implements TestAttemptService {
+public class AttemptManagement implements AttemptExternalAPI, AttemptInternalAPI {
 
     private static final String TEST_ATTEMPT = "TestAttempt";
     private final TestAttemptRepository testAttemptRepository;

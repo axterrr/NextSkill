@@ -1,4 +1,4 @@
-package ukma.springboot.nextskill.services;
+package ukma.springboot.nextskill.test;
 
 import ukma.springboot.nextskill.models.responses.TestResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
@@ -6,7 +6,11 @@ import ukma.springboot.nextskill.models.views.TestView;
 
 import java.util.UUID;
 
-public interface TestService extends GenericService<TestView, TestResponse> {
+public interface TestExternalAPI {
+    TestResponse create(TestView view);
+    TestResponse update(TestView view);
+    void delete(UUID id);
+
     boolean hasOwnerRights(UUID userId, UUID testId);
     void checkTestAccess(UUID testUuid, UserResponse user);
     TestResponse getTestByAttempt(UUID attemptId);

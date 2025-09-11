@@ -1,4 +1,4 @@
-package ukma.springboot.nextskill.services;
+package ukma.springboot.nextskill.user;
 
 import ukma.springboot.nextskill.models.entities.UserEntity;
 import ukma.springboot.nextskill.models.responses.CourseResponse;
@@ -8,12 +8,19 @@ import ukma.springboot.nextskill.models.views.UserView;
 import java.util.List;
 import java.util.UUID;
 
-public interface UserService extends GenericService<UserView, UserResponse> {
+public interface UserExternalAPI {
+
+    UserResponse create(UserView view);
+    UserResponse update(UserView view);
+    void delete(UUID id);
+
     boolean isAdmin(UUID uuid);
     boolean isTeacher(UUID uuid);
     boolean isStudent(UUID uuid);
+
     UserEntity getUserByUsername(String username);
     UserResponse getAuthenticatedUser();
+
     UserResponse getWithCourses(UUID userId);
     List<CourseResponse> getCourses(UUID userId);
 }

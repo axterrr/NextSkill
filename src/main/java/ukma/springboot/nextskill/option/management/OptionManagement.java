@@ -1,4 +1,4 @@
-package ukma.springboot.nextskill.services.implementations;
+package ukma.springboot.nextskill.option.management;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -7,15 +7,16 @@ import ukma.springboot.nextskill.models.entities.QuestionOptionEntity;
 import ukma.springboot.nextskill.models.mappers.QuestionOptionMapper;
 import ukma.springboot.nextskill.models.responses.QuestionOptionResponse;
 import ukma.springboot.nextskill.models.views.QuestionOptionView;
+import ukma.springboot.nextskill.option.OptionExternalAPI;
+import ukma.springboot.nextskill.option.OptionInternalAPI;
 import ukma.springboot.nextskill.repositories.QuestionOptionRepository;
-import ukma.springboot.nextskill.services.QuestionOptionService;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class QuestionOptionServiceImpl implements QuestionOptionService {
+public class OptionManagement implements OptionExternalAPI, OptionInternalAPI {
 
     private static final String QUESTION_OPTION = "QuestionOption";
     private final QuestionOptionRepository questionOptionRepository;

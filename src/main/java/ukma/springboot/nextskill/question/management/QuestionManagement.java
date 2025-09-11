@@ -1,4 +1,4 @@
-package ukma.springboot.nextskill.services.implementations;
+package ukma.springboot.nextskill.question.management;
 
 import lombok.AllArgsConstructor;
 import org.hibernate.Hibernate;
@@ -8,15 +8,16 @@ import ukma.springboot.nextskill.models.entities.QuestionEntity;
 import ukma.springboot.nextskill.models.mappers.QuestionMapper;
 import ukma.springboot.nextskill.models.responses.QuestionResponse;
 import ukma.springboot.nextskill.models.views.QuestionView;
+import ukma.springboot.nextskill.question.QuestionExternalAPI;
+import ukma.springboot.nextskill.question.QuestionInternalAPI;
 import ukma.springboot.nextskill.repositories.QuestionRepository;
-import ukma.springboot.nextskill.services.QuestionService;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class QuestionServiceImpl implements QuestionService {
+public class QuestionManagement implements QuestionExternalAPI, QuestionInternalAPI {
 
     private static final String QUESTION = "Question";
     private final QuestionRepository questionRepository;

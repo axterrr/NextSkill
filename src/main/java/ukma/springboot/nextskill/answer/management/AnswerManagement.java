@@ -1,7 +1,9 @@
-package ukma.springboot.nextskill.services.implementations;
+package ukma.springboot.nextskill.answer.management;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import ukma.springboot.nextskill.answer.AnswerExternalAPI;
+import ukma.springboot.nextskill.answer.AnswerInternalAPI;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
 import ukma.springboot.nextskill.models.entities.QuestionAnswerEntity;
 import ukma.springboot.nextskill.models.entities.QuestionOptionEntity;
@@ -19,7 +21,7 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class QuestionAnswerServiceImpl implements QuestionAnswerService {
+public class AnswerManagement implements AnswerExternalAPI, AnswerInternalAPI {
 
     private static final String QUESTION_ANSWER = "QuestionAnswer";
     private final QuestionAnswerRepository questionAnswerRepository;

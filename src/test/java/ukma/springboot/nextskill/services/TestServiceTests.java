@@ -11,7 +11,7 @@ import ukma.springboot.nextskill.models.entities.TestEntity;
 import ukma.springboot.nextskill.models.entities.UserEntity;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.repositories.TestRepository;
-import ukma.springboot.nextskill.services.implementations.TestServiceImpl;
+import ukma.springboot.nextskill.test.management.TestManagement;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -26,7 +26,7 @@ class TestServiceTests {
     private TestRepository testRepository;
 
     @InjectMocks
-    private TestServiceImpl testService;
+    private TestManagement testService;
 
     @Test
     void testDeleteTest() {

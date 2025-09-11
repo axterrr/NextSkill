@@ -1,4 +1,4 @@
-package ukma.springboot.nextskill.services.implementations;
+package ukma.springboot.nextskill.test.management;
 
 import lombok.AllArgsConstructor;
 import org.hibernate.Hibernate;
@@ -13,13 +13,15 @@ import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.TestView;
 import ukma.springboot.nextskill.repositories.TestRepository;
 import ukma.springboot.nextskill.services.TestService;
+import ukma.springboot.nextskill.test.TestExternalAPI;
+import ukma.springboot.nextskill.test.TestInternalAPI;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class TestServiceImpl implements TestService {
+public class TestManagement implements TestExternalAPI, TestInternalAPI {
 
     private TestRepository testRepository;
 
