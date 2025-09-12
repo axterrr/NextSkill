@@ -15,7 +15,7 @@ import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
 import ukma.springboot.nextskill.models.entities.UserEntity;
 import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.security.managers.AuthenticationManagerImpl;
-import ukma.springboot.nextskill.user.UserExternalAPI;
+import ukma.springboot.nextskill.modules.user.UserExternalAPI;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;

@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
 import ukma.springboot.nextskill.models.entities.UserEntity;
-import ukma.springboot.nextskill.user.UserExternalAPI;
+import ukma.springboot.nextskill.modules.user.UserExternalAPI;
 
 import java.util.List;
 

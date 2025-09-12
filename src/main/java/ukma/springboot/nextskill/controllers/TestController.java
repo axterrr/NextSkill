@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ukma.springboot.nextskill.answer.AnswerExternalAPI;
-import ukma.springboot.nextskill.attempt.AttemptExternalAPI;
+import ukma.springboot.nextskill.modules.answer.AnswerExternalAPI;
+import ukma.springboot.nextskill.modules.attempt.AttemptExternalAPI;
 import ukma.springboot.nextskill.exceptions.MaxAttemptsException;
 import ukma.springboot.nextskill.models.entities.QuestionEntity;
 import ukma.springboot.nextskill.models.entities.TestAttemptEntity;
@@ -15,10 +15,10 @@ import ukma.springboot.nextskill.models.entities.TestEntity;
 import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.responses.*;
 import ukma.springboot.nextskill.models.views.TestView;
-import ukma.springboot.nextskill.question.QuestionExternalAPI;
-import ukma.springboot.nextskill.section.SectionExternalAPI;
-import ukma.springboot.nextskill.test.TestExternalAPI;
-import ukma.springboot.nextskill.user.UserExternalAPI;
+import ukma.springboot.nextskill.modules.question.QuestionExternalAPI;
+import ukma.springboot.nextskill.modules.section.SectionExternalAPI;
+import ukma.springboot.nextskill.modules.test.TestExternalAPI;
+import ukma.springboot.nextskill.modules.user.UserExternalAPI;
 
 import java.util.*;
 

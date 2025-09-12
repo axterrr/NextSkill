@@ -10,8 +10,8 @@ import ukma.springboot.nextskill.models.entities.SectionEntity;
 import ukma.springboot.nextskill.models.entities.TestEntity;
 import ukma.springboot.nextskill.models.entities.UserEntity;
 import ukma.springboot.nextskill.models.responses.UserResponse;
-import ukma.springboot.nextskill.test.repository.TestRepository;
-import ukma.springboot.nextskill.test.management.TestManagement;
+import ukma.springboot.nextskill.modules.test.repository.TestRepository;
+import ukma.springboot.nextskill.modules.test.management.TestManagement;
 
 import java.util.Optional;
 import java.util.UUID;

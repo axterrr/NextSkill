@@ -13,8 +13,8 @@ import ukma.springboot.nextskill.models.entities.UserEntity;
 import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.UserView;
-import ukma.springboot.nextskill.user.repository.UserRepository;
-import ukma.springboot.nextskill.user.management.UserManagement;
+import ukma.springboot.nextskill.modules.user.repository.UserRepository;
+import ukma.springboot.nextskill.modules.user.management.UserManagement;
 import ukma.springboot.nextskill.validation.UserValidator;
 
 import java.util.Optional;

@@ -4,18 +4,18 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import ukma.springboot.nextskill.course.CourseExternalAPI;
+import ukma.springboot.nextskill.modules.course.CourseExternalAPI;
 import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.views.CourseView;
 import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.responses.*;
 import ukma.springboot.nextskill.models.views.*;
-import ukma.springboot.nextskill.option.OptionExternalAPI;
-import ukma.springboot.nextskill.post.PostExternalAPI;
-import ukma.springboot.nextskill.question.QuestionExternalAPI;
-import ukma.springboot.nextskill.section.SectionExternalAPI;
-import ukma.springboot.nextskill.test.TestExternalAPI;
-import ukma.springboot.nextskill.user.UserExternalAPI;
+import ukma.springboot.nextskill.modules.option.OptionExternalAPI;
+import ukma.springboot.nextskill.modules.post.PostExternalAPI;
+import ukma.springboot.nextskill.modules.question.QuestionExternalAPI;
+import ukma.springboot.nextskill.modules.section.SectionExternalAPI;
+import ukma.springboot.nextskill.modules.test.TestExternalAPI;
+import ukma.springboot.nextskill.modules.user.UserExternalAPI;
 
 @SpringBootApplication
 @AllArgsConstructor

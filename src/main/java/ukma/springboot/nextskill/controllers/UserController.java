@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ukma.springboot.nextskill.models.entities.UserEntity;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.UserView;
-import ukma.springboot.nextskill.user.UserExternalAPI;
+import ukma.springboot.nextskill.modules.user.UserExternalAPI;
 
 import java.util.UUID;
 

@@ -7,16 +7,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import ukma.springboot.nextskill.attempt.AttemptExternalAPI;
+import ukma.springboot.nextskill.modules.attempt.AttemptExternalAPI;
 import ukma.springboot.nextskill.models.entities.TestEntity;
 import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.responses.QuestionResponse;
 import ukma.springboot.nextskill.models.responses.TestResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.QuestionView;
-import ukma.springboot.nextskill.question.QuestionExternalAPI;
-import ukma.springboot.nextskill.test.management.TestManagement;
-import ukma.springboot.nextskill.user.UserExternalAPI;
+import ukma.springboot.nextskill.modules.question.QuestionExternalAPI;
+import ukma.springboot.nextskill.modules.test.management.TestManagement;
+import ukma.springboot.nextskill.modules.user.UserExternalAPI;
 
 import java.util.UUID;
 

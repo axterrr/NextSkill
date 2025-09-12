@@ -5,13 +5,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ukma.springboot.nextskill.course.CourseExternalAPI;
+import ukma.springboot.nextskill.modules.course.CourseExternalAPI;
 import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.CourseView;
 import ukma.springboot.nextskill.models.views.SectionView;
-import ukma.springboot.nextskill.section.SectionExternalAPI;
-import ukma.springboot.nextskill.user.UserExternalAPI;
+import ukma.springboot.nextskill.modules.section.SectionExternalAPI;
+import ukma.springboot.nextskill.modules.user.UserExternalAPI;
 
 import java.util.List;
 import java.util.UUID;
