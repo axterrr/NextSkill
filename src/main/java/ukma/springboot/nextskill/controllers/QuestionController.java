@@ -7,12 +7,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import ukma.springboot.nextskill.attempt.AttemptExternalAPI;
 import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.responses.QuestionResponse;
 import ukma.springboot.nextskill.models.responses.TestResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.QuestionView;
+import ukma.springboot.nextskill.question.QuestionExternalAPI;
 import ukma.springboot.nextskill.services.*;
+import ukma.springboot.nextskill.test.management.TestManagement;
+import ukma.springboot.nextskill.user.UserExternalAPI;
 
 import java.util.UUID;
 
@@ -21,24 +25,24 @@ import java.util.UUID;
 public class QuestionController {
 
     private static final String MANAGE_QUESTION = "/manage-questions";
-    private TestService testService;
-    private UserService userService;
-    private QuestionService questionService;
-    private TestAttemptService attemptService;
+    private TestManagement testExternalAPI;
+    private UserExternalAPI userExternalAPI;
+    private QuestionExternalAPI questionExternalAPI;
+    private AttemptExternalAPI attemptExternalAPI;
 
     @PostMapping("/question/{questionUuid}/delete")
     public String deleteQuestion(@PathVariable(name = "questionUuid") String questionUuid
     ) {
         UUID questionId = UUID.fromString(questionUuid);
-        TestResponse associatedTest = testService.getTestByQuestion(questionId);
+        TestResponse associatedTest = testExternalAPI.getTestByQuestion(questionId);
 
-        UserResponse authenticated = userService.getAuthenticatedUser();
-        boolean isOwner = testService.hasOwnerRights(authenticated.getUuid(), associatedTest.getUuid());
+        UserResponse authenticated = userExternalAPI.getAuthenticatedUser();
+        boolean isOwner = testExternalAPI.hasOwnerRights(authenticated.getUuid(), associatedTest.getUuid());
         if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
             return TestController.REDIRECT_TO_TEST + associatedTest.getUuid();
 
-        attemptService.removeAllWithTest(associatedTest.getUuid());
-        questionService.delete(questionId);
+        attemptExternalAPI.removeAllWithTest(associatedTest.getUuid());
+        questionExternalAPI.delete(questionId);
 
         return TestController.REDIRECT_TO_TEST + associatedTest.getUuid() + MANAGE_QUESTION;
     }
@@ -49,14 +53,14 @@ public class QuestionController {
             @ModelAttribute QuestionView questionView
     ) {
         UUID questionId = UUID.fromString(questionUuid);
-        TestResponse associatedTest = testService.getTestByQuestion(questionId);
+        TestResponse associatedTest = testExternalAPI.getTestByQuestion(questionId);
 
-        UserResponse authenticated = userService.getAuthenticatedUser();
-        boolean isOwner = testService.hasOwnerRights(authenticated.getUuid(), associatedTest.getUuid());
+        UserResponse authenticated = userExternalAPI.getAuthenticatedUser();
+        boolean isOwner = testExternalAPI.hasOwnerRights(authenticated.getUuid(), associatedTest.getUuid());
         if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
             return TestController.REDIRECT_TO_TEST + associatedTest.getUuid();
 
-        questionService.update(questionView);
+        questionExternalAPI.update(questionView);
 
         return TestController.REDIRECT_TO_TEST + associatedTest.getUuid() + MANAGE_QUESTION;
     }
@@ -65,10 +69,10 @@ public class QuestionController {
     public String createQuestion(
             @ModelAttribute QuestionView questionView
     ) {
-        TestResponse associatedTest = testService.get(questionView.getTestId());
+        TestResponse associatedTest = testExternalAPI.get(questionView.getTestId());
 
-        UserResponse authenticated = userService.getAuthenticatedUser();
-        boolean isOwner = testService.hasOwnerRights(authenticated.getUuid(), associatedTest.getUuid());
+        UserResponse authenticated = userExternalAPI.getAuthenticatedUser();
+        boolean isOwner = testExternalAPI.hasOwnerRights(authenticated.getUuid(), associatedTest.getUuid());
         if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
             return TestController.REDIRECT_TO_TEST + associatedTest.getUuid();
 
@@ -77,7 +81,7 @@ public class QuestionController {
                 .testId(associatedTest.getUuid())
                 .build();
 
-        questionService.create(view);
+        questionExternalAPI.create(view);
 
         return TestController.REDIRECT_TO_TEST + associatedTest.getUuid() + MANAGE_QUESTION;
     }
@@ -88,11 +92,11 @@ public class QuestionController {
             Model model
     ) {
         UUID questionId = UUID.fromString(questionUuid);
-        QuestionResponse questionResponse = questionService.get(questionId);
-        TestResponse associatedTest = testService.getTestByQuestion(questionId);
+        QuestionResponse questionResponse = questionExternalAPI.get(questionId);
+        TestResponse associatedTest = testExternalAPI.getTestByQuestion(questionId);
 
-        UserResponse authenticated = userService.getAuthenticatedUser();
-        boolean isOwner = testService.hasOwnerRights(authenticated.getUuid(), associatedTest.getUuid());
+        UserResponse authenticated = userExternalAPI.getAuthenticatedUser();
+        boolean isOwner = testExternalAPI.hasOwnerRights(authenticated.getUuid(), associatedTest.getUuid());
         if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
             return TestController.REDIRECT_TO_TEST + associatedTest.getUuid();
 

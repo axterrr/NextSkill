@@ -6,11 +6,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ukma.springboot.nextskill.attempt.AttemptExternalAPI;
 import ukma.springboot.nextskill.exceptions.MaxAttemptsException;
 import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.responses.*;
 import ukma.springboot.nextskill.models.views.TestView;
-import ukma.springboot.nextskill.services.*;
+import ukma.springboot.nextskill.question.QuestionExternalAPI;
+import ukma.springboot.nextskill.section.SectionExternalAPI;
+import ukma.springboot.nextskill.test.TestExternalAPI;
+import ukma.springboot.nextskill.user.UserExternalAPI;
 
 import java.util.*;
 
@@ -22,23 +26,23 @@ public class TestController {
     private static final String REDIRECT_TO_HOME = "redirect:/home";
     private static final String QUESTIONS = "questions";
     private QuestionAnswerService questionAnswerService;
-    private TestService testService;
-    private UserService userService;
-    private TestAttemptService attemptService;
-    private QuestionService questionService;
-    private SectionService sectionService;
+    private TestExternalAPI testExternalAPI;
+    private UserExternalAPI userExternalAPI;
+    private AttemptExternalAPI attemptExternalAPI;
+    private QuestionExternalAPI questionExternalAPI;
+    private SectionExternalAPI sectionExternalAPI;
 
     @GetMapping("/test/{uuid}")
     public String testInfo(@PathVariable String uuid, Model model) {
-        UserResponse authenticatedUser = userService.getAuthenticatedUser();
+        UserResponse authenticatedUser = userExternalAPI.getAuthenticatedUser();
         if (authenticatedUser.getRole() != UserRole.ADMIN){
-            testService.checkTestAccess(UUID.fromString(uuid), authenticatedUser);
+            testExternalAPI.checkTestAccess(UUID.fromString(uuid), authenticatedUser);
         }
 
-        TestResponse test = testService.get(UUID.fromString(uuid));
+        TestResponse test = testExternalAPI.get(UUID.fromString(uuid));
         model.addAttribute("test", test);
 
-        boolean hasOwnerRights = testService.hasOwnerRights(authenticatedUser.getUuid(), test.getUuid());
+        boolean hasOwnerRights = testExternalAPI.hasOwnerRights(authenticatedUser.getUuid(), test.getUuid());
         model.addAttribute("isOwner", hasOwnerRights);
         model.addAttribute("user", authenticatedUser);
 
@@ -46,7 +50,7 @@ public class TestController {
                 attempt -> attempt.getCompletedBy().getUuid().equals(authenticatedUser.getUuid())
         ).toList();
         List<TestAttemptResponse> finishedAttempts =
-                attemptService.getFinishedAttempts(test.getUuid(), authenticatedUser.getUuid());
+                attemptExternalAPI.getFinishedAttempts(test.getUuid(), authenticatedUser.getUuid());
 
         model.addAttribute("myAttempts", userAttempts);
 
@@ -61,21 +65,21 @@ public class TestController {
 
     @GetMapping("/test/{uuid}/start")
     public String doAttempt(@PathVariable(name = "uuid") String testUuid, Model model) {
-        UserResponse authenticatedUser = userService.getAuthenticatedUser();
-        testService.checkTestAccess(UUID.fromString(testUuid), authenticatedUser);
+        UserResponse authenticatedUser = userExternalAPI.getAuthenticatedUser();
+        testExternalAPI.checkTestAccess(UUID.fromString(testUuid), authenticatedUser);
 
         UUID testId = UUID.fromString(testUuid);
         UUID userId = authenticatedUser.getUuid();
 
-        Optional<TestAttemptResponse> unfinishedAttempt = attemptService.getUnfinishedAttempt(testId, userId);
+        Optional<TestAttemptResponse> unfinishedAttempt = attemptExternalAPI.getUnfinishedAttempt(testId, userId);
         if (unfinishedAttempt.isPresent()) {
             return REDIRECT_TO_TEST + testUuid + "/attempt/" + unfinishedAttempt.get().getUuid();
         }
 
-        List<TestAttemptResponse> finishedAttempts = attemptService.getFinishedAttempts(testId, userId);
+        List<TestAttemptResponse> finishedAttempts = attemptExternalAPI.getFinishedAttempts(testId, userId);
         if (!finishedAttempts.isEmpty()) throw new MaxAttemptsException();
 
-        TestAttemptResponse newAttempt = attemptService.createNewAttempt(testId, userId);
+        TestAttemptResponse newAttempt = attemptExternalAPI.createNewAttempt(testId, userId);
 
         return REDIRECT_TO_TEST + testUuid + "/attempt/" + newAttempt.getUuid();
     }
@@ -89,12 +93,12 @@ public class TestController {
         UUID testId = UUID.fromString(testUuid);
         UUID attemptId = UUID.fromString(attemptUuid);
 
-        UserResponse authenticated = userService.getAuthenticatedUser();
-        testService.checkTestAccess(testId, authenticated);
-        attemptService.checkAttemptAccess(attemptId, authenticated);
+        UserResponse authenticated = userExternalAPI.getAuthenticatedUser();
+        testExternalAPI.checkTestAccess(testId, authenticated);
+        attemptExternalAPI.checkAttemptAccess(attemptId, authenticated);
 
-        TestAttemptResponse attempt = attemptService.get(attemptId);
-        List<QuestionResponse> questions = questionService.getTestQuestions(testId);
+        TestAttemptResponse attempt = attemptExternalAPI.get(attemptId);
+        List<QuestionResponse> questions = questionExternalAPI.getTestQuestions(testId);
 
         List<UUID> answeredOptions = attempt.getAnswers().stream()
                 .map(answer -> answer.getAnswerOption().getId()).toList();
@@ -118,16 +122,16 @@ public class TestController {
         UUID testId = UUID.fromString(testUuid);
         UUID attemptId = UUID.fromString(attemptUuid);
 
-        TestAttemptResponse attempt = attemptService.get(attemptId);
+        TestAttemptResponse attempt = attemptExternalAPI.get(attemptId);
         if(attempt.isSubmitted())
             return REDIRECT_TO_TEST + testUuid;
 
-        UserResponse authenticated = userService.getAuthenticatedUser();
-        testService.checkTestAccess(testId, authenticated);
-        attemptService.checkAttemptAccess(attemptId, authenticated);
+        UserResponse authenticated = userExternalAPI.getAuthenticatedUser();
+        testExternalAPI.checkTestAccess(testId, authenticated);
+        attemptExternalAPI.checkAttemptAccess(attemptId, authenticated);
 
         questionAnswerService.updateSavedAnswers(formData, UUID.fromString(attemptUuid));
-        attemptService.submitAttempt(attemptId);
+        attemptExternalAPI.submitAttempt(attemptId);
 
         return REDIRECT_TO_TEST + testUuid;
     }
@@ -141,15 +145,15 @@ public class TestController {
         UUID testId = UUID.fromString(testUuid);
         UUID attemptId = UUID.fromString(attemptUuid);
 
-        TestAttemptResponse attempt = attemptService.get(attemptId);
+        TestAttemptResponse attempt = attemptExternalAPI.get(attemptId);
         if(attempt.isSubmitted())
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
                     .body("Cannot update answers for a submitted attempt.");
 
-        UserResponse authenticated = userService.getAuthenticatedUser();
-        testService.checkTestAccess(testId, authenticated);
-        attemptService.checkAttemptAccess(attemptId, authenticated);
+        UserResponse authenticated = userExternalAPI.getAuthenticatedUser();
+        testExternalAPI.checkTestAccess(testId, authenticated);
+        attemptExternalAPI.checkAttemptAccess(attemptId, authenticated);
 
         questionAnswerService.updateSavedAnswers(formData, UUID.fromString(attemptUuid));
         return ResponseEntity.ok("Answers saved successfully");
@@ -161,14 +165,14 @@ public class TestController {
             Model model
     ) {
         UUID attemptId = UUID.fromString(attemptUuid);
-        TestAttemptResponse attempt = attemptService.get(attemptId);
+        TestAttemptResponse attempt = attemptExternalAPI.get(attemptId);
         if(!attempt.isSubmitted()) return REDIRECT_TO_HOME;
 
-        TestResponse test = testService.getTestByAttempt(attempt.getUuid());
-        List<QuestionResponse> questions = questionService.getTestQuestions(test.getUuid());
+        TestResponse test = testExternalAPI.getTestByAttempt(attempt.getUuid());
+        List<QuestionResponse> questions = questionExternalAPI.getTestQuestions(test.getUuid());
 
-        UserResponse authenticated = userService.getAuthenticatedUser();
-        boolean isOwner = testService.hasOwnerRights(authenticated.getUuid(), test.getUuid());
+        UserResponse authenticated = userExternalAPI.getAuthenticatedUser();
+        boolean isOwner = testExternalAPI.hasOwnerRights(authenticated.getUuid(), test.getUuid());
         if (!attempt.getCompletedBy().getUuid().equals(authenticated.getUuid())
             && !isOwner && authenticated.getRole() != UserRole.ADMIN) {
                 return REDIRECT_TO_TEST + test.getUuid();
@@ -202,8 +206,8 @@ public class TestController {
             @PathVariable(name = "testId") UUID testId,
             Model model
     ) {
-        UserResponse authenticated = userService.getAuthenticatedUser();
-        TestResponse testResponse = testService.get(testId);
+        UserResponse authenticated = userExternalAPI.getAuthenticatedUser();
+        TestResponse testResponse = testExternalAPI.get(testId);
 
         if ( authenticated.getRole() != UserRole.ADMIN &&
                 !testResponse.getSection().getCourse().getTeacher().getUuid().equals(authenticated.getUuid())
@@ -221,8 +225,8 @@ public class TestController {
     public String deleteAttempt(
             @PathVariable(name = "attemptId") UUID attemptId
     ) {
-        TestResponse test = testService.getTestByAttempt(attemptId);
-        attemptService.delete(attemptId);
+        TestResponse test = testExternalAPI.getTestByAttempt(attemptId);
+        attemptExternalAPI.delete(attemptId);
         return REDIRECT_TO_TEST + test.getUuid() + "/all-attempts";
     }
 
@@ -230,8 +234,8 @@ public class TestController {
     public String createTest(
             @ModelAttribute TestView testView
     ) {
-        SectionResponse associatedSection = sectionService.get(testView.getSectionId());
-        UserResponse authenticated = userService.getAuthenticatedUser();
+        SectionResponse associatedSection = sectionExternalAPI.get(testView.getSectionId());
+        UserResponse authenticated = userExternalAPI.getAuthenticatedUser();
 
         if ( authenticated.getRole() != UserRole.ADMIN &&
                 !associatedSection.getCourse().getTeacher().getUuid().equals(authenticated.getUuid())
@@ -246,7 +250,7 @@ public class TestController {
                 .isHidden(testView.isHidden())
                 .build();
 
-        TestResponse res = testService.create(view);
+        TestResponse res = testExternalAPI.create(view);
 
         return REDIRECT_TO_TEST + res.getUuid();
     }
@@ -257,13 +261,13 @@ public class TestController {
     ) {
         UUID testId = UUID.fromString(testUuid);
 
-        UserResponse authenticated = userService.getAuthenticatedUser();
-        boolean isOwner = testService.hasOwnerRights(authenticated.getUuid(), testId);
+        UserResponse authenticated = userExternalAPI.getAuthenticatedUser();
+        boolean isOwner = testExternalAPI.hasOwnerRights(authenticated.getUuid(), testId);
         if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
             return REDIRECT_TO_TEST + testId;
 
-        UUID courseId = testService.get(testId).getSection().getCourse().getUuid();
-        testService.delete(testId);
+        UUID courseId = testExternalAPI.get(testId).getSection().getCourse().getUuid();
+        testExternalAPI.delete(testId);
 
         return "redirect:/course/" + courseId + "?test&deleted";
     }
@@ -274,12 +278,12 @@ public class TestController {
     ) {
         UUID testId = UUID.fromString(testUuid);
 
-        UserResponse authenticated = userService.getAuthenticatedUser();
-        boolean isOwner = testService.hasOwnerRights(authenticated.getUuid(), testId);
+        UserResponse authenticated = userExternalAPI.getAuthenticatedUser();
+        boolean isOwner = testExternalAPI.hasOwnerRights(authenticated.getUuid(), testId);
         if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
             return REDIRECT_TO_TEST + testId;
 
-        testService.hide(testId);
+        testExternalAPI.hide(testId);
 
         return REDIRECT_TO_TEST + testId;
     }
@@ -290,12 +294,12 @@ public class TestController {
     ) {
         UUID testId = UUID.fromString(testUuid);
 
-        UserResponse authenticated = userService.getAuthenticatedUser();
-        boolean isOwner = testService.hasOwnerRights(authenticated.getUuid(), testId);
+        UserResponse authenticated = userExternalAPI.getAuthenticatedUser();
+        boolean isOwner = testExternalAPI.hasOwnerRights(authenticated.getUuid(), testId);
         if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
             return REDIRECT_TO_TEST + testId;
 
-        testService.unhide(testId);
+        testExternalAPI.unhide(testId);
 
         return REDIRECT_TO_TEST + testId;
     }
@@ -307,12 +311,12 @@ public class TestController {
     ) {
         UUID testId = UUID.fromString(testUuid);
 
-        UserResponse authenticated = userService.getAuthenticatedUser();
-        boolean isOwner = testService.hasOwnerRights(authenticated.getUuid(), testId);
+        UserResponse authenticated = userExternalAPI.getAuthenticatedUser();
+        boolean isOwner = testExternalAPI.hasOwnerRights(authenticated.getUuid(), testId);
         if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
             return REDIRECT_TO_TEST + testId;
 
-        model.addAttribute("test", testService.get(testId));
+        model.addAttribute("test", testExternalAPI.get(testId));
         model.addAttribute("user", authenticated);
 
         return "edit-test";
@@ -325,13 +329,13 @@ public class TestController {
     ) {
         UUID testId = UUID.fromString(testUuid);
 
-        UserResponse authenticated = userService.getAuthenticatedUser();
-        boolean isOwner = testService.hasOwnerRights(authenticated.getUuid(), testId);
+        UserResponse authenticated = userExternalAPI.getAuthenticatedUser();
+        boolean isOwner = testExternalAPI.hasOwnerRights(authenticated.getUuid(), testId);
         if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
             return REDIRECT_TO_TEST + testId;
 
         testView.setUuid(testId);
-        testService.update(testView);
+        testExternalAPI.update(testView);
 
         return REDIRECT_TO_TEST + testId;
     }
@@ -343,12 +347,12 @@ public class TestController {
     ) {
         UUID testId = UUID.fromString(testUuid);
 
-        UserResponse authenticated = userService.getAuthenticatedUser();
-        boolean isOwner = testService.hasOwnerRights(authenticated.getUuid(), testId);
+        UserResponse authenticated = userExternalAPI.getAuthenticatedUser();
+        boolean isOwner = testExternalAPI.hasOwnerRights(authenticated.getUuid(), testId);
         if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
             return REDIRECT_TO_TEST + testId;
 
-        TestResponse test = testService.get(testId);
+        TestResponse test = testExternalAPI.get(testId);
         List<QuestionResponse> questionResponses = test.getQuestions();
 
         model.addAttribute("test", test);

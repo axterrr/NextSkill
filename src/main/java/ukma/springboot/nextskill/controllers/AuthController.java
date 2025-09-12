@@ -7,15 +7,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import ukma.springboot.nextskill.services.UserService;
 import ukma.springboot.nextskill.models.views.UserView;
 import org.springframework.web.bind.annotation.*;
+import ukma.springboot.nextskill.user.UserExternalAPI;
 
 @Controller
 @AllArgsConstructor
 public class AuthController {
 
-    private UserService userService;
+    private UserExternalAPI userExternalAPI;
 
     @GetMapping("login")
     public String login() {
@@ -28,7 +28,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public String registerUser(@ModelAttribute UserView userView) {
-        userService.create(userView);
+        userExternalAPI.create(userView);
         return "redirect:/login";
     }
 
