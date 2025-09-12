@@ -17,7 +17,6 @@ import ukma.springboot.nextskill.user.repository.UserRepository;
 import ukma.springboot.nextskill.user.management.UserManagement;
 import ukma.springboot.nextskill.validation.UserValidator;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -61,23 +60,6 @@ class UserServiceTests {
         userResponse.setUuid(userId);
         userResponse.setRole(UserRole.STUDENT);
         userResponse.setUsername("test_user");
-    }
-
-    @Test
-    void testGetAll() {
-        when(userRepository.findAll()).thenReturn(List.of(userEntity));
-        List<UserResponse> result = userService.getAll();
-        assertEquals(1, result.size());
-        assertEquals(userId, result.get(0).getUuid());
-        verify(userRepository, times(1)).findAll();
-    }
-
-    @Test
-    void testGetById() {
-        when(userRepository.findById(userId)).thenReturn(Optional.of(userEntity));
-        UserResponse result = userService.get(userId);
-        assertEquals(userId, result.getUuid());
-        verify(userRepository, times(1)).findById(userId);
     }
 
     @Test

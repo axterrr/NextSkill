@@ -8,7 +8,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.UserView;
-import ukma.springboot.nextskill.services.UserService;
+import ukma.springboot.nextskill.user.UserExternalAPI;
 
 import java.util.UUID;
 
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 class UserControllerTest {
 
     @Mock
-    private UserService userService;
+    private UserExternalAPI userExternalAPI;
 
     @Mock
     private Model model;
@@ -42,29 +42,13 @@ class UserControllerTest {
 
     @Test
     void testProfile() {
-        when(userService.getAuthenticatedUser()).thenReturn(mockUser);
-        when(userService.getWithCourses(mockUserId)).thenReturn(mockUser);
+        when(userExternalAPI.getAuthenticatedUser()).thenReturn(mockUser);
+        when(userExternalAPI.getWithCourses(mockUserId)).thenReturn(mockUser);
 
         String viewName = userController.profile(model);
 
-        verify(userService).getAuthenticatedUser();
-        verify(userService).getWithCourses(mockUserId);
-        verify(model).addAttribute("currentUser", mockUser);
-        verify(model).addAttribute("user", mockUser);
-        assertEquals("profile", viewName, "The returned view name should be 'profile'");
-    }
-
-    @Test
-    void testGetUser() {
-        when(userService.get(mockUserId)).thenReturn(mockUser);
-        when(userService.getAuthenticatedUser()).thenReturn(mockUser);
-        when(userService.getWithCourses(mockUserId)).thenReturn(mockUser);
-
-        String viewName = userController.getUser(mockUserId, model);
-
-        verify(userService).get(mockUserId);
-        verify(userService).getAuthenticatedUser();
-        verify(userService).getWithCourses(mockUserId);
+        verify(userExternalAPI).getAuthenticatedUser();
+        verify(userExternalAPI).getWithCourses(mockUserId);
         verify(model).addAttribute("currentUser", mockUser);
         verify(model).addAttribute("user", mockUser);
         assertEquals("profile", viewName, "The returned view name should be 'profile'");
@@ -80,7 +64,7 @@ class UserControllerTest {
 
         String viewName = userController.updateUser(mockUserId, userView);
 
-        verify(userService).update(userView);
+        verify(userExternalAPI).update(userView);
         assertEquals("redirect:/profile", viewName, "The returned view name should redirect to '/profile'");
     }
 
@@ -88,7 +72,7 @@ class UserControllerTest {
     void testDeleteUser() {
         String viewName = userController.deleteUser(mockUserId);
 
-        verify(userService).delete(mockUserId);
+        verify(userExternalAPI).delete(mockUserId);
         assertEquals("redirect:/home?user&deleted", viewName, "The returned view name should redirect to '/home?user&deleted'");
     }
 }

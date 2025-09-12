@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import ukma.springboot.nextskill.course.management.CourseManagement;
+import ukma.springboot.nextskill.course.repository.CourseRepository;
 import ukma.springboot.nextskill.exceptions.NoAccessException;
 import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
 import ukma.springboot.nextskill.models.entities.CourseEntity;
@@ -12,8 +14,8 @@ import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.CourseView;
-import ukma.springboot.nextskill.course.management.ICourseManagement;
 import ukma.springboot.nextskill.course.validation.CourseValidator;
+import ukma.springboot.nextskill.user.UserExternalAPI;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -26,13 +28,13 @@ class ICourseManagementTests {
     private CourseRepository courseRepository;
 
     @Mock
-    private UserService userService;
+    private UserExternalAPI userExternalAPI;
 
     @Mock
     private CourseValidator courseValidator;
 
     @InjectMocks
-    private ICourseManagement courseService;
+    private CourseManagement courseService;
 
     private UUID courseId;
     private CourseEntity courseEntity;
@@ -89,7 +91,7 @@ class ICourseManagementTests {
     void testDeleteCourseNoAccess() {
         when(courseRepository.findById(courseId)).thenReturn(Optional.of(courseEntity));
         doThrow(new NoAccessException("You do not have permission to delete this course."))
-                .when(userService).getAuthenticatedUser();
+                .when(userExternalAPI).getAuthenticatedUser();
 
         assertThrows(NoAccessException.class, () -> courseService.delete(courseId));
     }
@@ -100,7 +102,7 @@ class ICourseManagementTests {
         userResponse.setRole(UserRole.ADMIN);
 
         when(courseRepository.findById(courseId)).thenReturn(Optional.of(courseEntity));
-        when(userService.getAuthenticatedUser()).thenReturn(userResponse);
+        when(userExternalAPI.getAuthenticatedUser()).thenReturn(userResponse);
 
         assertDoesNotThrow(() -> courseService.delete(courseId));
 
