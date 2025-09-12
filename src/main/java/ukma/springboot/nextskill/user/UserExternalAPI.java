@@ -23,4 +23,6 @@ public interface UserExternalAPI {
 
     UserResponse getWithCourses(UUID userId);
     List<CourseResponse> getCourses(UUID userId);
+
+    UserResponse getResponse(UUID id);
 }

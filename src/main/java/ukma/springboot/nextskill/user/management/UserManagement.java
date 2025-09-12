@@ -41,6 +41,11 @@ public class UserManagement implements UserInternalAPI, UserExternalAPI {
     }
 
     @Override
+    public UserResponse getResponse(UUID id) {
+        return UserMapper.toUserResponse(userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", id)));
+    }
+
+    @Override
     public UserResponse create(UserView userView) {
         userValidator.validateForCreation(userView);
         UserEntity userEntity = userRepository.save(UserMapper.toUserEntity(userView, passwordEncoder));
