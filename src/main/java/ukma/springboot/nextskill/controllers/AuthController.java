@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import ukma.springboot.nextskill.models.views.UserView;
 import org.springframework.web.bind.annotation.*;
-import ukma.springboot.nextskill.user.UserExternalAPI;
+import ukma.springboot.nextskill.modules.user.UserExternalAPI;
 
 @Controller
 @AllArgsConstructor

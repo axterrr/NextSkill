@@ -4,15 +4,15 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ukma.springboot.nextskill.course.CourseExternalAPI;
+import ukma.springboot.nextskill.modules.course.CourseExternalAPI;
 import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.responses.PostResponse;
 import ukma.springboot.nextskill.models.responses.SectionResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.PostView;
-import ukma.springboot.nextskill.post.PostExternalAPI;
-import ukma.springboot.nextskill.section.SectionExternalAPI;
-import ukma.springboot.nextskill.user.UserExternalAPI;
+import ukma.springboot.nextskill.modules.post.PostExternalAPI;
+import ukma.springboot.nextskill.modules.section.SectionExternalAPI;
+import ukma.springboot.nextskill.modules.user.UserExternalAPI;
 
 import java.util.UUID;
 

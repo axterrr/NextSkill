@@ -1,7 +1,7 @@
 package ukma.springboot.nextskill.models.mappers;
 
 import ukma.springboot.nextskill.models.entities.CourseEntity;
-import ukma.springboot.nextskill.course.mapper.CourseMapper;
+import ukma.springboot.nextskill.modules.course.mapper.CourseMapper;
 import ukma.springboot.nextskill.models.entities.SectionEntity;
 import ukma.springboot.nextskill.models.responses.SectionResponse;
 import ukma.springboot.nextskill.models.views.SectionView;

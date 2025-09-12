@@ -6,11 +6,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
-import ukma.springboot.nextskill.course.CourseExternalAPI;
+import ukma.springboot.nextskill.modules.course.CourseExternalAPI;
 import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
-import ukma.springboot.nextskill.services.SectionService;
-import ukma.springboot.nextskill.services.UserService;
+import ukma.springboot.nextskill.modules.section.SectionExternalAPI;
+import ukma.springboot.nextskill.modules.user.UserExternalAPI;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,13 +22,13 @@ import static org.mockito.Mockito.*;
 class CourseControllerTest {
 
     @Mock
-    private UserService userService;
+    private UserExternalAPI userExternalAPI;
 
     @Mock
     private CourseExternalAPI courseExternalAPI;
 
     @Mock
-    private SectionService sectionService;
+    private SectionExternalAPI sectionExternalAPI;
 
     @Mock
     private Model model;
@@ -61,11 +61,11 @@ class CourseControllerTest {
 
     @Test
     void testHome() {
-        when(userService.getAuthenticatedUser()).thenReturn(mockUser);
+        when(userExternalAPI.getAuthenticatedUser()).thenReturn(mockUser);
 
         String viewName = coursesController.home(model);
 
-        verify(userService).getAuthenticatedUser();
+        verify(userExternalAPI).getAuthenticatedUser();
         verify(model).addAttribute("user", mockUser);
 
         assertEquals("home", viewName, "The returned view name should be 'home'");
@@ -74,11 +74,11 @@ class CourseControllerTest {
     @Test
     void testEnroll() {
         UUID courseUuid = mockCourse.getUuid();
-        when(userService.getAuthenticatedUser()).thenReturn(mockUser);
+        when(userExternalAPI.getAuthenticatedUser()).thenReturn(mockUser);
 
         String viewName = coursesController.enroll(courseUuid, model);
 
-        verify(userService).getAuthenticatedUser();
+        verify(userExternalAPI).getAuthenticatedUser();
         verify(courseExternalAPI).enrollStudent(courseUuid, mockUser.getUuid());
 
         assertEquals("redirect:/course/" + courseUuid + "?enrolled", viewName, "The returned view should redirect to the course page with enrolled query.");
@@ -87,11 +87,11 @@ class CourseControllerTest {
     @Test
     void testUnroll() {
         UUID courseUuid = mockCourse.getUuid();
-        when(userService.getAuthenticatedUser()).thenReturn(mockUser);
+        when(userExternalAPI.getAuthenticatedUser()).thenReturn(mockUser);
 
         String viewName = coursesController.unroll(courseUuid, model);
 
-        verify(userService).getAuthenticatedUser();
+        verify(userExternalAPI).getAuthenticatedUser();
         verify(courseExternalAPI).unrollStudent(courseUuid, mockUser.getUuid());
 
         assertEquals("redirect:/course/" + courseUuid + "?unrolled", viewName, "The returned view should redirect to the course page with unrolled query.");
