@@ -1,8 +1,8 @@
-package ukma.springboot.nextskill.validation.constraints;
+package ukma.springboot.nextskill.modules.user.validation.constraints;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import ukma.springboot.nextskill.validation.constraints.validators.ConfirmPasswordValidator;
+import ukma.springboot.nextskill.modules.user.validation.constraints.validators.ConfirmPasswordValidator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

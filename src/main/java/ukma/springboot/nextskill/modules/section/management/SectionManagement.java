@@ -10,7 +10,7 @@ import ukma.springboot.nextskill.models.views.SectionView;
 import ukma.springboot.nextskill.modules.section.repository.SectionRepository;
 import ukma.springboot.nextskill.modules.section.SectionExternalAPI;
 import ukma.springboot.nextskill.modules.section.SectionInternalAPI;
-import ukma.springboot.nextskill.validation.SectionValidator;
+import ukma.springboot.nextskill.modules.section.validation.SectionValidator;
 
 import java.util.List;
 import java.util.UUID;

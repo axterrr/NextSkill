@@ -1,9 +1,9 @@
-package ukma.springboot.nextskill.validation.constraints.validators;
+package ukma.springboot.nextskill.modules.user.validation.constraints.validators;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import ukma.springboot.nextskill.models.views.UserView;
-import ukma.springboot.nextskill.validation.constraints.ConfirmPassword;
+import ukma.springboot.nextskill.modules.user.validation.constraints.ConfirmPassword;
 
 public class ConfirmPasswordValidator implements ConstraintValidator<ConfirmPassword, UserView> {
     @Override

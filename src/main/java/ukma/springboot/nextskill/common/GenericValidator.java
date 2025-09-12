@@ -1,4 +1,4 @@
-package ukma.springboot.nextskill.validation;
+package ukma.springboot.nextskill.common;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ValidationException;

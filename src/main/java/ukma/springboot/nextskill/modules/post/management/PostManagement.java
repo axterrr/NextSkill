@@ -10,7 +10,7 @@ import ukma.springboot.nextskill.models.views.PostView;
 import ukma.springboot.nextskill.modules.post.PostExternalAPI;
 import ukma.springboot.nextskill.modules.post.PostInternalAPI;
 import ukma.springboot.nextskill.modules.post.repository.PostRepository;
-import ukma.springboot.nextskill.validation.PostValidator;
+import ukma.springboot.nextskill.modules.post.validation.PostValidator;
 
 import java.util.List;
 import java.util.UUID;

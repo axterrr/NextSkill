@@ -16,7 +16,7 @@ import ukma.springboot.nextskill.models.views.UserView;
 import ukma.springboot.nextskill.modules.user.repository.UserRepository;
 import ukma.springboot.nextskill.modules.user.UserExternalAPI;
 import ukma.springboot.nextskill.modules.user.UserInternalAPI;
-import ukma.springboot.nextskill.validation.UserValidator;
+import ukma.springboot.nextskill.modules.user.validation.UserValidator;
 
 import java.util.ArrayList;
 import java.util.List;

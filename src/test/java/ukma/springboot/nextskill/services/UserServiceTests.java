@@ -15,7 +15,7 @@ import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.UserView;
 import ukma.springboot.nextskill.modules.user.repository.UserRepository;
 import ukma.springboot.nextskill.modules.user.management.UserManagement;
-import ukma.springboot.nextskill.validation.UserValidator;
+import ukma.springboot.nextskill.modules.user.validation.UserValidator;
 
 import java.util.Optional;
 import java.util.UUID;
