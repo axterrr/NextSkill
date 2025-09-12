@@ -10,6 +10,7 @@ import java.util.UUID;
 
 public interface UserExternalAPI {
 
+    UserEntity get(UUID id);
     UserResponse create(UserView view);
     UserResponse update(UserView view);
     void delete(UUID id);

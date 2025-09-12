@@ -7,5 +7,4 @@ import java.util.UUID;
 
 public interface SectionInternalAPI {
     List<SectionResponse> getAll();
-    SectionResponse get(UUID id);
 }

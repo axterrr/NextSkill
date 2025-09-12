@@ -7,5 +7,4 @@ import java.util.UUID;
 
 public interface PostInternalAPI {
     List<PostResponse> getAll();
-    PostResponse get(UUID id);
 }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import ukma.springboot.nextskill.models.entities.UserEntity;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.UserView;
 import ukma.springboot.nextskill.user.UserExternalAPI;
@@ -27,7 +28,7 @@ public class UserController {
 
     @GetMapping("user/{id}")
     public String getUser(@PathVariable UUID id, Model model) {
-        UserResponse user = userExternalAPI.get(id);
+        UserEntity user = userExternalAPI.get(id);
         model.addAttribute("currentUser", userExternalAPI.getAuthenticatedUser());
         model.addAttribute("user", userExternalAPI.getWithCourses(user.getUuid()));
         return "profile";

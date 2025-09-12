@@ -8,5 +8,4 @@ import java.util.UUID;
 
 public interface UserInternalAPI {
     List<UserEntity> getAll();
-    UserEntity get(UUID id);
 }

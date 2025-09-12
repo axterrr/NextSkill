@@ -7,5 +7,4 @@ import java.util.UUID;
 
 public interface TestInternalAPI {
     List<TestEntity> getAll();
-    TestEntity get(UUID id);
 }

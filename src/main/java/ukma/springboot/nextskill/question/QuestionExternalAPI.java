@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface QuestionExternalAPI {
+    QuestionResponse get(UUID id);
     QuestionResponse create(QuestionView view);
     QuestionResponse update(QuestionView view);
     void delete(UUID id);

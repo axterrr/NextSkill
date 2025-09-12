@@ -7,5 +7,4 @@ import java.util.UUID;
 
 public interface CourseInternalAPI {
     List<CourseResponse> getAll();
-    CourseResponse get(UUID id);
 }

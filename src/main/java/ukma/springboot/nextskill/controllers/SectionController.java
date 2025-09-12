@@ -12,8 +12,6 @@ import ukma.springboot.nextskill.models.responses.SectionResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.SectionView;
 import ukma.springboot.nextskill.section.SectionExternalAPI;
-import ukma.springboot.nextskill.services.SectionService;
-import ukma.springboot.nextskill.services.UserService;
 import ukma.springboot.nextskill.user.UserExternalAPI;
 
 import java.util.UUID;

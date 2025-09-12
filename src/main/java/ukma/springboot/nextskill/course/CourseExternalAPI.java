@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CourseExternalAPI {
-
+    CourseResponse get(UUID id);
     CourseResponse create(CourseView courseView);
     void enrollStudent(UUID courseId, UUID studentId);
     void unrollStudent(UUID courseUuid, UUID studentUuid);

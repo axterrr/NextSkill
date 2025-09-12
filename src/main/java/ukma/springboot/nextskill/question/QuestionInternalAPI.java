@@ -7,5 +7,4 @@ import java.util.UUID;
 
 public interface QuestionInternalAPI {
     List<QuestionResponse> getAll();
-    QuestionResponse get(UUID id);
 }
