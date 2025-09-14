@@ -1,5 +1,6 @@
 package ukma.springboot.nextskill.modules.course.mapper;
 
+import org.springframework.modulith.NamedInterface;
 import ukma.springboot.nextskill.models.entities.CourseEntity;
 import ukma.springboot.nextskill.models.entities.SectionEntity;
 import ukma.springboot.nextskill.models.entities.UserEntity;
@@ -11,6 +12,7 @@ import ukma.springboot.nextskill.models.views.CourseView;
 import static ukma.springboot.nextskill.models.mappers.MapperUtility.mapIfInitialized;
 import static ukma.springboot.nextskill.models.mappers.MapperUtility.orElse;
 
+@NamedInterface
 public class CourseMapper {
 
     private CourseMapper() {}

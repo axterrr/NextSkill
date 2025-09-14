@@ -8,13 +8,13 @@ import ukma.springboot.nextskill.NextSkillApplication;
 
 @SpringBootTest
 class DocumentationTests {
+    static ApplicationModules modules = ApplicationModules.of(NextSkillApplication.class);
 
     @Test
     void generateModulithDocumentation() {
-        var modules = ApplicationModules.of(NextSkillApplication.class).verify();
+        modules.verify();
 
-        new Documenter(modules)
-                .writeDocumentation()
+        new Documenter(modules).writeDocumentation()
                 .writeIndividualModulesAsPlantUml();
     }
 }

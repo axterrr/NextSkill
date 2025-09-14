@@ -1,5 +1,6 @@
 package ukma.springboot.nextskill.modules.attempt;
 
+import org.springframework.modulith.NamedInterface;
 import ukma.springboot.nextskill.models.responses.TestAttemptResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.TestAttemptView;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@NamedInterface
 public interface AttemptExternalAPI {
     TestAttemptResponse get(UUID id);
     TestAttemptResponse create(TestAttemptView view);

@@ -1,5 +1,6 @@
 package ukma.springboot.nextskill.modules.test;
 
+import org.springframework.modulith.NamedInterface;
 import ukma.springboot.nextskill.models.entities.TestEntity;
 import ukma.springboot.nextskill.models.responses.TestResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
@@ -7,6 +8,7 @@ import ukma.springboot.nextskill.models.views.TestView;
 
 import java.util.UUID;
 
+@NamedInterface
 public interface TestExternalAPI {
     TestEntity get(UUID id);
     TestResponse create(TestView view);

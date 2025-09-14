@@ -2,7 +2,6 @@ plugins {
     java
     id("org.springframework.boot") version "3.3.3"
     id("io.spring.dependency-management") version "1.1.6"
-    id("org.asciidoctor.jvm.convert") version "3.3.2"
 }
 
 group = "ukma.springboot"
@@ -42,8 +41,10 @@ dependencies {
 
     // Modulith
     // https://mvnrepository.com/artifact/org.springframework.modulith/spring-modulith-starter-core
-    implementation("org.springframework.modulith:spring-modulith-starter-core:2.0.0-M2")
-    testImplementation("org.springframework.modulith:spring-modulith-docs:2.0.0-M2")
+    implementation("org.springframework.modulith:spring-modulith-starter-core:1.2.1")
+    testImplementation("org.springframework.modulith:spring-modulith-starter-test:1.2.1")
+    testImplementation("org.springframework.modulith:spring-modulith-docs:1.2.1")
+
 
 }
 

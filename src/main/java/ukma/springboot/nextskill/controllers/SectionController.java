@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import ukma.springboot.nextskill.modules.course.management.CourseManagement;
+import ukma.springboot.nextskill.modules.course.CourseExternalAPI;
 import ukma.springboot.nextskill.models.responses.SectionResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.SectionView;
@@ -24,7 +24,7 @@ public class SectionController {
     private static final String SECTION = "section";
     private SectionExternalAPI sectionExternalAPI;
     private UserExternalAPI userExternalAPI;
-    private CourseManagement courseManagement;
+    private CourseExternalAPI courseExternalAPI;
 
     @GetMapping("section/{sectionUuid}/edit")
     public String editSection(@PathVariable UUID sectionUuid, Model model) {
@@ -43,7 +43,7 @@ public class SectionController {
         UUID courseId = sectionResponse.getCourse().getUuid();
 
         UserResponse authenticated = userExternalAPI.getAuthenticatedUser();
-        boolean isOwner = courseManagement.hasOwnerRights(authenticated.getUuid(), courseId);
+        boolean isOwner = courseExternalAPI.hasOwnerRights(authenticated.getUuid(), courseId);
         if (!isOwner && !userExternalAPI.isAdmin(authenticated.getUuid()))
             return REDIRECT_TO_COURSE + courseId;
 

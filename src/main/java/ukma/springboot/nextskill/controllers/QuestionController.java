@@ -15,7 +15,7 @@ import ukma.springboot.nextskill.models.responses.TestResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.QuestionView;
 import ukma.springboot.nextskill.modules.question.QuestionExternalAPI;
-import ukma.springboot.nextskill.modules.test.management.TestManagement;
+import ukma.springboot.nextskill.modules.test.TestExternalAPI;
 import ukma.springboot.nextskill.modules.user.UserExternalAPI;
 
 import java.util.UUID;
@@ -25,7 +25,7 @@ import java.util.UUID;
 public class QuestionController {
 
     private static final String MANAGE_QUESTION = "/manage-questions";
-    private TestManagement testExternalAPI;
+    private TestExternalAPI testExternalAPI;
     private UserExternalAPI userExternalAPI;
     private QuestionExternalAPI questionExternalAPI;
     private AttemptExternalAPI attemptExternalAPI;
