@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ukma.springboot.nextskill.answer.AnswerExternalAPI;
 import ukma.springboot.nextskill.attempt.AttemptExternalAPI;
 import ukma.springboot.nextskill.exceptions.MaxAttemptsException;
 import ukma.springboot.nextskill.models.entities.QuestionEntity;
@@ -29,7 +28,6 @@ public class TestController {
     public static final String REDIRECT_TO_TEST = "redirect:/test/";
     private static final String REDIRECT_TO_HOME = "redirect:/home";
     private static final String QUESTIONS = "questions";
-    private AnswerExternalAPI answerExternalAPI;
     private TestExternalAPI testExternalAPI;
     private UserExternalAPI userExternalAPI;
     private AttemptExternalAPI attemptExternalAPI;
@@ -125,17 +123,9 @@ public class TestController {
     ) {
         UUID testId = UUID.fromString(testUuid);
         UUID attemptId = UUID.fromString(attemptUuid);
-
-        TestAttemptResponse attempt = attemptExternalAPI.get(attemptId);
-        if(attempt.isSubmitted())
-            return REDIRECT_TO_TEST + testUuid;
-
         UserResponse authenticated = userExternalAPI.getAuthenticatedUser();
-        testExternalAPI.checkTestAccess(testId, authenticated);
-        attemptExternalAPI.checkAttemptAccess(attemptId, authenticated);
 
-        answerExternalAPI.updateSavedAnswers(formData, UUID.fromString(attemptUuid));
-        attemptExternalAPI.submitAttempt(attemptId);
+        attemptExternalAPI.submitAttemptWithAnswers(testId, attemptId, formData, authenticated);
 
         return REDIRECT_TO_TEST + testUuid;
     }
@@ -148,18 +138,16 @@ public class TestController {
     ) {
         UUID testId = UUID.fromString(testUuid);
         UUID attemptId = UUID.fromString(attemptUuid);
+        UserResponse authenticated = userExternalAPI.getAuthenticatedUser();
 
-        TestAttemptResponse attempt = attemptExternalAPI.get(attemptId);
-        if(attempt.isSubmitted())
+        boolean saved = attemptExternalAPI.saveAttemptWithAnswers(testId, attemptId, formData, authenticated);
+
+        if (!saved) {
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
                     .body("Cannot update answers for a submitted attempt.");
+        }
 
-        UserResponse authenticated = userExternalAPI.getAuthenticatedUser();
-        testExternalAPI.checkTestAccess(testId, authenticated);
-        attemptExternalAPI.checkAttemptAccess(attemptId, authenticated);
-
-        answerExternalAPI.updateSavedAnswers(formData, UUID.fromString(attemptUuid));
         return ResponseEntity.ok("Answers saved successfully");
     }
 

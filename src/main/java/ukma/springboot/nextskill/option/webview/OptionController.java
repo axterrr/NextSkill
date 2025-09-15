@@ -1,12 +1,13 @@
 package ukma.springboot.nextskill.option.webview;
 
 import lombok.AllArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import ukma.springboot.nextskill.attempt.AttemptExternalAPI;
+import ukma.springboot.nextskill.option.OptionChangedEvent;
 import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.responses.QuestionOptionResponse;
 import ukma.springboot.nextskill.models.responses.QuestionResponse;
@@ -30,7 +31,7 @@ public class OptionController {
     private OptionExternalAPI optionExternalAPI;
     private UserExternalAPI userExternalAPI;
     private TestExternalAPI testExternalAPI;
-    private AttemptExternalAPI attemptExternalAPI;
+    private ApplicationEventPublisher eventPublisher;
 
     @PostMapping("/option/{optionUuid}/set-correct")
     public ResponseEntity<String> setCorrect(
@@ -65,7 +66,7 @@ public class OptionController {
         if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
             return REDIRECT_TO_QUESTION+ associatedQuestion.getId() + MANAGE_OPTIONS;
 
-        attemptExternalAPI.removeAllWithTest(associatedTest.getUuid());
+        eventPublisher.publishEvent(new OptionChangedEvent(this, associatedTest.getUuid(), optionId));
         optionExternalAPI.delete(optionId);
 
         return REDIRECT_TO_QUESTION+ associatedQuestion.getId() + MANAGE_OPTIONS;

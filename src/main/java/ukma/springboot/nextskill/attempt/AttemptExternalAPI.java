@@ -5,6 +5,7 @@ import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.TestAttemptView;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,4 +21,7 @@ public interface AttemptExternalAPI {
     TestAttemptResponse createNewAttempt(UUID testId, UUID userId);
     void checkAttemptAccess(UUID attemptId, UserResponse authenticated);
     void submitAttempt(UUID attemptId);
+
+    void submitAttemptWithAnswers(UUID testId, UUID attemptId, Map<String, String> formData, UserResponse authenticated);
+    boolean saveAttemptWithAnswers(UUID testId, UUID attemptId, Map<String, String> formData, UserResponse authenticated);
 }

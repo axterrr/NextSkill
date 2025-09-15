@@ -3,6 +3,7 @@ package ukma.springboot.nextskill.attempt.management;
 import lombok.AllArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
+import ukma.springboot.nextskill.answer.AnswerExternalAPI;
 import ukma.springboot.nextskill.attempt.AttemptExternalAPI;
 import ukma.springboot.nextskill.attempt.AttemptInternalAPI;
 import ukma.springboot.nextskill.exceptions.NoAccessException;
@@ -20,6 +21,7 @@ import ukma.springboot.nextskill.test.TestExternalAPI;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,6 +32,7 @@ public class AttemptManagement implements AttemptExternalAPI, AttemptInternalAPI
     private static final String TEST_ATTEMPT = "TestAttempt";
     private final AttemptRepository attemptRepository;
     private final TestExternalAPI testExternalAPI;
+    private final AnswerExternalAPI answerExternalAPI;
 
     @Override
     public List<TestAttemptResponse> getAll() {
@@ -142,5 +145,33 @@ public class AttemptManagement implements AttemptExternalAPI, AttemptInternalAPI
     @Override
     public void removeAllWithTest(UUID uuid) {
         attemptRepository.deleteAllByTestUuid(uuid);
+    }
+
+    @Override
+    public void submitAttemptWithAnswers(UUID testId, UUID attemptId, Map<String, String> formData, UserResponse authenticated) {
+        TestAttemptResponse attempt = this.get(attemptId);
+        if (attempt.isSubmitted()) {
+            return;
+        }
+
+        testExternalAPI.checkTestAccess(testId, authenticated);
+        this.checkAttemptAccess(attemptId, authenticated);
+
+        answerExternalAPI.updateSavedAnswers(formData, attemptId);
+        this.submitAttempt(attemptId);
+    }
+
+    @Override
+    public boolean saveAttemptWithAnswers(UUID testId, UUID attemptId, Map<String, String> formData, UserResponse authenticated) {
+        TestAttemptResponse attempt = this.get(attemptId);
+        if (attempt.isSubmitted()) {
+            return false;
+        }
+
+        testExternalAPI.checkTestAccess(testId, authenticated);
+        this.checkAttemptAccess(attemptId, authenticated);
+
+        answerExternalAPI.updateSavedAnswers(formData, attemptId);
+        return true;
     }
 }
