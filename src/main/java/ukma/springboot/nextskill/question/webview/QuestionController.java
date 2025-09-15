@@ -1,13 +1,15 @@
 package ukma.springboot.nextskill.question.webview;
 
 import lombok.AllArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import ukma.springboot.nextskill.test.webview.TestController;
+import ukma.springboot.nextskill.common.Redirect;
+import ukma.springboot.nextskill.question.QuestionDeletedEvent;
 import ukma.springboot.nextskill.attempt.AttemptExternalAPI;
 import ukma.springboot.nextskill.models.entities.TestEntity;
 import ukma.springboot.nextskill.models.enums.UserRole;
@@ -29,7 +31,7 @@ public class QuestionController {
     private TestExternalAPI testExternalAPI;
     private UserExternalAPI userExternalAPI;
     private QuestionExternalAPI questionExternalAPI;
-    private AttemptExternalAPI attemptExternalAPI;
+    private ApplicationEventPublisher eventPublisher;
 
     @PostMapping("/question/{questionUuid}/delete")
     public String deleteQuestion(@PathVariable(name = "questionUuid") String questionUuid
@@ -40,12 +42,12 @@ public class QuestionController {
         UserResponse authenticated = userExternalAPI.getAuthenticatedUser();
         boolean isOwner = testExternalAPI.hasOwnerRights(authenticated.getUuid(), associatedTest.getUuid());
         if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
-            return TestController.REDIRECT_TO_TEST + associatedTest.getUuid();
+            return Redirect.REDIRECT_TO_TEST + associatedTest.getUuid();
 
-        attemptExternalAPI.removeAllWithTest(associatedTest.getUuid());
+        eventPublisher.publishEvent(new QuestionDeletedEvent(this, associatedTest.getUuid(), questionId));
         questionExternalAPI.delete(questionId);
 
-        return TestController.REDIRECT_TO_TEST + associatedTest.getUuid() + MANAGE_QUESTION;
+        return Redirect.REDIRECT_TO_TEST + associatedTest.getUuid() + MANAGE_QUESTION;
     }
 
     @PostMapping("/question/{questionUuid}/edit")
@@ -59,11 +61,11 @@ public class QuestionController {
         UserResponse authenticated = userExternalAPI.getAuthenticatedUser();
         boolean isOwner = testExternalAPI.hasOwnerRights(authenticated.getUuid(), associatedTest.getUuid());
         if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
-            return TestController.REDIRECT_TO_TEST + associatedTest.getUuid();
+            return Redirect.REDIRECT_TO_TEST + associatedTest.getUuid();
 
         questionExternalAPI.update(questionView);
 
-        return TestController.REDIRECT_TO_TEST + associatedTest.getUuid() + MANAGE_QUESTION;
+        return Redirect.REDIRECT_TO_TEST + associatedTest.getUuid() + MANAGE_QUESTION;
     }
 
     @PostMapping("/question/add")
@@ -75,7 +77,7 @@ public class QuestionController {
         UserResponse authenticated = userExternalAPI.getAuthenticatedUser();
         boolean isOwner = testExternalAPI.hasOwnerRights(authenticated.getUuid(), associatedTest.getUuid());
         if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
-            return TestController.REDIRECT_TO_TEST + associatedTest.getUuid();
+            return Redirect.REDIRECT_TO_TEST + associatedTest.getUuid();
 
         QuestionView view = QuestionView.builder()
                 .questionText(questionView.getQuestionText())
@@ -84,7 +86,7 @@ public class QuestionController {
 
         questionExternalAPI.create(view);
 
-        return TestController.REDIRECT_TO_TEST + associatedTest.getUuid() + MANAGE_QUESTION;
+        return Redirect.REDIRECT_TO_TEST + associatedTest.getUuid() + MANAGE_QUESTION;
     }
 
     @GetMapping("/question/{questionUuid}/manage-options")
@@ -99,7 +101,7 @@ public class QuestionController {
         UserResponse authenticated = userExternalAPI.getAuthenticatedUser();
         boolean isOwner = testExternalAPI.hasOwnerRights(authenticated.getUuid(), associatedTest.getUuid());
         if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
-            return TestController.REDIRECT_TO_TEST + associatedTest.getUuid();
+            return Redirect.REDIRECT_TO_TEST + associatedTest.getUuid();
 
         model.addAttribute("question", questionResponse);
         model.addAttribute("options", questionResponse.getQuestionOptions());

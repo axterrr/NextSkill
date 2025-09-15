@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import ukma.springboot.nextskill.option.OptionChangedEvent;
+import ukma.springboot.nextskill.option.OptionDeletedEvent;
 import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.responses.QuestionOptionResponse;
 import ukma.springboot.nextskill.models.responses.QuestionResponse;
@@ -66,7 +66,7 @@ public class OptionController {
         if(!isOwner && authenticated.getRole() != UserRole.ADMIN)
             return REDIRECT_TO_QUESTION+ associatedQuestion.getId() + MANAGE_OPTIONS;
 
-        eventPublisher.publishEvent(new OptionChangedEvent(this, associatedTest.getUuid(), optionId));
+        eventPublisher.publishEvent(new OptionDeletedEvent(this, associatedTest.getUuid(), optionId));
         optionExternalAPI.delete(optionId);
 
         return REDIRECT_TO_QUESTION+ associatedQuestion.getId() + MANAGE_OPTIONS;
