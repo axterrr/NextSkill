@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ukma.springboot.nextskill.models.enums.UserRole;
-import ukma.springboot.nextskill.modules.user.validation.constraints.ConfirmPassword;
+import ukma.springboot.nextskill.user.validation.constraints.ConfirmPassword;
 
 import java.util.UUID;
 

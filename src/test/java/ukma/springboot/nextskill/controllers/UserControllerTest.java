@@ -8,7 +8,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.UserView;
-import ukma.springboot.nextskill.modules.user.UserExternalAPI;
+import ukma.springboot.nextskill.user.UserExternalAPI;
+import ukma.springboot.nextskill.user.webview.UserController;
 
 import java.util.UUID;
 
