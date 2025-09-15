@@ -1,13 +1,11 @@
 package ukma.springboot.nextskill.course;
 
-import org.springframework.modulith.NamedInterface;
 import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.views.CourseView;
 
 import java.util.List;
 import java.util.UUID;
 
-@NamedInterface
 public interface CourseExternalAPI {
     CourseResponse get(UUID id);
     CourseResponse create(CourseView courseView);

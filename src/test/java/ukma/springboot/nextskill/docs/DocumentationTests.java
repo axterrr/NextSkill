@@ -11,10 +11,16 @@ class DocumentationTests {
     static ApplicationModules modules = ApplicationModules.of(NextSkillApplication.class);
 
     @Test
-    void generateModulithDocumentation() {
+    void shouldBeCompliant() {
         modules.verify();
+    }
 
-        new Documenter(modules).writeDocumentation()
+    @Test
+    void writeDocumentationSnippets() {
+        new Documenter(modules)
+                .writeModuleCanvases()
+                .writeModulesAsPlantUml()
+                .writeDocumentation()
                 .writeIndividualModulesAsPlantUml();
     }
 }
