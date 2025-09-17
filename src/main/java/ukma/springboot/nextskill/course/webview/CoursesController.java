@@ -1,6 +1,7 @@
 package ukma.springboot.nextskill.course.webview;
 
 import lombok.AllArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +11,7 @@ import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.CourseView;
 import ukma.springboot.nextskill.models.views.SectionView;
-import ukma.springboot.nextskill.section.SectionExternalAPI;
+import ukma.springboot.nextskill.section.SectionCreateEvent;
 import ukma.springboot.nextskill.user.UserExternalAPI;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class CoursesController {
     private static final String COURSE = "course";
     private UserExternalAPI userExternalAPI;
     private CourseExternalAPI courseExternalAPI;
-    private SectionExternalAPI sectionExternalAPI;
+    private ApplicationEventPublisher eventPublisher;
 
     @GetMapping("home")
     public String home(Model model) {
@@ -159,7 +160,7 @@ public class CoursesController {
                 .courseId(courseUuid)
                 .build();
 
-        sectionExternalAPI.create(sectionView);
+        eventPublisher.publishEvent(new SectionCreateEvent(this, sectionView));
 
         return REDIRECT_TO_COURSE + courseUuid + "?section&added";
     }

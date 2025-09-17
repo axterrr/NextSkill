@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ukma.springboot.nextskill.common.Redirect;
 import ukma.springboot.nextskill.question.QuestionDeletedEvent;
-import ukma.springboot.nextskill.attempt.AttemptExternalAPI;
 import ukma.springboot.nextskill.models.entities.TestEntity;
 import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.responses.QuestionResponse;
