@@ -4,30 +4,30 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import ukma.springboot.nextskill.course.CourseExternalAPI;
+import ukma.springboot.nextskill.course.service.CourseService;
 import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.views.CourseView;
 import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.responses.*;
 import ukma.springboot.nextskill.models.views.*;
-import ukma.springboot.nextskill.option.OptionExternalAPI;
-import ukma.springboot.nextskill.post.PostExternalAPI;
-import ukma.springboot.nextskill.question.QuestionExternalAPI;
-import ukma.springboot.nextskill.section.SectionExternalAPI;
-import ukma.springboot.nextskill.test.TestExternalAPI;
-import ukma.springboot.nextskill.user.UserExternalAPI;
+import ukma.springboot.nextskill.assessment.service.OptionService;
+import ukma.springboot.nextskill.post.service.PostService;
+import ukma.springboot.nextskill.assessment.service.QuestionService;
+import ukma.springboot.nextskill.course.service.SectionService;
+import ukma.springboot.nextskill.assessment.service.TestService;
+import ukma.springboot.nextskill.user.service.UserService;
 
 @SpringBootApplication
 @AllArgsConstructor
 public class NextSkillApplication implements CommandLineRunner {
 
-    private UserExternalAPI userExternalAPI;
-    private CourseExternalAPI courseExternalAPI;
-    private SectionExternalAPI sectionExternalAPI;
-    private PostExternalAPI postExternalAPI;
-    private TestExternalAPI testExternalAPI;
-    private QuestionExternalAPI questionExternalAPI;
-    private OptionExternalAPI optionExternalAPI;
+    private UserService userService;
+    private CourseService courseExternalAPI;
+    private SectionService sectionExternalAPI;
+    private PostService postService;
+    private TestService testService;
+    private QuestionService questionService;
+    private OptionService optionService;
 
     public static void main(String[] args) {
         SpringApplication.run(NextSkillApplication.class, args);
@@ -87,11 +87,11 @@ public class NextSkillApplication implements CommandLineRunner {
                 .build();
 
 
-        UserResponse createdTeacher = userExternalAPI.create(teacher);
-        UserResponse createdStudent = userExternalAPI.create(student);
-        UserResponse createdStudent2 = userExternalAPI.create(student2);
-        UserResponse createdAdmin = userExternalAPI.create(admin);
-        UserResponse createdNewTeacher =  userExternalAPI.create(newTeacher);
+        UserResponse createdTeacher = userService.create(teacher);
+        UserResponse createdStudent = userService.create(student);
+        UserResponse createdStudent2 = userService.create(student2);
+        UserResponse createdAdmin = userService.create(admin);
+        UserResponse createdNewTeacher =  userService.create(newTeacher);
 
 
         CourseView course1 = CourseView.builder()
@@ -172,14 +172,14 @@ public class NextSkillApplication implements CommandLineRunner {
                 .sectionId(createdSection1.getUuid())
                 .build();
 
-        TestResponse createdTest = testExternalAPI.create(test);
+        TestResponse createdTest = testService.create(test);
 
         QuestionView question = QuestionView.builder()
                 .questionText("How do you feel?")
                 .testId(createdTest.getUuid())
                 .build();
 
-        QuestionResponse createdQuestion = questionExternalAPI.create(question);
+        QuestionResponse createdQuestion = questionService.create(question);
 
         QuestionOptionView option1 = QuestionOptionView.builder()
                 .isCorrect(true)
@@ -193,15 +193,15 @@ public class NextSkillApplication implements CommandLineRunner {
                 .questionId(createdQuestion.getId())
                 .build();
 
-        optionExternalAPI.create(option1);
-        optionExternalAPI.create(option2);
+        optionService.create(option1);
+        optionService.create(option2);
 
         QuestionView question2 = QuestionView.builder()
                 .questionText("Which animal do you like?")
                 .testId(createdTest.getUuid())
                 .build();
 
-        QuestionResponse createdQuestion2 = questionExternalAPI.create(question2);
+        QuestionResponse createdQuestion2 = questionService.create(question2);
 
         QuestionOptionView option21 = QuestionOptionView.builder()
                 .isCorrect(true)
@@ -227,13 +227,13 @@ public class NextSkillApplication implements CommandLineRunner {
                 .questionId(createdQuestion2.getId())
                 .build();
 
-        optionExternalAPI.create(option21);
-        optionExternalAPI.create(option22);
-        optionExternalAPI.create(option23);
-        optionExternalAPI.create(option24);
+        optionService.create(option21);
+        optionService.create(option22);
+        optionService.create(option23);
+        optionService.create(option24);
 
-        postExternalAPI.create(post1);
-        postExternalAPI.create(post2);
-        postExternalAPI.create(post3);
+        postService.create(post1);
+        postService.create(post2);
+        postService.create(post3);
     }
 }

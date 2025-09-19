@@ -14,7 +14,7 @@ import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.UserView;
 import ukma.springboot.nextskill.user.repository.UserRepository;
-import ukma.springboot.nextskill.user.management.UserManagement;
+import ukma.springboot.nextskill.user.service.implementation.UserServiceImpl;
 import ukma.springboot.nextskill.user.validation.UserValidator;
 
 import java.util.Optional;
@@ -36,7 +36,7 @@ class UserServiceTests {
     private PasswordEncoder passwordEncoder;
 
     @InjectMocks
-    private UserManagement userService;
+    private UserServiceImpl userService;
 
     private UUID userId;
     private UserEntity userEntity;

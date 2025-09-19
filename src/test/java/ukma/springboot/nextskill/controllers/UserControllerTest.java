@@ -8,8 +8,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.UserView;
-import ukma.springboot.nextskill.user.UserExternalAPI;
-import ukma.springboot.nextskill.user.webview.UserController;
+import ukma.springboot.nextskill.user.service.UserService;
+import ukma.springboot.nextskill.user.controller.UserController;
 
 import java.util.UUID;
 
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
 class UserControllerTest {
 
     @Mock
-    private UserExternalAPI userExternalAPI;
+    private UserService userService;
 
     @Mock
     private Model model;
@@ -43,13 +43,13 @@ class UserControllerTest {
 
     @Test
     void testProfile() {
-        when(userExternalAPI.getAuthenticatedUser()).thenReturn(mockUser);
-        when(userExternalAPI.getWithCourses(mockUserId)).thenReturn(mockUser);
+        when(userService.getAuthenticatedUser()).thenReturn(mockUser);
+        when(userService.getWithCourses(mockUserId)).thenReturn(mockUser);
 
         String viewName = userController.profile(model);
 
-        verify(userExternalAPI).getAuthenticatedUser();
-        verify(userExternalAPI).getWithCourses(mockUserId);
+        verify(userService).getAuthenticatedUser();
+        verify(userService).getWithCourses(mockUserId);
         verify(model).addAttribute("currentUser", mockUser);
         verify(model).addAttribute("user", mockUser);
         assertEquals("profile", viewName, "The returned view name should be 'profile'");
@@ -65,7 +65,7 @@ class UserControllerTest {
 
         String viewName = userController.updateUser(mockUserId, userView);
 
-        verify(userExternalAPI).update(userView);
+        verify(userService).update(userView);
         assertEquals("redirect:/profile", viewName, "The returned view name should redirect to '/profile'");
     }
 
@@ -73,7 +73,7 @@ class UserControllerTest {
     void testDeleteUser() {
         String viewName = userController.deleteUser(mockUserId);
 
-        verify(userExternalAPI).delete(mockUserId);
+        verify(userService).delete(mockUserId);
         assertEquals("redirect:/home?user&deleted", viewName, "The returned view name should redirect to '/home?user&deleted'");
     }
 }

@@ -5,17 +5,17 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import ukma.springboot.nextskill.course.management.CourseManagement;
+import ukma.springboot.nextskill.course.service.implementation.CourseServiceImpl;
 import ukma.springboot.nextskill.course.repository.CourseRepository;
-import ukma.springboot.nextskill.exceptions.NoAccessException;
-import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
+import ukma.springboot.nextskill.common.exceptions.NoAccessException;
+import ukma.springboot.nextskill.common.exceptions.ResourceNotFoundException;
 import ukma.springboot.nextskill.models.entities.CourseEntity;
 import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.CourseView;
 import ukma.springboot.nextskill.course.validation.CourseValidator;
-import ukma.springboot.nextskill.user.UserExternalAPI;
+import ukma.springboot.nextskill.user.service.UserService;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -28,13 +28,13 @@ class ICourseManagementTests {
     private CourseRepository courseRepository;
 
     @Mock
-    private UserExternalAPI userExternalAPI;
+    private UserService userService;
 
     @Mock
     private CourseValidator courseValidator;
 
     @InjectMocks
-    private CourseManagement courseService;
+    private CourseServiceImpl courseService;
 
     private UUID courseId;
     private CourseEntity courseEntity;
@@ -91,7 +91,7 @@ class ICourseManagementTests {
     void testDeleteCourseNoAccess() {
         when(courseRepository.findById(courseId)).thenReturn(Optional.of(courseEntity));
         doThrow(new NoAccessException("You do not have permission to delete this course."))
-                .when(userExternalAPI).getAuthenticatedUser();
+                .when(userService).getAuthenticatedUser();
 
         assertThrows(NoAccessException.class, () -> courseService.delete(courseId));
     }
@@ -102,7 +102,7 @@ class ICourseManagementTests {
         userResponse.setRole(UserRole.ADMIN);
 
         when(courseRepository.findById(courseId)).thenReturn(Optional.of(courseEntity));
-        when(userExternalAPI.getAuthenticatedUser()).thenReturn(userResponse);
+        when(userService.getAuthenticatedUser()).thenReturn(userResponse);
 
         assertDoesNotThrow(() -> courseService.delete(courseId));
 

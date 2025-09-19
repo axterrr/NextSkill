@@ -10,8 +10,8 @@ import ukma.springboot.nextskill.models.entities.SectionEntity;
 import ukma.springboot.nextskill.models.entities.TestEntity;
 import ukma.springboot.nextskill.models.entities.UserEntity;
 import ukma.springboot.nextskill.models.responses.UserResponse;
-import ukma.springboot.nextskill.test.repository.TestRepository;
-import ukma.springboot.nextskill.test.management.TestManagement;
+import ukma.springboot.nextskill.assessment.repository.TestRepository;
+import ukma.springboot.nextskill.assessment.service.implementation.TestServiceImpl;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -26,7 +26,7 @@ class TestServiceTests {
     private TestRepository testRepository;
 
     @InjectMocks
-    private TestManagement testService;
+    private TestServiceImpl testService;
 
     @Test
     void testDeleteTest() {

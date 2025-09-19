@@ -11,11 +11,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
+import ukma.springboot.nextskill.common.exceptions.ResourceNotFoundException;
 import ukma.springboot.nextskill.models.entities.UserEntity;
 import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.security.managers.AuthenticationManagerImpl;
-import ukma.springboot.nextskill.user.UserExternalAPI;
+import ukma.springboot.nextskill.user.service.UserService;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
 class AuthenticationManagerTests {
 
     @Mock
-    private UserExternalAPI userExternalAPI;
+    private UserService userService;
 
     @Mock
     private PasswordEncoder passwordEncoder;
@@ -46,7 +46,7 @@ class AuthenticationManagerTests {
 
     @Test
     void testAuthenticate_Success() {
-        when(userExternalAPI.getUserByUsername(username)).thenReturn(userEntity);
+        when(userService.getUserByUsername(username)).thenReturn(userEntity);
         when(passwordEncoder.matches(password, userEntity.getPasswordHash())).thenReturn(true);
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(username, password);
@@ -55,30 +55,30 @@ class AuthenticationManagerTests {
         assertNotNull(result);
         assertEquals(username, result.getPrincipal());
         assertTrue(result.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_STUDENT")));
-        verify(userExternalAPI, times(1)).getUserByUsername(username);
+        verify(userService, times(1)).getUserByUsername(username);
         verify(passwordEncoder, times(1)).matches(password, userEntity.getPasswordHash());
     }
 
     @Test
     void testAuthenticate_IncorrectUsername() {
-        when(userExternalAPI.getUserByUsername(username)).thenThrow(ResourceNotFoundException.class);
+        when(userService.getUserByUsername(username)).thenThrow(ResourceNotFoundException.class);
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(username, password);
 
         assertThrows(BadCredentialsException.class, () -> authenticationManager.authenticate(authentication));
-        verify(userExternalAPI, times(1)).getUserByUsername(username);
+        verify(userService, times(1)).getUserByUsername(username);
         verify(passwordEncoder, never()).matches(anyString(), anyString());
     }
 
     @Test
     void testAuthenticate_IncorrectPassword() {
-        when(userExternalAPI.getUserByUsername(username)).thenReturn(userEntity);
+        when(userService.getUserByUsername(username)).thenReturn(userEntity);
         when(passwordEncoder.matches(password, userEntity.getPasswordHash())).thenReturn(false);
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(username, password);
 
         assertThrows(BadCredentialsException.class, () -> authenticationManager.authenticate(authentication));
-        verify(userExternalAPI, times(1)).getUserByUsername(username);
+        verify(userService, times(1)).getUserByUsername(username);
         verify(passwordEncoder, times(1)).matches(password, userEntity.getPasswordHash());
     }
 }

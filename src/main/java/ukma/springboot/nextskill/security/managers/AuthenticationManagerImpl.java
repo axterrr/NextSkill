@@ -9,9 +9,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
+import ukma.springboot.nextskill.common.exceptions.ResourceNotFoundException;
 import ukma.springboot.nextskill.models.entities.UserEntity;
-import ukma.springboot.nextskill.user.UserExternalAPI;
+import ukma.springboot.nextskill.user.service.UserService;
 
 import java.util.List;
 
@@ -19,14 +19,14 @@ import java.util.List;
 @AllArgsConstructor
 public class AuthenticationManagerImpl implements AuthenticationManager {
 
-    private final UserExternalAPI userExternalAPI;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         UserEntity user;
         try {
-            user = userExternalAPI.getUserByUsername(authentication.getPrincipal().toString());
+            user = userService.getUserByUsername(authentication.getPrincipal().toString());
         } catch (ResourceNotFoundException e) {
             throw new BadCredentialsException("Incorrect Username");
         }
