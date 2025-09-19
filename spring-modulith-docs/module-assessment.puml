@@ -1,0 +1,28 @@
+@startuml
+set separator none
+title Assessment
+
+top to bottom direction
+
+!include <C4/C4>
+!include <C4/C4_Context>
+!include <C4/C4_Component>
+
+Container_Boundary("NextSkillApplication.NextSkillApplication_boundary", "NextSkillApplication", $tags="") {
+  Component(NextSkillApplication.NextSkillApplication.Assessment, "Assessment", $techn="Module", $descr="", $tags="", $link="")
+  Component(NextSkillApplication.NextSkillApplication.Common, "Common", $techn="Module", $descr="", $tags="", $link="")
+  Component(NextSkillApplication.NextSkillApplication.Course, "Course", $techn="Module", $descr="", $tags="", $link="")
+  Component(NextSkillApplication.NextSkillApplication.User, "User", $techn="Module", $descr="", $tags="", $link="")
+}
+
+Rel(NextSkillApplication.NextSkillApplication.Course, NextSkillApplication.NextSkillApplication.Common, "depends on", $techn="", $tags="", $link="")
+Rel(NextSkillApplication.NextSkillApplication.Course, NextSkillApplication.NextSkillApplication.User, "uses", $techn="", $tags="", $link="")
+Rel(NextSkillApplication.NextSkillApplication.Common, NextSkillApplication.NextSkillApplication.Course, "depends on", $techn="", $tags="", $link="")
+Rel(NextSkillApplication.NextSkillApplication.Common, NextSkillApplication.NextSkillApplication.User, "depends on", $techn="", $tags="", $link="")
+Rel(NextSkillApplication.NextSkillApplication.Assessment, NextSkillApplication.NextSkillApplication.Common, "depends on", $techn="", $tags="", $link="")
+Rel(NextSkillApplication.NextSkillApplication.Assessment, NextSkillApplication.NextSkillApplication.User, "uses", $techn="", $tags="", $link="")
+Rel(NextSkillApplication.NextSkillApplication.Assessment, NextSkillApplication.NextSkillApplication.Course, "uses", $techn="", $tags="", $link="")
+Rel(NextSkillApplication.NextSkillApplication.User, NextSkillApplication.NextSkillApplication.Common, "depends on", $techn="", $tags="", $link="")
+
+SHOW_LEGEND(true)
+@enduml

@@ -1,0 +1,13 @@
+[%autowidth.stretch, cols="h,a"]
+|===
+|Base package
+|`ukma.springboot.nextskill.post`
+|Spring components
+|_Services_
+
+* `u.s.n.p.PostService` (via `u.s.n.p.service.PostServiceImpl`)
+|Bean references
+|* `u.s.n.c.CourseService` (in Course)
+* `u.s.n.u.UserService` (in User)
+* `u.s.n.c.SectionService` (in Course)
+|===

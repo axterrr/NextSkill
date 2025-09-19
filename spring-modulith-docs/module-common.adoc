@@ -1,0 +1,7 @@
+[%autowidth.stretch, cols="h,a"]
+|===
+|Base package
+|`ukma.springboot.nextskill.common`
+|Spring components
+|* `u.s.n.c.exceptions.GlobalExceptionHandler`
+|===

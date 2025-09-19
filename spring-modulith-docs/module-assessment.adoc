@@ -1,0 +1,16 @@
+[%autowidth.stretch, cols="h,a"]
+|===
+|Base package
+|`ukma.springboot.nextskill.assessment`
+|Spring components
+|_Services_
+
+* `u.s.n.a.AnswerService` (via `u.s.n.a.service.AnswerServiceImpl`)
+* `u.s.n.a.AttemptService` (via `u.s.n.a.service.AttemptServiceImpl`)
+* `u.s.n.a.OptionService` (via `u.s.n.a.service.OptionServiceImpl`)
+* `u.s.n.a.QuestionService` (via `u.s.n.a.service.QuestionServiceImpl`)
+* `u.s.n.a.TestService` (via `u.s.n.a.service.TestServiceImpl`)
+|Bean references
+|* `u.s.n.u.UserService` (in User)
+* `u.s.n.c.SectionService` (in Course)
+|===

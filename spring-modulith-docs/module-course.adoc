@@ -1,0 +1,12 @@
+[%autowidth.stretch, cols="h,a"]
+|===
+|Base package
+|`ukma.springboot.nextskill.course`
+|Spring components
+|_Services_
+
+* `u.s.n.c.CourseService` (via `u.s.n.c.service.CourseServiceImpl`)
+* `u.s.n.c.SectionService` (via `u.s.n.c.service.SectionServiceImpl`)
+|Bean references
+|* `u.s.n.u.UserService` (in User)
+|===

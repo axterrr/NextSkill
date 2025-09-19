@@ -1,0 +1,9 @@
+[%autowidth.stretch, cols="h,a"]
+|===
+|Base package
+|`ukma.springboot.nextskill.email`
+|Spring components
+|_Services_
+
+* `u.s.n.e.EmailService` (via `u.s.n.e.service.EmailServiceImpl`)
+|===

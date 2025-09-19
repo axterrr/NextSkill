@@ -1,0 +1,9 @@
+[%autowidth.stretch, cols="h,a"]
+|===
+|Base package
+|`ukma.springboot.nextskill.user`
+|Spring components
+|_Services_
+
+* `u.s.n.u.UserService` (via `u.s.n.u.service.UserServiceImpl`)
+|===
