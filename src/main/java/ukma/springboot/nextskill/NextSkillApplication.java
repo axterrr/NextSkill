@@ -4,10 +4,26 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import ukma.springboot.nextskill.models.enums.UserRole;
-import ukma.springboot.nextskill.models.responses.*;
-import ukma.springboot.nextskill.models.views.*;
-import ukma.springboot.nextskill.services.*;
+import ukma.springboot.nextskill.core.models.enums.UserRole;
+import ukma.springboot.nextskill.core.models.responses.CourseResponse;
+import ukma.springboot.nextskill.core.models.responses.QuestionResponse;
+import ukma.springboot.nextskill.core.models.responses.SectionResponse;
+import ukma.springboot.nextskill.core.models.responses.TestResponse;
+import ukma.springboot.nextskill.core.models.responses.UserResponse;
+import ukma.springboot.nextskill.core.models.views.CourseView;
+import ukma.springboot.nextskill.core.models.views.PostView;
+import ukma.springboot.nextskill.core.models.views.QuestionOptionView;
+import ukma.springboot.nextskill.core.models.views.QuestionView;
+import ukma.springboot.nextskill.core.models.views.SectionView;
+import ukma.springboot.nextskill.core.models.views.TestView;
+import ukma.springboot.nextskill.core.models.views.UserView;
+import ukma.springboot.nextskill.core.services.CourseService;
+import ukma.springboot.nextskill.core.services.PostService;
+import ukma.springboot.nextskill.core.services.QuestionOptionService;
+import ukma.springboot.nextskill.core.services.QuestionService;
+import ukma.springboot.nextskill.core.services.SectionService;
+import ukma.springboot.nextskill.core.services.TestService;
+import ukma.springboot.nextskill.core.services.UserService;
 
 @SpringBootApplication
 @AllArgsConstructor

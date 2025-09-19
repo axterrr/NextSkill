@@ -11,11 +11,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import ukma.springboot.nextskill.exceptions.ResourceNotFoundException;
-import ukma.springboot.nextskill.models.entities.UserEntity;
-import ukma.springboot.nextskill.models.enums.UserRole;
-import ukma.springboot.nextskill.security.managers.AuthenticationManagerImpl;
-import ukma.springboot.nextskill.services.UserService;
+import ukma.springboot.nextskill.core.exceptions.ResourceNotFoundException;
+import ukma.springboot.nextskill.core.models.entities.UserEntity;
+import ukma.springboot.nextskill.core.models.enums.UserRole;
+import ukma.springboot.nextskill.core.security.managers.AuthenticationManagerImpl;
+import ukma.springboot.nextskill.core.services.UserService;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;

@@ -6,11 +6,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
-import ukma.springboot.nextskill.models.responses.CourseResponse;
-import ukma.springboot.nextskill.models.responses.UserResponse;
-import ukma.springboot.nextskill.services.CourseService;
-import ukma.springboot.nextskill.services.SectionService;
-import ukma.springboot.nextskill.services.UserService;
+import ukma.springboot.nextskill.core.controllers.CoursesController;
+import ukma.springboot.nextskill.core.models.responses.CourseResponse;
+import ukma.springboot.nextskill.core.models.responses.UserResponse;
+import ukma.springboot.nextskill.core.services.CourseService;
+import ukma.springboot.nextskill.core.services.SectionService;
+import ukma.springboot.nextskill.core.services.UserService;
 
 import java.time.LocalDateTime;
 import java.util.List;
