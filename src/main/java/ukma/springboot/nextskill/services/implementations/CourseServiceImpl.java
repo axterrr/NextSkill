@@ -16,6 +16,7 @@ import ukma.springboot.nextskill.models.views.CourseView;
 import ukma.springboot.nextskill.repositories.CourseRepository;
 import ukma.springboot.nextskill.repositories.UserRepository;
 import ukma.springboot.nextskill.services.CourseService;
+import ukma.springboot.nextskill.services.EmailService;
 import ukma.springboot.nextskill.services.UserService;
 import ukma.springboot.nextskill.validation.CourseValidator;
 
@@ -31,6 +32,7 @@ public class CourseServiceImpl implements CourseService {
     private UserRepository userRepository;
     private UserService userService;
     private CourseValidator courseValidator;
+    private EmailService emailService;
 
     @Override
     public List<CourseResponse> getAll() {
@@ -130,6 +132,9 @@ public class CourseServiceImpl implements CourseService {
         }
         else throw new IllegalArgumentException("User is already enrolled to course");
         courseRepository.save(courseEntity);
+
+        emailService.sendEmail(userEntity.getEmail(), "Enrolling to new course",
+            "You have been enrolled to new course: \"" + courseEntity.getName() + "\"");
     }
 
     @Override
@@ -142,5 +147,8 @@ public class CourseServiceImpl implements CourseService {
             courseEntity.getStudents().remove(userEntity);
         else throw new IllegalArgumentException("User is not enrolled to course");
         courseRepository.save(courseEntity);
+
+        emailService.sendEmail(userEntity.getEmail(), "Unrolling from course",
+            "You have been unrolled from course: \"" + courseEntity.getName() + "\"");
     }
 }
