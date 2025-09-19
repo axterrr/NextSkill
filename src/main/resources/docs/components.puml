@@ -1,0 +1,19 @@
+@startuml
+set separator none
+title NextSkillApplication
+
+top to bottom direction
+
+!include <C4/C4>
+!include <C4/C4_Context>
+!include <C4/C4_Component>
+
+Container_Boundary("NextSkillApplication.NextSkillApplication_boundary", "NextSkillApplication", $tags="") {
+  Component(NextSkillApplication.NextSkillApplication.Core, "Core", $techn="Module", $descr="", $tags="", $link="")
+  Component(NextSkillApplication.NextSkillApplication.Email, "Email", $techn="Module", $descr="", $tags="", $link="")
+}
+
+Rel(NextSkillApplication.NextSkillApplication.Core, NextSkillApplication.NextSkillApplication.Email, "depends on", $techn="", $tags="", $link="")
+
+SHOW_LEGEND(true)
+@enduml
