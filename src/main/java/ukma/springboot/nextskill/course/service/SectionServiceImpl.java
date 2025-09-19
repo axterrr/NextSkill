@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ukma.springboot.nextskill.common.exceptions.ResourceNotFoundException;
 import ukma.springboot.nextskill.course.SectionService;
-import ukma.springboot.nextskill.models.entities.SectionEntity;
-import ukma.springboot.nextskill.models.mappers.SectionMapper;
-import ukma.springboot.nextskill.models.responses.SectionResponse;
-import ukma.springboot.nextskill.models.views.SectionView;
+import ukma.springboot.nextskill.common.models.entities.SectionEntity;
+import ukma.springboot.nextskill.common.models.mappers.SectionMapper;
+import ukma.springboot.nextskill.common.models.responses.SectionResponse;
+import ukma.springboot.nextskill.common.models.views.SectionView;
 import ukma.springboot.nextskill.course.repository.SectionRepository;
 import ukma.springboot.nextskill.course.validation.SectionValidator;
 

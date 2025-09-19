@@ -5,11 +5,11 @@ import org.springframework.stereotype.Service;
 import ukma.springboot.nextskill.assessment.AnswerService;
 import ukma.springboot.nextskill.assessment.repository.OptionRepository;
 import ukma.springboot.nextskill.common.exceptions.ResourceNotFoundException;
-import ukma.springboot.nextskill.models.entities.QuestionAnswerEntity;
-import ukma.springboot.nextskill.models.entities.QuestionOptionEntity;
-import ukma.springboot.nextskill.models.mappers.QuestionAnswerMapper;
-import ukma.springboot.nextskill.models.responses.QuestionAnswerResponse;
-import ukma.springboot.nextskill.models.views.QuestionAnswerView;
+import ukma.springboot.nextskill.common.models.entities.QuestionAnswerEntity;
+import ukma.springboot.nextskill.common.models.entities.QuestionOptionEntity;
+import ukma.springboot.nextskill.common.models.mappers.QuestionAnswerMapper;
+import ukma.springboot.nextskill.common.models.responses.QuestionAnswerResponse;
+import ukma.springboot.nextskill.common.models.views.QuestionAnswerView;
 import ukma.springboot.nextskill.assessment.repository.AnswerRepository;
 
 import java.util.List;

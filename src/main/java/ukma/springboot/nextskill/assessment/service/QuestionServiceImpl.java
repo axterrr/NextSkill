@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import ukma.springboot.nextskill.common.exceptions.ResourceNotFoundException;
-import ukma.springboot.nextskill.models.entities.QuestionEntity;
-import ukma.springboot.nextskill.models.mappers.QuestionMapper;
-import ukma.springboot.nextskill.models.responses.QuestionResponse;
-import ukma.springboot.nextskill.models.views.QuestionView;
+import ukma.springboot.nextskill.common.models.entities.QuestionEntity;
+import ukma.springboot.nextskill.common.models.mappers.QuestionMapper;
+import ukma.springboot.nextskill.common.models.responses.QuestionResponse;
+import ukma.springboot.nextskill.common.models.views.QuestionView;
 import ukma.springboot.nextskill.assessment.QuestionService;
 import ukma.springboot.nextskill.assessment.repository.QuestionRepository;
 

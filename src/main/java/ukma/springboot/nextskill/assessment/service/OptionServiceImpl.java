@@ -3,10 +3,10 @@ package ukma.springboot.nextskill.assessment.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ukma.springboot.nextskill.common.exceptions.ResourceNotFoundException;
-import ukma.springboot.nextskill.models.entities.QuestionOptionEntity;
-import ukma.springboot.nextskill.models.mappers.QuestionOptionMapper;
-import ukma.springboot.nextskill.models.responses.QuestionOptionResponse;
-import ukma.springboot.nextskill.models.views.QuestionOptionView;
+import ukma.springboot.nextskill.common.models.entities.QuestionOptionEntity;
+import ukma.springboot.nextskill.common.models.mappers.QuestionOptionMapper;
+import ukma.springboot.nextskill.common.models.responses.QuestionOptionResponse;
+import ukma.springboot.nextskill.common.models.views.QuestionOptionView;
 import ukma.springboot.nextskill.assessment.OptionService;
 import ukma.springboot.nextskill.assessment.repository.OptionRepository;
 

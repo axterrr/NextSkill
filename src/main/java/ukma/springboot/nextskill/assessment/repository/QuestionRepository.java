@@ -1,8 +1,7 @@
 package ukma.springboot.nextskill.assessment.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ukma.springboot.nextskill.models.entities.QuestionEntity;
-import ukma.springboot.nextskill.models.responses.QuestionResponse;
+import ukma.springboot.nextskill.common.models.entities.QuestionEntity;
 
 import java.util.List;
 import java.util.Optional;

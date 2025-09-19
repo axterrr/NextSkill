@@ -6,8 +6,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
-import ukma.springboot.nextskill.models.responses.UserResponse;
-import ukma.springboot.nextskill.models.views.UserView;
+import ukma.springboot.nextskill.common.models.responses.UserResponse;
+import ukma.springboot.nextskill.common.models.views.UserView;
 import ukma.springboot.nextskill.user.UserService;
 import ukma.springboot.nextskill.user.controller.UserController;
 

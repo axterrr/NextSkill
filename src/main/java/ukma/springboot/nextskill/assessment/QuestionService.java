@@ -1,7 +1,7 @@
 package ukma.springboot.nextskill.assessment;
 
-import ukma.springboot.nextskill.models.responses.QuestionResponse;
-import ukma.springboot.nextskill.models.views.QuestionView;
+import ukma.springboot.nextskill.common.models.responses.QuestionResponse;
+import ukma.springboot.nextskill.common.models.views.QuestionView;
 
 import java.util.List;
 import java.util.UUID;

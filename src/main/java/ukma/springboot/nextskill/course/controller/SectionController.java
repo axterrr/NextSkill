@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ukma.springboot.nextskill.course.CourseService;
-import ukma.springboot.nextskill.models.responses.SectionResponse;
-import ukma.springboot.nextskill.models.responses.UserResponse;
-import ukma.springboot.nextskill.models.views.SectionView;
+import ukma.springboot.nextskill.common.models.responses.SectionResponse;
+import ukma.springboot.nextskill.common.models.responses.UserResponse;
+import ukma.springboot.nextskill.common.models.views.SectionView;
 import ukma.springboot.nextskill.course.SectionService;
 import ukma.springboot.nextskill.user.UserService;
 

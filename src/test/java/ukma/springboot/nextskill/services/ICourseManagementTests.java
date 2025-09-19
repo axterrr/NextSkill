@@ -9,11 +9,11 @@ import ukma.springboot.nextskill.course.service.CourseServiceImpl;
 import ukma.springboot.nextskill.course.repository.CourseRepository;
 import ukma.springboot.nextskill.common.exceptions.NoAccessException;
 import ukma.springboot.nextskill.common.exceptions.ResourceNotFoundException;
-import ukma.springboot.nextskill.models.entities.CourseEntity;
-import ukma.springboot.nextskill.models.enums.UserRole;
-import ukma.springboot.nextskill.models.responses.CourseResponse;
-import ukma.springboot.nextskill.models.responses.UserResponse;
-import ukma.springboot.nextskill.models.views.CourseView;
+import ukma.springboot.nextskill.common.models.entities.CourseEntity;
+import ukma.springboot.nextskill.common.models.enums.UserRole;
+import ukma.springboot.nextskill.common.models.responses.CourseResponse;
+import ukma.springboot.nextskill.common.models.responses.UserResponse;
+import ukma.springboot.nextskill.common.models.views.CourseView;
 import ukma.springboot.nextskill.course.validation.CourseValidator;
 import ukma.springboot.nextskill.user.UserService;
 

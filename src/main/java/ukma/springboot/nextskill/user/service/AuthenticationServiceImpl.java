@@ -10,7 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import ukma.springboot.nextskill.common.exceptions.ResourceNotFoundException;
-import ukma.springboot.nextskill.models.entities.UserEntity;
+import ukma.springboot.nextskill.common.models.entities.UserEntity;
 import ukma.springboot.nextskill.user.UserService;
 
 import java.util.List;

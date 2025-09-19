@@ -12,8 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ukma.springboot.nextskill.common.exceptions.ResourceNotFoundException;
-import ukma.springboot.nextskill.models.entities.UserEntity;
-import ukma.springboot.nextskill.models.enums.UserRole;
+import ukma.springboot.nextskill.common.models.entities.UserEntity;
+import ukma.springboot.nextskill.common.models.enums.UserRole;
 import ukma.springboot.nextskill.user.service.AuthenticationServiceImpl;
 import ukma.springboot.nextskill.user.UserService;
 

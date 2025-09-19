@@ -5,12 +5,12 @@ import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import ukma.springboot.nextskill.common.exceptions.NoAccessException;
 import ukma.springboot.nextskill.common.exceptions.ResourceNotFoundException;
-import ukma.springboot.nextskill.models.entities.CourseEntity;
-import ukma.springboot.nextskill.models.entities.TestEntity;
-import ukma.springboot.nextskill.models.mappers.TestMapper;
-import ukma.springboot.nextskill.models.responses.TestResponse;
-import ukma.springboot.nextskill.models.responses.UserResponse;
-import ukma.springboot.nextskill.models.views.TestView;
+import ukma.springboot.nextskill.common.models.entities.CourseEntity;
+import ukma.springboot.nextskill.common.models.entities.TestEntity;
+import ukma.springboot.nextskill.common.models.mappers.TestMapper;
+import ukma.springboot.nextskill.common.models.responses.TestResponse;
+import ukma.springboot.nextskill.common.models.responses.UserResponse;
+import ukma.springboot.nextskill.common.models.views.TestView;
 import ukma.springboot.nextskill.assessment.repository.TestRepository;
 import ukma.springboot.nextskill.assessment.TestService;
 

@@ -2,7 +2,7 @@ package ukma.springboot.nextskill.course.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ukma.springboot.nextskill.models.entities.CourseEntity;
+import ukma.springboot.nextskill.common.models.entities.CourseEntity;
 
 import java.util.UUID;
 

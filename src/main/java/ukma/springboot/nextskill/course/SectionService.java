@@ -1,7 +1,7 @@
 package ukma.springboot.nextskill.course;
 
-import ukma.springboot.nextskill.models.responses.SectionResponse;
-import ukma.springboot.nextskill.models.views.SectionView;
+import ukma.springboot.nextskill.common.models.responses.SectionResponse;
+import ukma.springboot.nextskill.common.models.views.SectionView;
 
 import java.util.List;
 import java.util.UUID;

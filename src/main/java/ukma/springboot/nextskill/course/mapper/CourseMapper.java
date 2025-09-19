@@ -1,16 +1,16 @@
 package ukma.springboot.nextskill.course.mapper;
 
 import org.springframework.modulith.NamedInterface;
-import ukma.springboot.nextskill.models.entities.CourseEntity;
-import ukma.springboot.nextskill.models.entities.SectionEntity;
-import ukma.springboot.nextskill.models.entities.UserEntity;
-import ukma.springboot.nextskill.models.mappers.SectionMapper;
-import ukma.springboot.nextskill.models.mappers.UserMapper;
-import ukma.springboot.nextskill.models.responses.CourseResponse;
-import ukma.springboot.nextskill.models.views.CourseView;
+import ukma.springboot.nextskill.common.models.entities.CourseEntity;
+import ukma.springboot.nextskill.common.models.entities.SectionEntity;
+import ukma.springboot.nextskill.common.models.entities.UserEntity;
+import ukma.springboot.nextskill.common.models.mappers.SectionMapper;
+import ukma.springboot.nextskill.common.models.mappers.UserMapper;
+import ukma.springboot.nextskill.common.models.responses.CourseResponse;
+import ukma.springboot.nextskill.common.models.views.CourseView;
 
-import static ukma.springboot.nextskill.models.mappers.MapperUtility.mapIfInitialized;
-import static ukma.springboot.nextskill.models.mappers.MapperUtility.orElse;
+import static ukma.springboot.nextskill.common.models.mappers.MapperUtility.mapIfInitialized;
+import static ukma.springboot.nextskill.common.models.mappers.MapperUtility.orElse;
 
 @NamedInterface
 public class CourseMapper {

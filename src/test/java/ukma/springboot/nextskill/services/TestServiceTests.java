@@ -5,11 +5,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ukma.springboot.nextskill.models.entities.CourseEntity;
-import ukma.springboot.nextskill.models.entities.SectionEntity;
-import ukma.springboot.nextskill.models.entities.TestEntity;
-import ukma.springboot.nextskill.models.entities.UserEntity;
-import ukma.springboot.nextskill.models.responses.UserResponse;
+import ukma.springboot.nextskill.common.models.entities.CourseEntity;
+import ukma.springboot.nextskill.common.models.entities.SectionEntity;
+import ukma.springboot.nextskill.common.models.entities.TestEntity;
+import ukma.springboot.nextskill.common.models.entities.UserEntity;
+import ukma.springboot.nextskill.common.models.responses.UserResponse;
 import ukma.springboot.nextskill.assessment.repository.TestRepository;
 import ukma.springboot.nextskill.assessment.service.TestServiceImpl;
 

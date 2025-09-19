@@ -2,7 +2,7 @@ package ukma.springboot.nextskill.assessment.repository;
 
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
-import ukma.springboot.nextskill.models.entities.TestAttemptEntity;
+import ukma.springboot.nextskill.common.models.entities.TestAttemptEntity;
 
 import java.util.List;
 import java.util.Optional;
