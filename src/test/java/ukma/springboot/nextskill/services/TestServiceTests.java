@@ -11,7 +11,7 @@ import ukma.springboot.nextskill.models.entities.TestEntity;
 import ukma.springboot.nextskill.models.entities.UserEntity;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.assessment.repository.TestRepository;
-import ukma.springboot.nextskill.assessment.service.implementation.TestServiceImpl;
+import ukma.springboot.nextskill.assessment.service.TestServiceImpl;
 
 import java.util.Optional;
 import java.util.UUID;

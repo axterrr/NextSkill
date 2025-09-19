@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.UserView;
-import ukma.springboot.nextskill.user.service.UserService;
+import ukma.springboot.nextskill.user.UserService;
 
 import java.util.UUID;
 

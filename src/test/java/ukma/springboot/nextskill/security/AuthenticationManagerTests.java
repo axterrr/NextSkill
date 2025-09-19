@@ -14,8 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import ukma.springboot.nextskill.common.exceptions.ResourceNotFoundException;
 import ukma.springboot.nextskill.models.entities.UserEntity;
 import ukma.springboot.nextskill.models.enums.UserRole;
-import ukma.springboot.nextskill.security.managers.AuthenticationManagerImpl;
-import ukma.springboot.nextskill.user.service.UserService;
+import ukma.springboot.nextskill.user.service.AuthenticationServiceImpl;
+import ukma.springboot.nextskill.user.UserService;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -30,7 +30,7 @@ class AuthenticationManagerTests {
     private PasswordEncoder passwordEncoder;
 
     @InjectMocks
-    private AuthenticationManagerImpl authenticationManager;
+    private AuthenticationServiceImpl authenticationManager;
 
     private String username = "test_user";
     private String password = "password123";

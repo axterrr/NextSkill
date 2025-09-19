@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import ukma.springboot.nextskill.course.service.CourseService;
+import ukma.springboot.nextskill.course.CourseService;
 import ukma.springboot.nextskill.models.responses.SectionResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.SectionView;
-import ukma.springboot.nextskill.course.service.SectionService;
-import ukma.springboot.nextskill.user.service.UserService;
+import ukma.springboot.nextskill.course.SectionService;
+import ukma.springboot.nextskill.user.UserService;
 
 import java.util.UUID;
 

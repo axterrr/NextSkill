@@ -6,13 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ukma.springboot.nextskill.course.service.CourseService;
+import ukma.springboot.nextskill.course.CourseService;
 import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.CourseView;
 import ukma.springboot.nextskill.models.views.SectionView;
-import ukma.springboot.nextskill.section.SectionCreateEvent;
-import ukma.springboot.nextskill.user.service.UserService;
+import ukma.springboot.nextskill.course.SectionCreateEvent;
+import ukma.springboot.nextskill.user.UserService;
 
 import java.util.List;
 import java.util.UUID;

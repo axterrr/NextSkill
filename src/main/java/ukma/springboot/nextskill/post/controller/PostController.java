@@ -4,15 +4,15 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ukma.springboot.nextskill.course.service.CourseService;
+import ukma.springboot.nextskill.course.CourseService;
 import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.responses.PostResponse;
 import ukma.springboot.nextskill.models.responses.SectionResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.PostView;
-import ukma.springboot.nextskill.post.service.PostService;
-import ukma.springboot.nextskill.course.service.SectionService;
-import ukma.springboot.nextskill.user.service.UserService;
+import ukma.springboot.nextskill.post.PostService;
+import ukma.springboot.nextskill.course.SectionService;
+import ukma.springboot.nextskill.user.UserService;
 
 import java.util.UUID;
 

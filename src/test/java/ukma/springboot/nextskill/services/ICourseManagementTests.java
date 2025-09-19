@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import ukma.springboot.nextskill.course.service.implementation.CourseServiceImpl;
+import ukma.springboot.nextskill.course.service.CourseServiceImpl;
 import ukma.springboot.nextskill.course.repository.CourseRepository;
 import ukma.springboot.nextskill.common.exceptions.NoAccessException;
 import ukma.springboot.nextskill.common.exceptions.ResourceNotFoundException;
@@ -15,7 +15,7 @@ import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.CourseView;
 import ukma.springboot.nextskill.course.validation.CourseValidator;
-import ukma.springboot.nextskill.user.service.UserService;
+import ukma.springboot.nextskill.user.UserService;
 
 import java.util.Optional;
 import java.util.UUID;

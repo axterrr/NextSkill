@@ -6,15 +6,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ukma.springboot.nextskill.assessment.service.AttemptService;
+import ukma.springboot.nextskill.assessment.AttemptService;
 import ukma.springboot.nextskill.common.exceptions.MaxAttemptsException;
 import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.responses.*;
 import ukma.springboot.nextskill.models.views.TestView;
-import ukma.springboot.nextskill.assessment.service.QuestionService;
-import ukma.springboot.nextskill.course.service.SectionService;
-import ukma.springboot.nextskill.assessment.service.TestService;
-import ukma.springboot.nextskill.user.service.UserService;
+import ukma.springboot.nextskill.assessment.QuestionService;
+import ukma.springboot.nextskill.course.SectionService;
+import ukma.springboot.nextskill.assessment.TestService;
+import ukma.springboot.nextskill.user.UserService;
 
 import java.util.*;
 

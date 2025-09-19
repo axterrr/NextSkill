@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ukma.springboot.nextskill.common.Constants;
-import ukma.springboot.nextskill.question.QuestionDeletedEvent;
+import ukma.springboot.nextskill.assessment.QuestionDeletedEvent;
 import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.responses.QuestionResponse;
 import ukma.springboot.nextskill.models.responses.TestResponse;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.QuestionView;
-import ukma.springboot.nextskill.assessment.service.QuestionService;
-import ukma.springboot.nextskill.assessment.service.TestService;
-import ukma.springboot.nextskill.user.service.UserService;
+import ukma.springboot.nextskill.assessment.QuestionService;
+import ukma.springboot.nextskill.assessment.TestService;
+import ukma.springboot.nextskill.user.UserService;
 
 import java.util.UUID;
 

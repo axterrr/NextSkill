@@ -8,7 +8,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
 import ukma.springboot.nextskill.models.responses.UserResponse;
 import ukma.springboot.nextskill.models.views.UserView;
-import ukma.springboot.nextskill.user.service.UserService;
+import ukma.springboot.nextskill.user.UserService;
 import ukma.springboot.nextskill.user.controller.UserController;
 
 import java.util.UUID;

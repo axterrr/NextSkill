@@ -4,18 +4,18 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import ukma.springboot.nextskill.course.service.CourseService;
+import ukma.springboot.nextskill.course.CourseService;
 import ukma.springboot.nextskill.models.responses.CourseResponse;
 import ukma.springboot.nextskill.models.views.CourseView;
 import ukma.springboot.nextskill.models.enums.UserRole;
 import ukma.springboot.nextskill.models.responses.*;
 import ukma.springboot.nextskill.models.views.*;
-import ukma.springboot.nextskill.assessment.service.OptionService;
-import ukma.springboot.nextskill.post.service.PostService;
-import ukma.springboot.nextskill.assessment.service.QuestionService;
-import ukma.springboot.nextskill.course.service.SectionService;
-import ukma.springboot.nextskill.assessment.service.TestService;
-import ukma.springboot.nextskill.user.service.UserService;
+import ukma.springboot.nextskill.assessment.OptionService;
+import ukma.springboot.nextskill.post.PostService;
+import ukma.springboot.nextskill.assessment.QuestionService;
+import ukma.springboot.nextskill.course.SectionService;
+import ukma.springboot.nextskill.assessment.TestService;
+import ukma.springboot.nextskill.user.UserService;
 
 @SpringBootApplication
 @AllArgsConstructor
