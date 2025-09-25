@@ -30,7 +30,8 @@ dependencies {
     implementation("com.auth0:java-jwt:4.4.0")
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
 
-    runtimeOnly("com.h2database:h2")
+    runtimeOnly("org.postgresql:postgresql")
+
     compileOnly("org.projectlombok:lombok:1.18.34")
     annotationProcessor("org.projectlombok:lombok:1.18.34")
 
