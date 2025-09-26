@@ -26,3 +26,10 @@ docker run --name next-skill-run --env-file .env -p 8080:8080 axterrr/next-skill
 ```bash
 docker push axterrr/next-skill-run
 ```
+
+---
+## 5. Start docker-compose
+
+```bash
+docker compose up
+```
